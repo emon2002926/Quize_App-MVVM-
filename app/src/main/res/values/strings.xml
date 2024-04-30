@@ -1,0 +1,65 @@
+<resources>
+    <string name="app_name">BCS PRO (Kotlin)</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="subjectBasedExam">বিষয়ভিত্তিক পরীক্ষা</string>
+    <string name="practice">অনুশীলন</string>
+    <string name="lectureAndNots">লেকচার এন্ড নোটস</string>
+    <string name="quiz">কুইজ কুইজ</string>
+    <string name="quizDisc">সহজ এবং মজার উপায়ে শেখা</string>
+    <string name="subjectExamDsc">যত খুশি বিষয়ভিত্তিক পরীক্ষা দিন। নিজেই সেট করুন পরীক্ষার সময় এবং নম্বর!</string>
+    <string name="overAllExam">সামগ্রিক পরীক্ষা</string>
+    <string name="questionBank">প্রশ্ন ব্যাংক</string>
+    <string name="importantQuestion">গুরুত্বপূর্ণ প্রশ্ন</string>
+    <string name="corses">কোর্স সমূহ</string>
+    <string name="showAll">সবগুলো</string>
+    <string name="liveExam">লাইভ এক্সাম</string>
+    <string name="question50">প্রশ্ন ৫০ টি - ২৫ মিনিট</string>
+    <string name="question100">প্রশ্ন ১০০ টি-৫০ মিনিট</string>
+    <string name="question200">প্রশ্ন ২০০ টি - ১০০ মিনিট</string>
+    <string name="amountOfQuestion">প্রশ্নের পরিমাণ</string>
+    <string name="home">হোম</string>
+    <string name="profile">প্রোফাইল</string>
+    <string name="more">আরও</string>
+    <string name="daily_model_test">ডেইলি মডেল টেস্ট</string>
+    <string name="statics">পরিসংখ্যান</string>
+    <string name="Exam_Statistic">পরীক্ষার পরিসংখ্যান</string>
+    <string name="totalExam">মোট পরীক্ষা</string>
+    <string name="totalQuestion">মোট প্রশ্ন</string>
+    <string name="question">৫০ টি প্রশ্ন</string>
+    <string name="time">৫০ মিনিট</string>
+    <string name="correct">সঠিক</string>
+    <string name="notAnswred">অনুত্তরিত</string>
+    <string name="showResult">পরীক্ষার ফলাফল গুলো</string>
+    <string name="messangerChat">মেসেঞ্জার চ্যাট</string>
+    <string name="facebookPage">ফেসবুক পেজ</string>
+    <string name="appRating">অ্যাপ রেটিং</string>
+    <string name="about_us">আমাদের সম্পর্কে</string>
+    <string name="privircy_policy">প্রাইভেসি পলিসি</string>
+    <string name="trems">টার্মস এন্ড কন্ডিশন</string>
+    <string name="lig_unt">সাইন আউট</string>
+    <string name="Bcs">বিসিএস প্রো</string>
+    <string name="yourProfile">আপনার প্রোফাইল</string>
+    <string name="start_exam">শুরু করুন</string>
+    <string name="not_now">বাতিল করুন</string>
+    <string name="minute">মিনিট</string>
+    <string name="overall_result">সমগ্রিক ফলাফল</string>
+    <string name="total">মোট</string>
+    <string name="wrong">ভুল</string>
+    <string name="marks">মার্কস</string>
+    <string name="result">ফলাফল</string>
+    <string name="International_afirs">আন্তর্জাতিক বিষয়াবলি</string>
+    <string name="Bangladeshi_affirs">বাংলাদেশ বিষয়াবলি</string>
+    <string name="bangla">বাংলা</string>
+    <string name="MVG">নৈতিকতা মুল্যবোধ ও সুশাসন</string>
+    <string name="math">গণিত</string>
+    <string name="english">ইংরেজি</string>
+    <string name="mental_skils">মানসিক দক্ষতা</string>
+    <string name="genaral_sceince">সাধারণ বিজ্ঞান</string>
+    <string name="ICT">কম্পিউটার ও তথ্য প্রযুক্তি</string>
+    <string name="submit">জমা দিন</string>
+    <string name="marked_question">মার্ক করা প্রশ্ন</string>
+
+
+</resources>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="190dp"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:gravity="center_vertical"
+    android:paddingTop="30dp"
+    android:layout_marginStart="4dp"
+    android:layout_marginTop="8dp"
+    android:background="@color/dodger_blue"
+    android:paddingBottom="30dp"
+    android:id="@+id/parentLayout"
+    android:paddingStart="8dp"
+    android:paddingEnd="8dp"
+    android:orientation="horizontal"
+    >
+
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/ivSubjectIcon"
+            android:src="@drawable/eng"/>
+
+        <TextView
+            android:id="@+id/tvSubjectName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:fontFamily="@font/roboto_mono_bold"
+            android:includeFontPadding="false"
+            android:layout_marginStart="8dp"
+            android:text="English"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+
+
+</LinearLayout>
+
+
