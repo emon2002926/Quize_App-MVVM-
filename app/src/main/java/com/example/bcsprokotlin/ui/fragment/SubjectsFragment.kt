@@ -80,8 +80,6 @@ class SubjectsFragment : Fragment() {
 
     private fun setupRecyclerView() = binding.rvSubjects.apply {
         adapter = subjectAdapter
-        layoutManager = LinearLayoutManager(context)
-
 
     }
 

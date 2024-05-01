@@ -11,18 +11,13 @@ import com.example.bcsprokotlin.databinding.FragmentHomeBinding
 
 
 class HomeFragment : Fragment() {
-    // TODO: Rename and change types of parameters
 lateinit var binding: FragmentHomeBinding
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?): View {
 
         binding = FragmentHomeBinding.inflate(inflater,container,false)
-
-
-        binding.apply {
-
-        }
+        
 
         with(binding){
             practice.setOnClickListener { findNavController().navigate(R.id.action_homeFragment_to_questionFragment) }

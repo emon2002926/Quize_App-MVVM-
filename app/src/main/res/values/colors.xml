@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <color name="colorPrimary">#6200EE</color>
+    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorAccent">#03DAC5</color>
+
+
     <color name="black">#FF000000</color>
     <color name="black_font">#121313</color>
     <color name="light_black_font">#121313</color>
@@ -12,16 +18,20 @@
     <color name="end_color_one">#fe0061</color>
 
     <color name="start_color_two">#01ffa8</color>
-    <color name="start_color_three">#a32ddf</color>
-    <color name="start_color_four">#3a13b0</color>
-    <color name="start_color_five">#ffe25b</color>
-    <color name="start_color_six">#f30864</color>
-
     <color name="end_color_two">#0f4dfe</color>
+
+    <color name="start_color_three">#a32ddf</color>
     <color name="end_color_three">#136ad3</color>
+
+    <color name="start_color_four">#3a13b0</color>
     <color name="end_color_four">#02f9a9</color>
+
+    <color name="start_color_five">#ffe25b</color>
     <color name="end_color_five">#ff2724</color>
+
+    <color name="start_color_six">#f30864</color>
     <color name="end_color_six">#841c84</color>
+
     <color name="DeepGrey">#636262</color>
     <color name="LiteBlack">#D5252525</color>
     <color name="LiteBlack2">#595656</color>

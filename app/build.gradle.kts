@@ -89,4 +89,8 @@ dependencies {
     kapt ("androidx.hilt:hilt-compiler:1.0.0")
     implementation ("androidx.hilt:hilt-navigation-compose:1.0.0")
 
+    implementation ("com.intuit.sdp:sdp-android:1.1.1")
+    implementation ("com.intuit.ssp:ssp-android:1.1.1")
+
+
 }

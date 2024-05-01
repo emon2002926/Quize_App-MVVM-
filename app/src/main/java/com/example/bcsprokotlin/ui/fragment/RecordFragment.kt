@@ -33,9 +33,9 @@ class RecordFragment : Fragment() {
         binding = FragmentRecordBinding.bind(view.rootView)
 
 
-        viewModel.viewModelScope.launch {
-            viewModel.getQuestion()
-        }
+//        viewModel.viewModelScope.launch {
+//            viewModel.getQuestion()
+//        }
 
 //        lifecycleScope.launch {
 //            questionAdapter = QuestionAdapter()
