@@ -5,68 +5,43 @@ import androidx.lifecycle.ViewModel
 import com.example.bcsprokotlin.model.Question
 import com.example.bcsprokotlin.model.SubjectName
 import com.example.bcsprokotlin.repository.QuestionRepository
-import com.example.bcsprokotlin.util.Constants.Companion.PAGE_SIZE
+import com.example.bcsprokotlin.repository.SubjectRepository
+import com.example.bcsprokotlin.util.Constants
 import com.example.bcsprokotlin.util.Resource
-import okio.IOException
 import retrofit2.Response
+import java.io.IOException
 
-class QuestionViewModel:ViewModel() {
-    private val repository = QuestionRepository()
+class SubjectViewModel:ViewModel() {
 
-    private val apiNumber=1
+
+
+    private val repository = SubjectRepository()
+
     val pageNumber= 1
 
-    val questions: MutableLiveData<Resource<MutableList<Question>>> = MutableLiveData()
-
-
     val subjects: MutableLiveData<Resource<MutableList<SubjectName>>> = MutableLiveData()
-
-     suspend fun getQuestion(){
-        questions.postValue(Resource.Loading())
-        try {
-            if (hasInternetConnection()){
-                val questionResponse =  repository.getQuestion(apiNumber ,pageNumber,PAGE_SIZE)
-                questions.postValue(handleQuestionResponse(questionResponse))
-            }else{
-                questions.postValue(Resource.Error("No internet connection"))
-            }
-        }catch (t:Throwable){
-            when(t){
-                is IOException->questions.postValue(Resource.Error("Network Failure"))
-                else->questions.postValue(Resource.Error("Conversion Error "))
-            }
-        }
-    }
-
-    private fun handleQuestionResponse(response :Response<MutableList<Question>>):Resource<MutableList<Question>>{
-        if (response.isSuccessful){
-            response.body()?.let {
-                return Resource.Success(it)
-            }
-        }
-        return Resource.Error(response.message())
-    }
-
     suspend fun getSubjectName(apiNumber:Int){
-        questions.postValue(Resource.Loading())
+        subjects.postValue(Resource.Loading())
 
         try {
             if (hasInternetConnection()){
-                val questionResponse =  repository.getSubjects(apiNumber ,pageNumber,PAGE_SIZE)
+                val questionResponse =  repository.getSubjects(apiNumber ,pageNumber,
+                    Constants.PAGE_SIZE
+                )
                 subjects.postValue(handleSubjectResponse(questionResponse))
             }else{
                 subjects.postValue(Resource.Error("No internet connection"))
             }
         }catch (t:Throwable){
             when(t){
-                is IOException->subjects.postValue(Resource.Error("Network Failure"))
+                is IOException ->subjects.postValue(Resource.Error("Network Failure"))
                 else->subjects.postValue(Resource.Error("Conversion Error "))
             }
         }
     }
 
-    private fun handleSubjectResponse(response :Response<MutableList<SubjectName>>
-    ):Resource<MutableList<SubjectName>>{
+    private fun handleSubjectResponse(response : Response<MutableList<SubjectName>>
+    ): Resource<MutableList<SubjectName>> {
         if (response.isSuccessful){
             response.body()?.let {
                 return Resource.Success(it)
@@ -79,7 +54,7 @@ class QuestionViewModel:ViewModel() {
 
 
 
-    private fun hasInternetConnection():Boolean{
+    private fun hasInternetConnection():Boolean {
 //        val connectivityManager = getApplication<BcsApplication>().getSystemService(
 //            Context.CONNECTIVITY_SERVICE
 //        ) as ConnectivityManager
@@ -104,8 +79,9 @@ class QuestionViewModel:ViewModel() {
 //
 //            }
 //        }
-        return true
-    }
+
+    return true}
+
 
 
 

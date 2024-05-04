@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:id="@+id/bottomSheetContainer"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bottom_sheet_baground"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:text="@string/overAllExam"
+        android:padding="15dp"
+        android:layout_marginTop="5dp"
+        android:textSize="25sp"
+        android:gravity="center"
+        android:textColor="@color/black"
+        />
+
+
+    <LinearLayout
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:id="@+id/layout25Min"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="18dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        android:background="@drawable/round_back_white50_10"
+        >
+
+        <LinearLayout
+            android:layout_width="19dp"
+            android:layout_height="19dp"
+            android:layout_centerVertical="true"
+            android:background="@drawable/round_back_white50_100"
+            android:id="@+id/iconBackground1">
+
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/option25Icon"
+                android:scaleType="fitXY"
+                android:layout_gravity="center"
+                android:padding="3dp"
+                app:riv_corner_radius="10dp"
+                />
+        </LinearLayout>
+        <TextView
+            android:id="@+id/option25Tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:text="@string/question50"
+            android:layout_gravity="center_vertical"
+            android:textSize="17sp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:id="@+id/layout50Min"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:padding="18dp"
+        android:orientation="horizontal"
+        android:background="@drawable/round_back_white50_10"
+        >
+
+        <LinearLayout
+            android:layout_width="19dp"
+            android:layout_height="19dp"
+            android:background="@drawable/round_back_white50_100"
+            android:id="@+id/iconBackground2">
+
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/option50Icon"
+                android:scaleType="fitXY"
+                android:padding="3dp"
+                android:layout_gravity="center"
+                app:riv_corner_radius="10dp"
+                />
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/option50Tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:text="@string/question100"
+            android:layout_gravity="center_vertical"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+
+            />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:id="@+id/layout100Min"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="18dp"
+        android:orientation="horizontal"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/round_back_white50_10"
+        >
+
+
+
+        <LinearLayout
+            android:layout_width="19dp"
+            android:layout_height="19dp"
+            android:layout_centerVertical="true"
+            android:background="@drawable/round_back_white50_100"
+            android:id="@+id/iconBackground3">
+
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/option100Icon"
+                android:scaleType="fitXY"
+                android:padding="3dp"
+                android:layout_gravity="center"
+                app:riv_corner_radius="10dp"
+                />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/option100Tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:text="@string/question200"
+            android:layout_gravity="center_vertical"
+            android:textSize="17sp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:text="@string/start_exam"
+        android:padding="10dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:gravity="center"
+        android:id="@+id/btnExamStart"
+        android:background="@drawable/round_bg"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/white"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/not_now"
+        android:id="@+id/btnCancal"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="35dp"
+        android:textSize="20sp"
+        android:padding="10dp"
+        android:textColor="@color/black"/>
+
+</LinearLayout>

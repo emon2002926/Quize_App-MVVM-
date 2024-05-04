@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.bcsprokotlin.adapter.QuestionAdapter
 import com.example.bcsprokotlin.databinding.FragmentQuestionBinding
@@ -32,23 +33,26 @@ class QuestionFragment : Fragment() {
         viewModel.viewModelScope.launch {
             viewModel.getQuestion()
         }
+
+        binding.backButton.setOnClickListener { findNavController().navigateUp() }
+
         lifecycleScope.launch {
             questionAdapter = QuestionAdapter()
             viewModel.questions.observe(viewLifecycleOwner) { response ->
                 when (response) {
 
                     is Resource.Loading -> {
-                        showProgressBar()
+                        showShimmerLayout()
                     }
                     is Resource.Success -> {
-                        hideProgressBar()
+                        hideShimmerLayout()
                         response.data?.let { questionList ->
                             questionAdapter.differ.submitList(questionList)
 
                         }
                     }
                     is Resource.Error -> {
-                        hideProgressBar()
+                        hideShimmerLayout()
                         response.message?.let { message ->
                             Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
                         }
@@ -71,14 +75,19 @@ class QuestionFragment : Fragment() {
 
     }
 
-    private fun hideProgressBar() = binding.apply{
-        progressBar.visibility= View.GONE
-        rvQuestion.visibility=View.VISIBLE
+
+    private fun hideShimmerLayout()=binding.apply {
+        shimmerLayout.stopShimmer()
+        shimmerLayout.visibility = View.GONE
+        rvQuestion.visibility = View.VISIBLE
     }
-    private fun showProgressBar() = binding.apply{
-        progressBar.visibility= View.VISIBLE
-        rvQuestion.visibility=View.GONE
+
+    private fun  showShimmerLayout() = binding.apply {
+        shimmerLayout.startShimmer()
+        shimmerLayout.visibility = View.VISIBLE
+        rvQuestion.visibility = View.GONE
     }
+
 
 
 }

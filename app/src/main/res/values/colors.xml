@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="colorPrimary">#6200EE</color>
-    <color name="colorPrimaryDark">#3700B3</color>
-    <color name="colorAccent">#03DAC5</color>
+    <color name="colorPrimary">#1489ee</color>
+    <color name="colorPrimaryDark">#0e5eaa</color>
+    <color name="colorAccent">#f57c00</color>
 
 
     <color name="black">#FF000000</color>
@@ -35,6 +35,9 @@
     <color name="DeepGrey">#636262</color>
     <color name="LiteBlack">#D5252525</color>
     <color name="LiteBlack2">#595656</color>
+
+    <color name="shimmerBackground">#989898</color>
+
 
 
 </resources>

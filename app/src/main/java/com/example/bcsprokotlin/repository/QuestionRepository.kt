@@ -6,7 +6,7 @@ import com.example.bcsprokotlin.model.SubjectName
 import com.example.bcsprokotlin.util.Constants.Companion.API_KEY
 import retrofit2.Response
 
-class Repository {
+class QuestionRepository {
     suspend fun getQuestion( apiNumber: Int,pageNumber:Int,limit:Int): Response<MutableList<Question>> {
         return RetrofitInstance.api.getQuestions(API_KEY, apiNumber,pageNumber,limit)
     }

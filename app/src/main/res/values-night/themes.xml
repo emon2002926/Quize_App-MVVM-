@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.BCSPROKotlin" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Base.Theme.BCSPROKotlin" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
 <!--        <item  name="android:windowTranslucentStatus">-->
@@ -9,6 +9,8 @@
 <!--        <item name="android:statusBarColor">-->
 <!--            @android:color/transparent-->
 <!--        </item>-->
-
+        <item name="colorPrimary">@color/dodger_blue</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
     </style>
 </resources>

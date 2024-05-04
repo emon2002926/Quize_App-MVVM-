@@ -3,66 +3,62 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/homeFragment2">
 
     <fragment
-        android:id="@+id/homeFragment"
+        android:id="@+id/homeFragment2"
         android:name="com.example.bcsprokotlin.ui.fragment.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
         <action
-            android:id="@+id/action_homeFragment_to_subjectsFragment"
+            android:id="@+id/action_homeFragment2_to_subjectsFragment"
             app:destination="@id/subjectsFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
-            app:popExitAnim="@anim/slide_out_right"
             app:popEnterAnim="@anim/slide_in_left"
-            />
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
-            android:id="@+id/action_homeFragment_to_questionFragment"
-            app:destination="@id/questionFragment" />
+            android:id="@+id/action_homeFragment2_to_questionFragment"
+            app:destination="@id/questionFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_homeFragment2_to_testFragment"
+            app:destination="@id/testFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
     <fragment
-        android:id="@+id/recordFragment"
-        android:name="com.example.bcsprokotlin.ui.fragment.RecordFragment"
-        android:label="fragment_record"
-        tools:layout="@layout/fragment_record" >
-<!--        <action-->
-<!--            android:id="@+id/action_recordFragment_to_subjectsFragment"-->
-<!--            app:destination="@id/subjectsFragment"-->
-<!--            app:enterAnim="@anim/slide_in_right"-->
-<!--            app:exitAnim="@anim/slide_out_left"-->
-<!--            app:popExitAnim="@anim/slide_out_right"-->
-<!--            app:popEnterAnim="@anim/slide_in_left"/>-->
-
-    </fragment>
-    <fragment
-        android:id="@+id/moreFragment"
+        android:id="@+id/moreFragment2"
         android:name="com.example.bcsprokotlin.ui.fragment.MoreFragment"
         android:label="fragment_more"
-        tools:layout="@layout/fragment_more" >
-
-    </fragment>
-    <fragment
-        android:id="@+id/subjectsFragment"
-        android:name="com.example.bcsprokotlin.ui.fragment.SubjectsFragment"
-        android:label="fragment_subjects"
-        tools:layout="@layout/fragment_subjects"
-        >
-        <action
-            android:id="@+id/action_subjectsFragment_to_questionFragment"
-            app:destination="@id/questionFragment" />
-        <action
-            android:id="@+id/action_subjectsFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_more" />
     <fragment
         android:id="@+id/questionFragment"
         android:name="com.example.bcsprokotlin.ui.fragment.QuestionFragment"
         android:label="fragment_question"
-        tools:layout="@layout/fragment_question" >
+        tools:layout="@layout/fragment_question" />
+    <fragment
+        android:id="@+id/recordFragment2"
+        android:name="com.example.bcsprokotlin.ui.fragment.RecordFragment"
+        android:label="fragment_record"
+        tools:layout="@layout/fragment_record" />
+    <fragment
+        android:id="@+id/subjectsFragment"
+        android:name="com.example.bcsprokotlin.ui.fragment.SubjectsFragment"
+        android:label="fragment_subjects"
+        tools:layout="@layout/fragment_subjects" >
         <action
-            android:id="@+id/action_questionFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
+            android:id="@+id/action_subjectsFragment_to_questionFragment"
+            app:destination="@id/questionFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/testFragment"
+        android:name="com.example.bcsprokotlin.ui.fragment.TestFragment"
+        android:label="fragment_test"
+        tools:layout="@layout/fragment_test" />
 </navigation>

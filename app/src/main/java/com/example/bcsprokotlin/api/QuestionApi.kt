@@ -27,4 +27,14 @@ interface QuestionApi {
         @Query("limit") limit: Int,
 
         ): Response<MutableList<SubjectName>>
+    @GET("/api/getData.php")
+    suspend fun getExam(
+        @Query("apiKey")
+        apiKey: String="abc123",
+        @Query("apiNum") apiNum: Int,
+        @Query("page") pageNumber: Int,
+        @Query("limit") limit: Int,
+
+        ): Response<MutableList<SubjectName>>
+
 }

@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:id="@+id/fullLayout"
+    android:background="@color/white"
+    android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:elevation="30dp"
+        app:cardCornerRadius="10dp"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/divider"
+            android:id="@+id/linear"
+            android:orientation="vertical">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:visibility="visible"
+                android:background="@drawable/shimer_bg_gray"
+                />
+
+            <!--        option 1 layOut-->
+            <RelativeLayout
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                >
+
+                <View
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:background="@drawable/shimer_bg_gray"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="20dp"
+                    />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="22dp"
+                    android:layout_marginStart="60dp"
+                    android:layout_marginTop="10sp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="15sp"
+                    android:layout_marginBottom="10sp"
+                    android:background="@drawable/shimer_bg_gray"
+                    />
+            </RelativeLayout>
+            <!--        option 2 layout-->
+
+            <RelativeLayout
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                >
+                <View
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:background="@drawable/shimer_bg_gray"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="20dp"
+                    />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="22dp"
+                    android:layout_marginStart="60sp"
+                    android:layout_marginTop="10sp"
+                    android:layout_marginEnd="15sp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginBottom="10sp"
+                    android:background="@drawable/shimer_bg_gray"
+                    />
+            </RelativeLayout>
+
+            <!--        option 3 layout-->
+            <RelativeLayout
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                >
+
+                <View
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="20dp"
+                    android:background="@drawable/shimer_bg_gray"
+
+                    />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="22dp"
+                    android:layout_marginStart="60sp"
+                    android:layout_marginTop="10sp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="10sp"
+                    android:layout_marginBottom="10sp"
+                    android:background="@drawable/shimer_bg_gray"
+                    />
+
+            </RelativeLayout>
+            <!--        option 4 layout-->
+            <RelativeLayout
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="15dp"
+                >
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:background="@drawable/shimer_bg_gray"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="20dp"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="22dp"
+                    android:layout_marginStart="60sp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_alignParentEnd="true"
+                    android:background="@drawable/shimer_bg_gray"
+
+                    />
+
+            </RelativeLayout>
+
+
+
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:elevation="30dp"
+        app:cardCornerRadius="10dp"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/divider"
+            android:orientation="vertical">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:visibility="visible"
+                android:background="@drawable/shimer_bg_gray"
+                />
+
+            <!--        option 1 layOut-->
+            <RelativeLayout
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                >
+
+                <View
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:background="@drawable/shimer_bg_gray"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="20dp"
+                    />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="22dp"
+                    android:layout_marginStart="60dp"
+                    android:layout_marginTop="10sp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="15sp"
+                    android:layout_marginBottom="10sp"
+                    android:background="@drawable/shimer_bg_gray"
+                    />
+            </RelativeLayout>
+            <!--        option 2 layout-->
+
+            <RelativeLayout
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                >
+                <View
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:background="@drawable/shimer_bg_gray"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="20dp"
+                    />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="22dp"
+                    android:layout_marginStart="60sp"
+                    android:layout_marginTop="10sp"
+                    android:layout_marginEnd="15sp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginBottom="10sp"
+                    android:background="@drawable/shimer_bg_gray"
+                    />
+            </RelativeLayout>
+
+            <!--        option 3 layout-->
+            <RelativeLayout
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                >
+
+                <View
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="20dp"
+                    android:background="@drawable/shimer_bg_gray"
+
+                    />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="22dp"
+                    android:layout_marginStart="60sp"
+                    android:layout_marginTop="10sp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="10sp"
+                    android:layout_marginBottom="10sp"
+                    android:background="@drawable/shimer_bg_gray"
+                    />
+
+            </RelativeLayout>
+            <!--        option 4 layout-->
+            <RelativeLayout
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="15dp"
+                >
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:background="@drawable/shimer_bg_gray"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="20dp"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="22dp"
+                    android:layout_marginStart="60sp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_alignParentEnd="true"
+                    android:background="@drawable/shimer_bg_gray"
+
+                    />
+
+            </RelativeLayout>
+
+
+
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:elevation="30dp"
+        app:cardCornerRadius="10dp"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/divider"
+            android:orientation="vertical">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:visibility="visible"
+                android:background="@drawable/shimer_bg_gray"
+                />
+
+            <!--        option 1 layOut-->
+            <RelativeLayout
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                >
+
+                <View
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:background="@drawable/shimer_bg_gray"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="20dp"
+                    />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="22dp"
+                    android:layout_marginStart="60dp"
+                    android:layout_marginTop="10sp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="15sp"
+                    android:layout_marginBottom="10sp"
+                    android:background="@drawable/shimer_bg_gray"
+                    />
+            </RelativeLayout>
+            <!--        option 2 layout-->
+
+            <RelativeLayout
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                >
+                <View
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:background="@drawable/shimer_bg_gray"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="20dp"
+                    />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="22dp"
+                    android:layout_marginStart="60sp"
+                    android:layout_marginTop="10sp"
+                    android:layout_marginEnd="15sp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginBottom="10sp"
+                    android:background="@drawable/shimer_bg_gray"
+                    />
+            </RelativeLayout>
+
+            <!--        option 3 layout-->
+            <RelativeLayout
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:id="@+id/option3Layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                >
+
+                <View
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="20dp"
+                    android:background="@drawable/shimer_bg_gray"
+
+                    />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="22dp"
+                    android:layout_marginStart="60sp"
+                    android:layout_marginTop="10sp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="10sp"
+                    android:layout_marginBottom="10sp"
+                    android:background="@drawable/shimer_bg_gray"
+                    />
+
+            </RelativeLayout>
+            <!--        option 4 layout-->
+            <RelativeLayout
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="15dp"
+                >
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:background="@drawable/shimer_bg_gray"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="20dp"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="22dp"
+                    android:layout_marginStart="60sp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_alignParentEnd="true"
+                    android:background="@drawable/shimer_bg_gray"
+
+                    />
+
+            </RelativeLayout>
+
+
+
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+
+</LinearLayout>

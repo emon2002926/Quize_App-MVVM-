@@ -50,22 +50,22 @@ class SubjectAdapter:RecyclerView.Adapter<SubjectAdapter.SubjectViewHolder>() {
                 tvSubjectName.text=subjectList.subject_name
                 Log.d("dksdfhj",subjectList.start_color)
 
-
-                val gradientDrawable = GradientDrawable().apply {
-                    shape = GradientDrawable.RECTANGLE
-                    colors = intArrayOf(
-                        Color.parseColor(subjectList.start_color), // Start color (replace "#FF0000" with your hex code)
-                        Color.parseColor(subjectList.end_color)  // End color (replace "#00FF00" with your hex code)
-                    )
-                    cornerRadius = contex.resources.getDimension(R.dimen.corner_radius) // Corner radius in dp
-                    setStroke(
-                        contex.resources.getDimensionPixelSize(R.dimen.stroke_width),
-                        Color.parseColor("#FFFFFF") // Stroke color (replace "#FFFFFF" with your hex code)
-                    )
-                    orientation = GradientDrawable.Orientation.LEFT_RIGHT
-                }
-
-                parentLayout.background = gradientDrawable
+//
+//                val gradientDrawable = GradientDrawable().apply {
+//                    shape = GradientDrawable.RECTANGLE
+//                    colors = intArrayOf(
+//                        Color.parseColor(subjectList.start_color), // Start color (replace "#FF0000" with your hex code)
+//                        Color.parseColor(subjectList.end_color)  // End color (replace "#00FF00" with your hex code)
+//                    )
+//                    cornerRadius = contex.resources.getDimension(R.dimen.corner_radius) // Corner radius in dp
+//                    setStroke(
+//                        contex.resources.getDimensionPixelSize(R.dimen.stroke_width),
+//                        Color.parseColor("#FFFFFF") // Stroke color (replace "#FFFFFF" with your hex code)
+//                    )
+//                    orientation = GradientDrawable.Orientation.LEFT_RIGHT
+//                }
+//
+//                parentLayout.background = gradientDrawable
 
             }
 
