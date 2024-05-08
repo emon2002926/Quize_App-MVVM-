@@ -29,7 +29,7 @@
                 android:layout_marginStart="15dp"
                 android:layout_marginEnd="15dp"
                 android:visibility="visible"
-                android:background="@drawable/shimer_bg_gray"
+                android:background="@drawable/shimmer_bg_gray"
                 />
 
             <!--        option 1 layOut-->
@@ -44,7 +44,7 @@
                 <View
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    android:background="@drawable/shimer_bg_gray"
+                    android:background="@drawable/shimmer_bg_gray"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="20dp"
                     />
@@ -56,7 +56,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_marginEnd="15sp"
                     android:layout_marginBottom="10sp"
-                    android:background="@drawable/shimer_bg_gray"
+                    android:background="@drawable/shimmer_bg_gray"
                     />
             </RelativeLayout>
             <!--        option 2 layout-->
@@ -71,7 +71,7 @@
                 <View
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    android:background="@drawable/shimer_bg_gray"
+                    android:background="@drawable/shimmer_bg_gray"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="20dp"
                     />
@@ -83,7 +83,7 @@
                     android:layout_marginEnd="15sp"
                     android:layout_alignParentEnd="true"
                     android:layout_marginBottom="10sp"
-                    android:background="@drawable/shimer_bg_gray"
+                    android:background="@drawable/shimmer_bg_gray"
                     />
             </RelativeLayout>
 
@@ -101,7 +101,7 @@
                     android:layout_height="22dp"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="20dp"
-                    android:background="@drawable/shimer_bg_gray"
+                    android:background="@drawable/shimmer_bg_gray"
 
                     />
 
@@ -113,7 +113,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_marginEnd="10sp"
                     android:layout_marginBottom="10sp"
-                    android:background="@drawable/shimer_bg_gray"
+                    android:background="@drawable/shimmer_bg_gray"
                     />
 
             </RelativeLayout>
@@ -130,7 +130,7 @@
                 <ImageView
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    android:background="@drawable/shimer_bg_gray"
+                    android:background="@drawable/shimmer_bg_gray"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="20dp"
                     />
@@ -142,7 +142,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="10dp"
                     android:layout_alignParentEnd="true"
-                    android:background="@drawable/shimer_bg_gray"
+                    android:background="@drawable/shimmer_bg_gray"
 
                     />
 
@@ -172,7 +172,7 @@
                 android:layout_marginStart="15dp"
                 android:layout_marginEnd="15dp"
                 android:visibility="visible"
-                android:background="@drawable/shimer_bg_gray"
+                android:background="@drawable/shimmer_bg_gray"
                 />
 
             <!--        option 1 layOut-->
@@ -187,7 +187,7 @@
                 <View
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    android:background="@drawable/shimer_bg_gray"
+                    android:background="@drawable/shimmer_bg_gray"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="20dp"
                     />
@@ -199,7 +199,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_marginEnd="15sp"
                     android:layout_marginBottom="10sp"
-                    android:background="@drawable/shimer_bg_gray"
+                    android:background="@drawable/shimmer_bg_gray"
                     />
             </RelativeLayout>
             <!--        option 2 layout-->
@@ -214,7 +214,7 @@
                 <View
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    android:background="@drawable/shimer_bg_gray"
+                    android:background="@drawable/shimmer_bg_gray"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="20dp"
                     />
@@ -226,7 +226,7 @@
                     android:layout_marginEnd="15sp"
                     android:layout_alignParentEnd="true"
                     android:layout_marginBottom="10sp"
-                    android:background="@drawable/shimer_bg_gray"
+                    android:background="@drawable/shimmer_bg_gray"
                     />
             </RelativeLayout>
 
@@ -244,7 +244,7 @@
                     android:layout_height="22dp"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="20dp"
-                    android:background="@drawable/shimer_bg_gray"
+                    android:background="@drawable/shimmer_bg_gray"
 
                     />
 
@@ -256,7 +256,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_marginEnd="10sp"
                     android:layout_marginBottom="10sp"
-                    android:background="@drawable/shimer_bg_gray"
+                    android:background="@drawable/shimmer_bg_gray"
                     />
 
             </RelativeLayout>
@@ -273,7 +273,7 @@
                 <ImageView
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    android:background="@drawable/shimer_bg_gray"
+                    android:background="@drawable/shimmer_bg_gray"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="20dp"
                     />
@@ -285,7 +285,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="10dp"
                     android:layout_alignParentEnd="true"
-                    android:background="@drawable/shimer_bg_gray"
+                    android:background="@drawable/shimmer_bg_gray"
 
                     />
 
@@ -315,7 +315,7 @@
                 android:layout_marginStart="15dp"
                 android:layout_marginEnd="15dp"
                 android:visibility="visible"
-                android:background="@drawable/shimer_bg_gray"
+                android:background="@drawable/shimmer_bg_gray"
                 />
 
             <!--        option 1 layOut-->
@@ -330,7 +330,7 @@
                 <View
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    android:background="@drawable/shimer_bg_gray"
+                    android:background="@drawable/shimmer_bg_gray"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="20dp"
                     />
@@ -342,7 +342,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_marginEnd="15sp"
                     android:layout_marginBottom="10sp"
-                    android:background="@drawable/shimer_bg_gray"
+                    android:background="@drawable/shimmer_bg_gray"
                     />
             </RelativeLayout>
             <!--        option 2 layout-->
@@ -357,7 +357,7 @@
                 <View
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    android:background="@drawable/shimer_bg_gray"
+                    android:background="@drawable/shimmer_bg_gray"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="20dp"
                     />
@@ -369,7 +369,7 @@
                     android:layout_marginEnd="15sp"
                     android:layout_alignParentEnd="true"
                     android:layout_marginBottom="10sp"
-                    android:background="@drawable/shimer_bg_gray"
+                    android:background="@drawable/shimmer_bg_gray"
                     />
             </RelativeLayout>
 
@@ -388,7 +388,7 @@
                     android:layout_height="22dp"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="20dp"
-                    android:background="@drawable/shimer_bg_gray"
+                    android:background="@drawable/shimmer_bg_gray"
 
                     />
 
@@ -400,7 +400,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_marginEnd="10sp"
                     android:layout_marginBottom="10sp"
-                    android:background="@drawable/shimer_bg_gray"
+                    android:background="@drawable/shimmer_bg_gray"
                     />
 
             </RelativeLayout>
@@ -417,7 +417,7 @@
                 <ImageView
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    android:background="@drawable/shimer_bg_gray"
+                    android:background="@drawable/shimmer_bg_gray"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="20dp"
                     />
@@ -429,7 +429,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="10dp"
                     android:layout_alignParentEnd="true"
-                    android:background="@drawable/shimer_bg_gray"
+                    android:background="@drawable/shimmer_bg_gray"
 
                     />
 

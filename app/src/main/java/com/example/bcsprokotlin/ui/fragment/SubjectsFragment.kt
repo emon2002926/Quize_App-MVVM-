@@ -42,21 +42,21 @@ class SubjectsFragment : Fragment() {
         viewModel.subjects.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is Resource.Success -> {
-//                        hidePregressBar()
+                    hideShimmer()
                     response.data?.let { questionList ->
                         subjectAdapter.differ.submitList(questionList)
 
                     }
                 }
                 is Resource.Error -> {
-//                        hidePregressBar()
+                    hideShimmer()
                     response.message?.let { message ->
                         Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
                     }
                 }
 
                 is Resource.Loading -> {
-//                        showPregressBar()
+                    showShimmer()
                 }
             }
         }
@@ -73,13 +73,17 @@ class SubjectsFragment : Fragment() {
     }
 
 
-//    private fun hidePregressBar() = binding.progressBar.apply{
-//        visibility= View.GONE
-//        binding.rvQuestion.visibility=View.VISIBLE
-//    }
-//    private fun showPregressBar() = binding.progressBar.apply{
-//        visibility= View.VISIBLE
-//        binding.rvQuestion.visibility=View.GONE
-//    }
+
+    private fun showShimmer() = binding.apply{
+        shimmerLayout.startShimmer()
+        shimmerLayout.visibility = View.VISIBLE
+       rvSubjects.visibility = View.GONE
+    }
+
+        private fun hideShimmer() = binding.apply{
+            shimmerLayout.stopShimmer()
+            shimmerLayout.visibility= View.GONE
+             rvSubjects.visibility=View.VISIBLE
+    }
 
 }

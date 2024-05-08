@@ -27,6 +27,8 @@ lateinit var binding: FragmentHomeBinding
             }
             scrollView.isVerticalScrollBarEnabled = false
             scrollView.isHorizontalScrollBarEnabled = false;
+
+            showAll.setOnClickListener { findNavController().navigate(R.id.action_homeFragment2_to_subjectsFragment) }
         }
 
         return binding.root
