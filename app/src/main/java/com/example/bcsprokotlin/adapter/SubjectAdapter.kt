@@ -1,17 +1,13 @@
 package com.example.bcsprokotlin.adapter
 
-import android.graphics.Color
-import android.graphics.drawable.GradientDrawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.bcsprokotlin.R
 import com.example.bcsprokotlin.databinding.ItemSubjectBinding
-import com.example.bcsprokotlin.model.SubjectName
+import com.example.bcsprokotlin.ui.fragment.SubjectsFragment.SubjectName
 
 class SubjectAdapter:RecyclerView.Adapter<SubjectAdapter.SubjectViewHolder>() {
 

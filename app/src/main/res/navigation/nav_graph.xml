@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/homeFragment2"
-        android:name="com.example.bcsprokotlin.ui.fragment.HomeFragment"
+        android:name="com.example.bcsprokotlin.ui.fragment.HomeFragment.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
         <action
@@ -23,14 +23,17 @@
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+            app:popExitAnim="@anim/slide_out_right"
+            />
+
         <action
-            android:id="@+id/action_homeFragment2_to_testFragment"
-            app:destination="@id/testFragment"
+            android:id="@+id/action_homeFragment2_to_questionBankFragment"
+            app:destination="@id/questionBankFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+            app:popExitAnim="@anim/slide_out_right"
+            />
     </fragment>
     <fragment
         android:id="@+id/moreFragment2"
@@ -39,7 +42,7 @@
         tools:layout="@layout/fragment_more" />
     <fragment
         android:id="@+id/questionFragment"
-        android:name="com.example.bcsprokotlin.ui.fragment.QuestionFragment"
+        android:name="com.example.bcsprokotlin.ui.fragment.QuestionFragment.QuestionFragment"
         android:label="fragment_question"
         tools:layout="@layout/fragment_question" />
     <fragment
@@ -49,16 +52,19 @@
         tools:layout="@layout/fragment_record" />
     <fragment
         android:id="@+id/subjectsFragment"
-        android:name="com.example.bcsprokotlin.ui.fragment.SubjectsFragment"
+        android:name="com.example.bcsprokotlin.ui.fragment.SubjectsFragment.SubjectsFragment"
         android:label="fragment_subjects"
         tools:layout="@layout/fragment_subjects" >
         <action
             android:id="@+id/action_subjectsFragment_to_questionFragment"
             app:destination="@id/questionFragment" />
     </fragment>
+
     <fragment
-        android:id="@+id/testFragment"
-        android:name="com.example.bcsprokotlin.ui.fragment.TestFragment"
-        android:label="fragment_test"
-        tools:layout="@layout/fragment_test" />
+        android:id="@+id/questionBankFragment"
+        android:name="com.example.bcsprokotlin.ui.fragment.QuestionBankFragment.QuestionBankFragment"
+        android:label="fragment_question_bank"
+        tools:layout="@layout/fragment_question_bank" >
+
+    </fragment>
 </navigation>

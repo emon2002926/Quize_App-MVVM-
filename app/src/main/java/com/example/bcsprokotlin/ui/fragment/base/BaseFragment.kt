@@ -8,12 +8,12 @@ import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 
 
-abstract class BaseFragment <viewBinding : ViewBinding>(
-    private val bindingInflater : (inflater : LayoutInflater) ->viewBinding
-) :Fragment() {
+abstract class BaseFragment<viewBinding : ViewBinding>(
+    private val bindingInflater: (inflater: LayoutInflater) -> viewBinding
+) : Fragment() {
 
-    private var _binding : viewBinding? = null
-    val binding : viewBinding get() = _binding as viewBinding
+    private var _binding: viewBinding? = null
+    val binding: viewBinding get() = _binding as viewBinding
 
 
     override fun onCreateView(
@@ -22,17 +22,15 @@ abstract class BaseFragment <viewBinding : ViewBinding>(
         savedInstanceState: Bundle?
     ): View? {
 
-        _binding =  bindingInflater.invoke(inflater)
+        _binding = bindingInflater.invoke(inflater)
 
-//        loading = ProgressDialog(requireContext())
 
-        taskExecutor()
-//        allObserver()
+        onCreateView()
+
         return binding.root
     }
 
-    abstract fun taskExecutor()
-//    abstract fun allObserver()
+    abstract fun onCreateView()
 
 
 }

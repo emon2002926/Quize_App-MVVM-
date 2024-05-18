@@ -1,4 +1,4 @@
-package com.example.bcsprokotlin.ui.fragment
+package com.example.bcsprokotlin.ui.fragment.QuestionFragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,37 +7,32 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.bcsprokotlin.adapter.QuestionAdapter
 import com.example.bcsprokotlin.databinding.FragmentQuestionBinding
-import com.example.bcsprokotlin.viewModel.QuestionViewModel
+import com.example.bcsprokotlin.ui.fragment.base.BaseFragment
 import com.example.bcsprokotlin.util.Resource
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
-class QuestionFragment : Fragment() {
+@AndroidEntryPoint
+class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionBinding::inflate) {
 
-    lateinit var binding: FragmentQuestionBinding
 
     private var questionAdapter= QuestionAdapter()
 
-    private val viewModel: QuestionViewModel by activityViewModels()
+    private val viewModel: QuestionViewModel by viewModels()
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?): View {
-        binding = FragmentQuestionBinding.inflate(inflater,container,false)
+    override fun onCreateView() {
 
-        viewModel.viewModelScope.launch {
-            viewModel.getQuestion()
-        }
 
         binding.backButton.setOnClickListener { findNavController().navigateUp() }
 
         lifecycleScope.launch {
-            questionAdapter = QuestionAdapter()
             viewModel.questions.observe(viewLifecycleOwner) { response ->
                 when (response) {
 
@@ -63,10 +58,9 @@ class QuestionFragment : Fragment() {
             }
         }
 
-
         setupRecyclerView()
-        return binding.root
     }
+
 
     private fun setupRecyclerView() = binding.rvQuestion.apply {
         adapter = questionAdapter

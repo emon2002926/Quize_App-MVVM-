@@ -6,14 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.viewModelScope
 import com.example.bcsprokotlin.R
 import com.example.bcsprokotlin.adapter.QuestionAdapter
 import com.example.bcsprokotlin.databinding.FragmentRecordBinding
-import com.example.bcsprokotlin.viewModel.QuestionViewModel
-import kotlinx.coroutines.launch
+import com.example.bcsprokotlin.ui.fragment.QuestionFragment.QuestionViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
 
+@AndroidEntryPoint
 class RecordFragment : Fragment() {
     lateinit var binding: FragmentRecordBinding
 

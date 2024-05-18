@@ -13,9 +13,9 @@ import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import com.example.bcsprokotlin.R
 import com.example.bcsprokotlin.databinding.ActivityMainBinding
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
@@ -67,7 +67,5 @@ class MainActivity : AppCompatActivity() {
     private fun showBottomNavigationView() {
         binding.bottomNavigationView.visibility = View.VISIBLE
     }
-
-
 
 }

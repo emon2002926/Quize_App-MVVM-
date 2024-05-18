@@ -1,33 +1,25 @@
-package com.example.bcsprokotlin.ui.fragment
+package com.example.bcsprokotlin.ui.fragment.SubjectsFragment
 
-import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.ItemTouchHelper.UP
 import com.example.bcsprokotlin.adapter.SubjectAdapter
 import com.example.bcsprokotlin.databinding.FragmentSubjectsBinding
+import com.example.bcsprokotlin.ui.fragment.base.BaseFragment
 import com.example.bcsprokotlin.util.Resource
-import com.example.bcsprokotlin.viewModel.SubjectViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
-class SubjectsFragment : Fragment() {
+@AndroidEntryPoint
+class SubjectsFragment : BaseFragment<FragmentSubjectsBinding>(FragmentSubjectsBinding::inflate) {
 
-    lateinit var binding: FragmentSubjectsBinding
     private val viewModel: SubjectViewModel by viewModels()
-    private var subjectAdapter= SubjectAdapter()
+    private var subjectAdapter = SubjectAdapter()
 
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?): View {
-
-        binding = FragmentSubjectsBinding.inflate(inflater,container,false)
+    override fun onCreateView() {
 
         viewModel.viewModelScope.launch {
             viewModel.getSubjectName(3)
@@ -48,6 +40,7 @@ class SubjectsFragment : Fragment() {
 
                     }
                 }
+
                 is Resource.Error -> {
                     hideShimmer()
                     response.message?.let { message ->
@@ -64,7 +57,6 @@ class SubjectsFragment : Fragment() {
 
         setupRecyclerView()
 
-        return binding.root
     }
 
     private fun setupRecyclerView() = binding.rvSubjects.apply {
@@ -73,17 +65,16 @@ class SubjectsFragment : Fragment() {
     }
 
 
-
-    private fun showShimmer() = binding.apply{
+    private fun showShimmer() = binding.apply {
         shimmerLayout.startShimmer()
         shimmerLayout.visibility = View.VISIBLE
-       rvSubjects.visibility = View.GONE
+        rvSubjects.visibility = View.GONE
     }
 
-        private fun hideShimmer() = binding.apply{
-            shimmerLayout.stopShimmer()
-            shimmerLayout.visibility= View.GONE
-             rvSubjects.visibility=View.VISIBLE
+    private fun hideShimmer() = binding.apply {
+        shimmerLayout.stopShimmer()
+        shimmerLayout.visibility = View.GONE
+        rvSubjects.visibility = View.VISIBLE
     }
 
 }
