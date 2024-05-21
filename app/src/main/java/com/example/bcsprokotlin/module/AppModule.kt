@@ -13,6 +13,6 @@ class AppModule {
     @Provides
     @Singleton
     fun provideConverter(): Converter {
-        return Converter()
+        return Converter
     }
 }

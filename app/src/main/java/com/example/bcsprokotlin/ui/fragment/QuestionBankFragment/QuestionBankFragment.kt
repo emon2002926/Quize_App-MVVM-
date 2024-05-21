@@ -10,6 +10,7 @@ import com.example.bcsprokotlin.databinding.FragmentQuestionBankBinding
 import com.example.bcsprokotlin.ui.fragment.base.BaseFragment
 import com.example.bcsprokotlin.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class QuestionBankFragment :
@@ -17,13 +18,13 @@ class QuestionBankFragment :
 
     private val viewModel: QuestionBankViewModel by viewModels()
 
-    private var questionBankAdapter = QuestionBankAdapter()
+    @Inject
+    lateinit var questionBankAdapter: QuestionBankAdapter
 
     override fun onCreateView() {
 
         binding.backButton.setOnClickListener { findNavController().navigateUp() }
 
-//        questionBankAdapter = QuestionBankAdapter()
         viewModel.bcsYearName.observe(viewLifecycleOwner) { response ->
 
             when (response) {
@@ -52,7 +53,7 @@ class QuestionBankFragment :
         setupRecyclerView()
     }
 
-    fun setupRecyclerView() = binding.rvQuestionBank.apply {
+    private fun setupRecyclerView() = binding.rvQuestionBank.apply {
         adapter = questionBankAdapter
         layoutManager = LinearLayoutManager(context)
     }

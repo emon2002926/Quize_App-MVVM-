@@ -9,8 +9,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.bcsprokotlin.databinding.QuestionBankItemBinding
 import com.example.bcsprokotlin.model.BcsYearName
 import com.example.bcsprokotlin.util.Converter
+import javax.inject.Inject
 
-class QuestionBankAdapter : RecyclerView.Adapter<QuestionBankAdapter.QuestionBankViwHolder>() {
+class QuestionBankAdapter @Inject constructor(private val converter: Converter) :
+    RecyclerView.Adapter<QuestionBankAdapter.QuestionBankViwHolder>() {
 
     inner class QuestionBankViwHolder(val binding: QuestionBankItemBinding) :
         RecyclerView.ViewHolder(binding.root)
