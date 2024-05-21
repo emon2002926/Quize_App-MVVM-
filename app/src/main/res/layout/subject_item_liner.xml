@@ -14,8 +14,8 @@
         android:layout_marginStart="17dp"
         android:layout_marginTop="@dimen/_12sdp"
         android:layout_marginEnd="17dp"
-        android:padding="@dimen/_4sdp"
-        android:src="@drawable/study_icon" />
+        android:padding="@dimen/_12sdp"
+        android:src="@drawable/learning" />
 
     <TextView
         android:layout_width="@dimen/_124sdp"
@@ -23,10 +23,10 @@
         android:ellipsize="end"
         android:fontFamily="@font/baloo_bhaina_2_medium"
         android:gravity="center"
-        android:lineSpacingMultiplier="0.7"
+        android:lineSpacingMultiplier="0.6"
         android:maxLines="2"
         android:text="আন্তর্জাতিক বিষয়াবলি"
-        android:textColor="@color/white"
+        android:textColor="@color/LiteBlack"
         android:textSize="@dimen/_14ssp"
         android:textStyle="bold" />
 </LinearLayout>
