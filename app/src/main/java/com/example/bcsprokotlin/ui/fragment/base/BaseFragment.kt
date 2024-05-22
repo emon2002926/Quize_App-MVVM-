@@ -23,8 +23,6 @@ abstract class BaseFragment<viewBinding : ViewBinding>(
     ): View? {
 
         _binding = bindingInflater.invoke(inflater)
-
-
         onCreateView()
 
         return binding.root

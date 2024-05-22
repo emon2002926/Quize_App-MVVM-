@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.bcsprokotlin.R
 import com.example.bcsprokotlin.databinding.McqLayoutBinding
 import com.example.bcsprokotlin.model.Question
-import com.example.bcsprokotlin.util.Converter
+import com.example.bcsprokotlin.util.GeneralUtils
 
 class QuestionAdapter : RecyclerView.Adapter<QuestionAdapter.QuestionViewHolder>() {
     inner class QuestionViewHolder(val binding: McqLayoutBinding) :
@@ -77,8 +77,8 @@ class QuestionAdapter : RecyclerView.Adapter<QuestionAdapter.QuestionViewHolder>
             Log.d("questinddd", questionList.question)
             holder.binding.apply {
 
-                textViewPosition2.text =
-                    Converter.convertEnglishToBengaliNumber("${position + 1}. ")
+                tvQuestionPosition.text =
+                    GeneralUtils.convertEnglishToBengaliNumber("${position + 1}" + ")")
 
                 //For Question
                 showImgOrTextView(questionList.question, questionList.image, questionIv, questionTv)
@@ -132,9 +132,12 @@ class QuestionAdapter : RecyclerView.Adapter<QuestionAdapter.QuestionViewHolder>
             textView.text = text
             textView.visibility = View.VISIBLE
         } else {
-            imageView.visibility = View.VISIBLE
-            textView.visibility = View.GONE
-            imageView.setImageBitmap(Converter.convertBase64ToBitmap(base64ImageString))
+            if (base64ImageString.isNotEmpty()) {
+                imageView.visibility = View.VISIBLE
+                textView.visibility = View.GONE
+                imageView.setImageBitmap(GeneralUtils.convertBase64ToBitmap(base64ImageString))
+            }
+
         }
 
     }

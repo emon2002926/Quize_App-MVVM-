@@ -3,10 +3,13 @@ package com.example.bcsprokotlin.util
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Base64
+import android.view.View
+import androidx.recyclerview.widget.RecyclerView
+import com.facebook.shimmer.ShimmerFrameLayout
 import java.text.NumberFormat
 import java.util.Locale
 
-object Converter {
+object GeneralUtils {
 
     fun convertEnglishToBengaliNumber(numberStr: String): String {
         try {
@@ -25,4 +28,16 @@ object Converter {
         return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size)
     }
 
+
+    fun hideShimmerLayout(shimmerLayout: ShimmerFrameLayout, recyclerView: RecyclerView) {
+        shimmerLayout.stopShimmer()
+        shimmerLayout.visibility = View.GONE
+        recyclerView.visibility = View.VISIBLE
+    }
+
+    fun showShimmerLayout(shimmerLayout: ShimmerFrameLayout, recyclerView: RecyclerView) {
+        shimmerLayout.startShimmer()
+        shimmerLayout.visibility = View.VISIBLE
+        recyclerView.visibility = View.GONE
+    }
 }

@@ -35,8 +35,8 @@ class SubjectsFragment : BaseFragment<FragmentSubjectsBinding>(FragmentSubjectsB
             when (response) {
                 is Resource.Success -> {
                     hideShimmer()
-                    response.data?.let { questionList ->
-                        subjectAdapter.differ.submitList(questionList)
+                    response.data?.let {
+                        subjectAdapter.differ.submitList(it)
 
                     }
                 }

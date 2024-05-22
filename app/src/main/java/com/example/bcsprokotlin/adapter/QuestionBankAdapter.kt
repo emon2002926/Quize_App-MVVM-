@@ -8,10 +8,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bcsprokotlin.databinding.QuestionBankItemBinding
 import com.example.bcsprokotlin.model.BcsYearName
-import com.example.bcsprokotlin.util.Converter
+import com.example.bcsprokotlin.util.GeneralUtils
 import javax.inject.Inject
 
-class QuestionBankAdapter @Inject constructor(private val converter: Converter) :
+class QuestionBankAdapter @Inject constructor(private val converter: GeneralUtils) :
     RecyclerView.Adapter<QuestionBankAdapter.QuestionBankViwHolder>() {
 
     inner class QuestionBankViwHolder(val binding: QuestionBankItemBinding) :
@@ -49,7 +49,7 @@ class QuestionBankAdapter @Inject constructor(private val converter: Converter) 
             with(holder.binding) {
                 questionBatch.text = bcsYearNames[position].bcsYearName
                 numOfQuestion.text =
-                    "প্রশ্নের পরিমাণ : ${Converter.convertEnglishToBengaliNumber(bcsYearNames[position].totalQuestion)}"
+                    "প্রশ্নের পরিমাণ : ${GeneralUtils.convertEnglishToBengaliNumber(bcsYearNames[position].totalQuestion)}"
             }
         }
     }

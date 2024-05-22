@@ -1,6 +1,6 @@
 package com.example.bcsprokotlin.module
 
-import com.example.bcsprokotlin.util.Converter
+import com.example.bcsprokotlin.util.GeneralUtils
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -12,7 +12,7 @@ import javax.inject.Singleton
 class AppModule {
     @Provides
     @Singleton
-    fun provideConverter(): Converter {
-        return Converter
+    fun provideConverter(): GeneralUtils {
+        return GeneralUtils
     }
 }

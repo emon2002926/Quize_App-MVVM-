@@ -12,33 +12,38 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class SubjectViewModel @Inject constructor(private val repository: Repository):ViewModel() {
+class SubjectViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
 
-    val pageNumber= 1
+    val pageNumber = 1
+
 
     val subjects: MutableLiveData<Resource<MutableList<SubjectName>>> = MutableLiveData()
-    suspend fun getSubjectName(apiNumber:Int){
+
+    suspend fun getSubjectName(apiNumber: Int) {
         subjects.postValue(Resource.Loading())
 
         try {
-            if (hasInternetConnection()){
-                val questionResponse =  repository.getSubjects(apiNumber ,pageNumber,
-                    Constants.PAGE_SIZE)
+            if (hasInternetConnection()) {
+                val questionResponse = repository.getSubjects(
+                    apiNumber, pageNumber,
+                    Constants.PAGE_SIZE
+                )
                 subjects.postValue(handleSubjectResponse(questionResponse))
-            }else{
+            } else {
                 subjects.postValue(Resource.Error("No internet connection"))
             }
-        }catch (t:Throwable){
-            when(t){
-                is IOException ->subjects.postValue(Resource.Error("Network Failure"))
-                else->subjects.postValue(Resource.Error("Conversion Error "))
+        } catch (t: Throwable) {
+            when (t) {
+                is IOException -> subjects.postValue(Resource.Error("Network Failure"))
+                else -> subjects.postValue(Resource.Error("Conversion Error "))
             }
         }
     }
 
-    private fun handleSubjectResponse(response : Response<MutableList<SubjectName>>
+    private fun handleSubjectResponse(
+        response: Response<MutableList<SubjectName>>
     ): Resource<MutableList<SubjectName>> {
-        if (response.isSuccessful){
+        if (response.isSuccessful) {
             response.body()?.let {
                 return Resource.Success(it)
             }
@@ -47,7 +52,7 @@ class SubjectViewModel @Inject constructor(private val repository: Repository):V
     }
 
 
-    private fun hasInternetConnection():Boolean {
+    private fun hasInternetConnection(): Boolean {
 //        val connectivityManager = getApplication<BcsApplication>().getSystemService(
 //            Context.CONNECTIVITY_SERVICE
 //        ) as ConnectivityManager
@@ -73,9 +78,8 @@ class SubjectViewModel @Inject constructor(private val repository: Repository):V
 //            }
 //        }
 
-    return true}
-
-
+        return true
+    }
 
 
 }

@@ -1,20 +1,14 @@
 package com.example.bcsprokotlin.ui.fragment.QuestionFragment
 
-import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.bcsprokotlin.adapter.QuestionAdapter
 import com.example.bcsprokotlin.databinding.FragmentQuestionBinding
 import com.example.bcsprokotlin.ui.fragment.base.BaseFragment
+import com.example.bcsprokotlin.util.GeneralUtils
 import com.example.bcsprokotlin.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -23,7 +17,7 @@ import kotlinx.coroutines.launch
 class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionBinding::inflate) {
 
 
-    private var questionAdapter= QuestionAdapter()
+    private var questionAdapter = QuestionAdapter()
 
     private val viewModel: QuestionViewModel by viewModels()
 
@@ -37,23 +31,27 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionB
                 when (response) {
 
                     is Resource.Loading -> {
-                        showShimmerLayout()
+                        GeneralUtils.showShimmerLayout(binding.shimmerLayout, binding.rvQuestion)
                     }
+
                     is Resource.Success -> {
-                        hideShimmerLayout()
+                        GeneralUtils.hideShimmerLayout(binding.shimmerLayout, binding.rvQuestion)
                         response.data?.let { questionList ->
                             questionAdapter.differ.submitList(questionList)
+                            GeneralUtils.hideShimmerLayout(
+                                binding.shimmerLayout,
+                                binding.rvQuestion
+                            )
 
                         }
                     }
+
                     is Resource.Error -> {
-                        hideShimmerLayout()
+                        GeneralUtils.hideShimmerLayout(binding.shimmerLayout, binding.rvQuestion)
                         response.message?.let { message ->
                             Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
                         }
                     }
-
-
                 }
             }
         }
@@ -65,23 +63,7 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionB
     private fun setupRecyclerView() = binding.rvQuestion.apply {
         adapter = questionAdapter
         layoutManager = LinearLayoutManager(context)
-
-
     }
-
-
-    private fun hideShimmerLayout()=binding.apply {
-        shimmerLayout.stopShimmer()
-        shimmerLayout.visibility = View.GONE
-        rvQuestion.visibility = View.VISIBLE
-    }
-
-    private fun  showShimmerLayout() = binding.apply {
-        shimmerLayout.startShimmer()
-        shimmerLayout.visibility = View.VISIBLE
-        rvQuestion.visibility = View.GONE
-    }
-
 
 
 }

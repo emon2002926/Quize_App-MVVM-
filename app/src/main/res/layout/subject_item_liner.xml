@@ -18,6 +18,7 @@
         android:src="@drawable/learning" />
 
     <TextView
+        android:id="@+id/tvSubjectName"
         android:layout_width="@dimen/_124sdp"
         android:layout_height="wrap_content"
         android:ellipsize="end"
