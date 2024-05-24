@@ -1,6 +1,7 @@
 package com.example.bcsprokotlin.api
 
 import com.example.bcsprokotlin.model.BcsYearName
+import com.example.bcsprokotlin.model.LiveExam
 import com.example.bcsprokotlin.model.Question
 import com.example.bcsprokotlin.ui.fragment.SubjectsFragment.SubjectName
 import retrofit2.Response
@@ -12,17 +13,17 @@ interface QuestionApi {
     @GET("/api/getData2.php")
     suspend fun getQuestions(
         @Query("apiKey")
-        apiKey: String="abc123",
+        apiKey: String = "abc123",
         @Query("apiNum") apiNum: Int,
         @Query("page") pageNumber: Int,
         @Query("limit") limit: Int,
 
-    ): Response<MutableList<Question>>
+        ): Response<MutableList<Question>>
 
     @GET("/api/getData2.php")
     suspend fun getSubjects(
         @Query("apiKey")
-        apiKey: String="abc123",
+        apiKey: String = "abc123",
         @Query("apiNum") apiNum: Int,
         @Query("page") pageNumber: Int,
         @Query("limit") limit: Int,
@@ -32,7 +33,7 @@ interface QuestionApi {
     @GET("/api/getData2.php")
     suspend fun getBcsYearName(
         @Query("apiKey")
-        apiKey: String="abc123",
+        apiKey: String = "abc123",
         @Query("apiNum") apiNum: Int,
         @Query("page") pageNumber: Int,
         @Query("limit") limit: Int,
@@ -41,12 +42,12 @@ interface QuestionApi {
 
 
     @GET("/api/getData2.php")
-    suspend fun getExam(
+    suspend fun getExamInfo(
         @Query("apiKey")
-        apiKey: String="abc123",
+        apiKey: String = "abc123",
         @Query("apiNum") apiNum: Int,
         @Query("page") pageNumber: Int,
         @Query("limit") limit: Int,
-        ): Response<MutableList<SubjectName>>
+    ): Response<MutableList<LiveExam>>
 
 }

@@ -62,7 +62,7 @@
 
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recview2"
+                        android:id="@+id/rvLiveExam"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
@@ -70,21 +70,29 @@
 
 
                     <com.facebook.shimmer.ShimmerFrameLayout
-                        android:id="@+id/shimer"
+                        android:id="@+id/shimmerLiveExam"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginTop="10dp"
                         android:visibility="visible">
 
-                        <LinearLayout
+                        <HorizontalScrollView
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
+                            android:layout_height="wrap_content">
 
-                            <include layout="@layout/shimer_live_model_test" />
+                            <LinearLayout
+                                android:id="@+id/horizontalScrollView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:scrollbars="none">
 
-                            <include layout="@layout/shimer_live_model_test" />
-                        </LinearLayout>
+                                <include layout="@layout/shimer_live_model_test" />
+
+                                <include layout="@layout/shimer_live_model_test" />
+                            </LinearLayout>
+                        </HorizontalScrollView>
+
 
                     </com.facebook.shimmer.ShimmerFrameLayout>
 
@@ -126,7 +134,36 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:scrollIndicators="none"
-                    android:visibility="visible" />
+                    android:visibility="gone" />
+
+                <com.facebook.shimmer.ShimmerFrameLayout
+                    android:id="@+id/shimmerSubject"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="visible">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <include layout="@layout/shimmer_subject_liner" />
+
+                            <include layout="@layout/shimmer_subject_liner" />
+
+                            <include layout="@layout/shimmer_subject_liner" />
+
+
+                        </LinearLayout>
+
+
+                    </HorizontalScrollView>
+
+                </com.facebook.shimmer.ShimmerFrameLayout>
 
 
                 <TextView
@@ -251,6 +288,7 @@
                                 android:id="@+id/CvImportantQuestion"
                                 android:layout_width="0dp"
                                 android:layout_height="fill_parent"
+                                android:layout_marginEnd="10dp"
                                 android:layout_weight="1"
                                 android:background="@drawable/lite_round_baground"
                                 android:gravity="center"

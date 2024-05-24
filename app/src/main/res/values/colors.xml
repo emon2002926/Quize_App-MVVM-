@@ -38,6 +38,8 @@
 
     <color name="shimmerBackground">#989898</color>
 
+    <color name="tangerine">#fc944c</color>
+    <color name="liteGreen">#f6fcf2</color>
 
 
 </resources>

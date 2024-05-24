@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.bcsprokotlin.databinding.QuestionBankItemBinding
+import com.example.bcsprokotlin.databinding.ItemQuestionBankBinding
 import com.example.bcsprokotlin.model.BcsYearName
 import com.example.bcsprokotlin.util.GeneralUtils
 import javax.inject.Inject
@@ -14,7 +14,7 @@ import javax.inject.Inject
 class QuestionBankAdapter @Inject constructor(private val converter: GeneralUtils) :
     RecyclerView.Adapter<QuestionBankAdapter.QuestionBankViwHolder>() {
 
-    inner class QuestionBankViwHolder(val binding: QuestionBankItemBinding) :
+    inner class QuestionBankViwHolder(val binding: ItemQuestionBankBinding) :
         RecyclerView.ViewHolder(binding.root)
 
     private val differCallback = object : DiffUtil.ItemCallback<BcsYearName>() {
@@ -31,7 +31,7 @@ class QuestionBankAdapter @Inject constructor(private val converter: GeneralUtil
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QuestionBankViwHolder {
         return QuestionBankViwHolder(
-            QuestionBankItemBinding.inflate(
+            ItemQuestionBankBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
