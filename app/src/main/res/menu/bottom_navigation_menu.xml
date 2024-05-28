@@ -4,17 +4,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/homeFragment2"
+        android:id="@+id/homeFragment"
         android:title="@string/home"
         android:icon="@drawable/ic_baseline_home_24"
         />
     <item
-        android:id="@+id/recordFragment2"
+        android:id="@+id/recordFragment"
         android:title="@string/profile"
         android:icon="@drawable/baseline_person_outline_24"
         />
     <item
-        android:id="@+id/moreFragment2"
+        android:id="@+id/moreFragment"
         android:title="@string/more"
         android:icon="@drawable/ic_baseline_settings_24"
         />

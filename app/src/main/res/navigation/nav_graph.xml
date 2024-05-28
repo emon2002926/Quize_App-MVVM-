@@ -3,40 +3,38 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/homeFragment2">
+    app:startDestination="@id/homeFragment">
 
     <fragment
-        android:id="@+id/homeFragment2"
+        android:id="@+id/homeFragment"
         android:name="com.example.bcsprokotlin.ui.fragment.HomeFragment.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" >
+        tools:layout="@layout/fragment_home">
         <action
-            android:id="@+id/action_homeFragment2_to_subjectsFragment"
+            android:id="@+id/action_homeFragment_to_subjectsFragment"
             app:destination="@id/subjectsFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+            app:popExitAnim="@anim/slide_out_right" />
         <action
-            android:id="@+id/action_homeFragment2_to_questionFragment"
+            android:id="@+id/action_homeFragment_to_questionFragment"
             app:destination="@id/questionFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"
-            />
+            app:popExitAnim="@anim/slide_out_right" />
 
         <action
-            android:id="@+id/action_homeFragment2_to_questionBankFragment"
+            android:id="@+id/action_homeFragment_to_questionBankFragment"
             app:destination="@id/questionBankFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"
-            />
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
-        android:id="@+id/moreFragment2"
+        android:id="@+id/moreFragment"
         android:name="com.example.bcsprokotlin.ui.fragment.MoreFragment"
         android:label="fragment_more"
         tools:layout="@layout/fragment_more" />
@@ -46,7 +44,7 @@
         android:label="fragment_question"
         tools:layout="@layout/fragment_question" />
     <fragment
-        android:id="@+id/recordFragment2"
+        android:id="@+id/recordFragment"
         android:name="com.example.bcsprokotlin.ui.fragment.RecordFragment"
         android:label="fragment_record"
         tools:layout="@layout/fragment_record" />
@@ -54,7 +52,7 @@
         android:id="@+id/subjectsFragment"
         android:name="com.example.bcsprokotlin.ui.fragment.SubjectsFragment.SubjectsFragment"
         android:label="fragment_subjects"
-        tools:layout="@layout/fragment_subjects" >
+        tools:layout="@layout/fragment_subjects">
         <action
             android:id="@+id/action_subjectsFragment_to_questionFragment"
             app:destination="@id/questionFragment" />
@@ -64,7 +62,7 @@
         android:id="@+id/questionBankFragment"
         android:name="com.example.bcsprokotlin.ui.fragment.QuestionBankFragment.QuestionBankFragment"
         android:label="fragment_question_bank"
-        tools:layout="@layout/fragment_question_bank" >
+        tools:layout="@layout/fragment_question_bank">
 
     </fragment>
 </navigation>

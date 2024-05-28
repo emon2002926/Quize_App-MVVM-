@@ -8,7 +8,7 @@ import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface QuestionApi {
+interface ApiService {
 
     @GET("/api/getData2.php")
     suspend fun getQuestions(
@@ -50,4 +50,19 @@ interface QuestionApi {
         @Query("limit") limit: Int,
     ): Response<MutableList<LiveExam>>
 
+    @GET("/api/exam.php") // Replace with your actual PHP script path
+    suspend fun getExamQuestions(
+        @Query("apiKey") apiKey: String,
+        @Query("exam_type") questionType: String,
+        @Query("totalQuestions") totalQuestions: Int,
+    ): Response<MutableList<Question>>
+
+
+    @GET("/api/exam.php") // Replace with your actual PHP script path
+    suspend fun getSubjectBasedExamQuestions(
+        @Query("apiKey") apiKey: String,
+        @Query("exam_type") examType: String,
+        @Query("subject_name") subjectName: String,
+        @Query("totalQuestions") questionAmount: Int,
+    ): Response<MutableList<Question>>
 }

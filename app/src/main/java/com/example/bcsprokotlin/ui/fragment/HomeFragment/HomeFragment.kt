@@ -4,6 +4,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
@@ -14,6 +15,8 @@ import com.example.bcsprokotlin.adapter.LiveExamAdapter
 import com.example.bcsprokotlin.adapter.SubjectAdapterHomeScreen
 import com.example.bcsprokotlin.databinding.FragmentHomeBinding
 import com.example.bcsprokotlin.databinding.LayoutShowExamOptionBinding
+import com.example.bcsprokotlin.model.SharedData
+import com.example.bcsprokotlin.ui.SharedViewModel
 import com.example.bcsprokotlin.ui.fragment.SubjectsFragment.SubjectViewModel
 import com.example.bcsprokotlin.ui.fragment.base.BaseFragment
 import com.example.bcsprokotlin.util.GeneralUtils
@@ -28,11 +31,15 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     private val subjectViewModel: SubjectViewModel by viewModels()
     private val liveExamViewModel: HomeFragmentViewModel by viewModels()
 
+    private val sharedViewModel: SharedViewModel by activityViewModels()
+
     private val subjectAdapter = SubjectAdapterHomeScreen()
     private val liveExamAdapter = LiveExamAdapter()
     private var questionAmount = 0
 
+
     override fun onCreateView() {
+
 
         // Launching coroutines in the appropriate ViewModel scope
         subjectViewModel.viewModelScope.launch { subjectViewModel.getSubjectName(3) }
@@ -56,7 +63,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         subjectViewModel.subjects.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is Resource.Error -> {
-                    GeneralUtils.hideShimmerLayout(shimmerSubject, rvSubjects)
+//                    GeneralUtils.hideShimmerLayout(shimmerSubject, rvSubjects)
                 }
 
                 is Resource.Loading -> {
@@ -96,9 +103,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     }
 
     private fun setListeners() = with(binding) {
-        practice.setOnClickListener { findNavController().navigate(R.id.action_homeFragment2_to_questionFragment) }
-        btnShowAllSubject.setOnClickListener { findNavController().navigate(R.id.action_homeFragment2_to_subjectsFragment) }
-        btnQuestionBank.setOnClickListener { findNavController().navigate(R.id.action_homeFragment2_to_questionBankFragment) }
+        practice.setOnClickListener { findNavController().navigate(R.id.action_homeFragment_to_questionFragment) }
+        btnShowAllSubject.setOnClickListener { findNavController().navigate(R.id.action_homeFragment_to_subjectsFragment) }
+        btnQuestionBank.setOnClickListener { findNavController().navigate(R.id.action_homeFragment_to_questionBankFragment) }
         exams.setOnClickListener { showExamOptions() }
     }
 
@@ -109,23 +116,27 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
         bindingExamOption.apply {
             layout25Min.setOnClickListener {
-                questionAmount = 25
+                questionAmount = 50
                 selectIcon(option25Icon)
                 eraseIcon(option50Icon, option100Icon)
             }
             layout50Min.setOnClickListener {
-                questionAmount = 50
+                questionAmount = 100
                 selectIcon(option50Icon)
                 eraseIcon(option25Icon, option100Icon)
             }
             layout100Min.setOnClickListener {
-                questionAmount = 100
+                questionAmount = 200
                 selectIcon(option100Icon)
                 eraseIcon(option25Icon, option50Icon)
             }
             btnExamStart.setOnClickListener {
                 if (questionAmount != 0) {
-                    findNavController().navigate(R.id.action_homeFragment2_to_questionFragment)
+                    val data = SharedData(
+                        "", questionAmount, "normal",
+                    )
+                    sharedViewModel.setSharedData(data)
+                    findNavController().navigate(R.id.action_homeFragment_to_questionFragment)
                     bottomSheetDialog.dismiss()
                 } else {
                     Toast.makeText(context, "Please select an option", Toast.LENGTH_SHORT).show()

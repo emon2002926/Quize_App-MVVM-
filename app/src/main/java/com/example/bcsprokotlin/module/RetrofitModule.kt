@@ -1,6 +1,6 @@
 package com.example.bcsprokotlin.module
 
-import com.example.bcsprokotlin.api.QuestionApi
+import com.example.bcsprokotlin.api.ApiService
 import com.example.bcsprokotlin.api.RetrofitInstance
 import com.example.bcsprokotlin.repository.Repository
 import dagger.Module
@@ -15,13 +15,13 @@ class RetrofitModule {
 
     @Provides
     @Singleton
-    fun provideRepository(apiService: QuestionApi): Repository {
+    fun provideRepository(apiService: ApiService): Repository {
         return Repository(apiService)
     }
 
     @Provides
     @Singleton
-    fun provideApiService(): QuestionApi {
+    fun provideApiService(): ApiService {
         return RetrofitInstance.api
     }
 

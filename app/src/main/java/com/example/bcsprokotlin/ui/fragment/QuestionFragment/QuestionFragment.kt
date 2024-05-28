@@ -1,12 +1,14 @@
 package com.example.bcsprokotlin.ui.fragment.QuestionFragment
 
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.bcsprokotlin.adapter.QuestionAdapter
 import com.example.bcsprokotlin.databinding.FragmentQuestionBinding
+import com.example.bcsprokotlin.ui.SharedViewModel
 import com.example.bcsprokotlin.ui.fragment.base.BaseFragment
 import com.example.bcsprokotlin.util.GeneralUtils
 import com.example.bcsprokotlin.util.Resource
@@ -18,6 +20,7 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionB
 
 
     private var questionAdapter = QuestionAdapter()
+    private val sharedViewModel: SharedViewModel by activityViewModels()
 
     private val viewModel: QuestionViewModel by viewModels()
 
@@ -26,35 +29,45 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionB
 
         binding.backButton.setOnClickListener { findNavController().navigateUp() }
 
-        lifecycleScope.launch {
-            viewModel.questions.observe(viewLifecycleOwner) { response ->
-                when (response) {
 
-                    is Resource.Loading -> {
-                        GeneralUtils.showShimmerLayout(binding.shimmerLayout, binding.rvQuestion)
+
+
+
+        sharedViewModel.sharedData.observe(viewLifecycleOwner, { data ->
+            viewModel.viewModelScope.launch {
+                viewModel.getExamQuestions(data.totalQuestion)
+            }
+        })
+
+
+        viewModel.questions.observe(viewLifecycleOwner) { response ->
+            when (response) {
+
+                is Resource.Loading -> {
+                    GeneralUtils.showShimmerLayout(binding.shimmerLayout, binding.rvQuestion)
+                }
+
+                is Resource.Success -> {
+                    GeneralUtils.hideShimmerLayout(binding.shimmerLayout, binding.rvQuestion)
+                    response.data?.let { questionList ->
+                        questionAdapter.differ.submitList(questionList)
+                        GeneralUtils.hideShimmerLayout(
+                            binding.shimmerLayout,
+                            binding.rvQuestion
+                        )
+
                     }
+                }
 
-                    is Resource.Success -> {
-                        GeneralUtils.hideShimmerLayout(binding.shimmerLayout, binding.rvQuestion)
-                        response.data?.let { questionList ->
-                            questionAdapter.differ.submitList(questionList)
-                            GeneralUtils.hideShimmerLayout(
-                                binding.shimmerLayout,
-                                binding.rvQuestion
-                            )
-
-                        }
-                    }
-
-                    is Resource.Error -> {
-                        GeneralUtils.hideShimmerLayout(binding.shimmerLayout, binding.rvQuestion)
-                        response.message?.let { message ->
-                            Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
-                        }
+                is Resource.Error -> {
+                    GeneralUtils.hideShimmerLayout(binding.shimmerLayout, binding.rvQuestion)
+                    response.message?.let { message ->
+                        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
                     }
                 }
             }
         }
+
 
         setupRecyclerView()
     }
