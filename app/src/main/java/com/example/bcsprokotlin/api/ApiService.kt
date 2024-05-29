@@ -10,7 +10,7 @@ import retrofit2.http.Query
 
 interface ApiService {
 
-    @GET("/api/getData2.php")
+    @GET("/api/appUtil.php")
     suspend fun getQuestions(
         @Query("apiKey")
         apiKey: String = "abc123",
@@ -20,7 +20,18 @@ interface ApiService {
 
         ): Response<MutableList<Question>>
 
-    @GET("/api/getData2.php")
+    @GET("/api/appUtil.php")
+    suspend fun getPreviousYearQuestions(
+        @Query("apiKey")
+        apiKey: String = "abc123",
+        @Query("apiNum") apiNum: Int,
+        @Query("page") pageNumber: Int,
+        @Query("limit") limit: Int,
+        @Query("batch") batch: String,
+
+        ): Response<MutableList<Question>>
+
+    @GET("/api/appUtil.php")
     suspend fun getSubjects(
         @Query("apiKey")
         apiKey: String = "abc123",
@@ -30,18 +41,17 @@ interface ApiService {
 
         ): Response<MutableList<SubjectName>>
 
-    @GET("/api/getData2.php")
+    @GET("/api/appUtil.php")
     suspend fun getBcsYearName(
         @Query("apiKey")
         apiKey: String = "abc123",
         @Query("apiNum") apiNum: Int,
         @Query("page") pageNumber: Int,
         @Query("limit") limit: Int,
+    ): Response<MutableList<BcsYearName>>
 
-        ): Response<MutableList<BcsYearName>>
 
-
-    @GET("/api/getData2.php")
+    @GET("/api/appUtil.php")
     suspend fun getExamInfo(
         @Query("apiKey")
         apiKey: String = "abc123",

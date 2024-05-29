@@ -1,12 +1,10 @@
 package com.example.bcsprokotlin.repository
 
 import com.example.bcsprokotlin.api.ApiService
-import com.example.bcsprokotlin.api.RetrofitInstance
 import com.example.bcsprokotlin.model.BcsYearName
 import com.example.bcsprokotlin.model.LiveExam
 import com.example.bcsprokotlin.model.Question
 import com.example.bcsprokotlin.ui.fragment.SubjectsFragment.SubjectName
-import com.example.bcsprokotlin.util.Constants
 import com.example.bcsprokotlin.util.Constants.Companion.API_KEY
 import com.example.bcsprokotlin.util.Constants.Companion.NORMAL_EXAM
 import com.example.bcsprokotlin.util.Constants.Companion.SUBJECT_BASED_EXAM
@@ -18,13 +16,13 @@ class Repository @Inject constructor(private val apiService: ApiService) {
     suspend fun getBcsYearName(
         apiNumber: Int, pageNumber: Int, limit: Int
     ): Response<MutableList<BcsYearName>> {
-        return apiService.getBcsYearName(Constants.API_KEY, apiNumber, pageNumber, limit)
+        return apiService.getBcsYearName(API_KEY, apiNumber, pageNumber, limit)
     }
 
     suspend fun getSubjects(
         apiNumber: Int, pageNumber: Int, limit: Int
     ): Response<MutableList<SubjectName>> {
-        return apiService.getSubjects(Constants.API_KEY, apiNumber, pageNumber, limit)
+        return apiService.getSubjects(API_KEY, apiNumber, pageNumber, limit)
     }
 
     suspend fun getQuestion(
@@ -32,7 +30,17 @@ class Repository @Inject constructor(private val apiService: ApiService) {
         pageNumber: Int,
         limit: Int
     ): Response<MutableList<Question>> {
-        return RetrofitInstance.api.getQuestions(Constants.API_KEY, apiNumber, pageNumber, limit)
+        return apiService.getQuestions(API_KEY, apiNumber, pageNumber, limit)
+    }
+
+
+    suspend fun getPreviousYearQuestion(
+        apiNumber: Int,
+        pageNumber: Int,
+        limit: Int,
+        batch: String
+    ): Response<MutableList<Question>> {
+        return apiService.getPreviousYearQuestions(API_KEY, apiNumber, pageNumber, limit, batch)
     }
 
     suspend fun getExamInfo(

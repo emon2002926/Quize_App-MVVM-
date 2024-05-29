@@ -1,5 +1,6 @@
 package com.example.bcsprokotlin.ui.fragment.QuestionFragment
 
+import android.util.Log
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -29,15 +30,22 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionB
 
         binding.backButton.setOnClickListener { findNavController().navigateUp() }
 
-
-
-
-
         sharedViewModel.sharedData.observe(viewLifecycleOwner, { data ->
             viewModel.viewModelScope.launch {
-                viewModel.getExamQuestions(data.totalQuestion)
+
+                if (data.action == "normalExam") {
+                    viewModel.getExamQuestions(data.totalQuestion)
+                } else if (data.action == "questionBank") {
+                    viewModel.getPreviousYearQuestions(200, data.batchOrSubjectName)
+                    Log.d("dgdfhgdfg", data.batchOrSubjectName)
+
+                }
+
+
             }
         })
+
+
 
 
         viewModel.questions.observe(viewLifecycleOwner) { response ->

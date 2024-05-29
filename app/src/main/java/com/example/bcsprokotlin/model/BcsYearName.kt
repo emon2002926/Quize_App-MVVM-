@@ -1,5 +1,7 @@
 package com.example.bcsprokotlin.model
 
+import java.io.Serializable
+
 data class BcsYearName(
     val bcsYearName: String,
     val dailyExam: String,
@@ -7,4 +9,4 @@ data class BcsYearName(
     val subjectCode: String,
     val subjects: String,
     val totalQuestion: String
-)
+) : Serializable

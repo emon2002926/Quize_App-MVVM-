@@ -40,13 +40,31 @@ class QuestionViewModel @Inject constructor(private val repository: Repository) 
         }
     }
 
-    private fun handleQuestionResponse(response: Response<MutableList<Question>>): Resource<MutableList<Question>> {
-        if (response.isSuccessful) {
-            response.body()?.let {
-                return Resource.Success(it)
+
+    //////////////////////////////////////
+    suspend fun getPreviousYearQuestions(totalQuestion: Int, batchName: String) {
+        _questions.postValue(Resource.Loading())
+        try {
+            if (hasInternetConnection()) {
+                val questionResponse =
+                    repository.getPreviousYearQuestion(
+                        9,
+                        pageNumber,
+                        totalQuestion,
+                        batchName
+                    )
+
+
+                _questions.postValue(handleQuestionResponse(questionResponse))
+            } else {
+                _questions.postValue(Resource.Error("No internet connection"))
+            }
+        } catch (t: Throwable) {
+            when (t) {
+                is IOException -> _questions.postValue(Resource.Error("Network Failure"))
+                else -> _questions.postValue(Resource.Error("Conversion Error "))
             }
         }
-        return Resource.Error(response.message())
     }
 
 
@@ -59,7 +77,7 @@ class QuestionViewModel @Inject constructor(private val repository: Repository) 
                     repository.getExamQuestion(totalQuestion)
 
 
-                _questions.postValue(handleExamQuestionResponse(questionResponse))
+                _questions.postValue(handleQuestionResponse(questionResponse))
             } else {
                 _questions.postValue(Resource.Error("No internet connection"))
             }
@@ -79,7 +97,7 @@ class QuestionViewModel @Inject constructor(private val repository: Repository) 
                 val questionResponse =
                     repository.getSubjectBasedExamQuestion(subjectName, totalQuestion)
 
-                _questions.postValue(handleExamQuestionResponse(questionResponse))
+                _questions.postValue(handleQuestionResponse(questionResponse))
             } else {
                 _questions.postValue(Resource.Error("No internet connection"))
             }
@@ -92,7 +110,7 @@ class QuestionViewModel @Inject constructor(private val repository: Repository) 
     }
 
 
-    private fun handleExamQuestionResponse(response: Response<MutableList<Question>>): Resource<MutableList<Question>> {
+    private fun handleQuestionResponse(response: Response<MutableList<Question>>): Resource<MutableList<Question>> {
         if (response.isSuccessful) {
             response.body()?.let {
                 return Resource.Success(it)
@@ -100,6 +118,16 @@ class QuestionViewModel @Inject constructor(private val repository: Repository) 
         }
         return Resource.Error(response.message())
     }
+
+
+//    private fun handleExamQuestionResponse(response: Response<MutableList<Question>>): Resource<MutableList<Question>> {
+//        if (response.isSuccessful) {
+//            response.body()?.let {
+//                return Resource.Success(it)
+//            }
+//        }
+//        return Resource.Error(response.message())
+//    }
 
 
     private fun hasInternetConnection(): Boolean {

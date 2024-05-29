@@ -133,7 +133,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
             btnExamStart.setOnClickListener {
                 if (questionAmount != 0) {
                     val data = SharedData(
-                        "", questionAmount, "normal",
+                        "", "normalExam", questionAmount, "normal", ""
                     )
                     sharedViewModel.setSharedData(data)
                     findNavController().navigate(R.id.action_homeFragment_to_questionFragment)

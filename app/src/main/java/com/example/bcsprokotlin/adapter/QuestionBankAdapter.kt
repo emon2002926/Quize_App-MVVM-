@@ -9,9 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.bcsprokotlin.databinding.ItemQuestionBankBinding
 import com.example.bcsprokotlin.model.BcsYearName
 import com.example.bcsprokotlin.util.GeneralUtils
-import javax.inject.Inject
 
-class QuestionBankAdapter @Inject constructor(private val converter: GeneralUtils) :
+class QuestionBankAdapter(val listener: HandleClickListener) :
     RecyclerView.Adapter<QuestionBankAdapter.QuestionBankViwHolder>() {
 
     inner class QuestionBankViwHolder(val binding: ItemQuestionBankBinding) :
@@ -50,8 +49,15 @@ class QuestionBankAdapter @Inject constructor(private val converter: GeneralUtil
                 questionBatch.text = bcsYearNames[position].bcsYearName
                 numOfQuestion.text =
                     "প্রশ্নের পরিমাণ : ${GeneralUtils.convertEnglishToBengaliNumber(bcsYearNames[position].totalQuestion)}"
+                fullLayout.setOnClickListener {
+                    listener.onClick(bcsYearNames[position])
+                }
             }
         }
+    }
+
+    interface HandleClickListener {
+        fun onClick(bcsYearName: BcsYearName)
     }
 
 }
