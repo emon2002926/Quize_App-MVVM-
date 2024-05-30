@@ -5,5 +5,6 @@ data class SharedData(
     val action: String,
     val totalQuestion: Int,
     val questionType: String,
-    val batchOrSubjectName: String
+    val batchOrSubjectName: String,
+    val time: Int
 )

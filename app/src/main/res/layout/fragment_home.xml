@@ -307,7 +307,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/subject_based_exam"
+                    android:id="@+id/subjectBasedExam"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/_20sdp"

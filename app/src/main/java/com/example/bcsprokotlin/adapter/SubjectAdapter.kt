@@ -9,23 +9,24 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.bcsprokotlin.databinding.ItemSubjectBinding
 import com.example.bcsprokotlin.ui.fragment.SubjectsFragment.SubjectName
 
-class SubjectAdapter:RecyclerView.Adapter<SubjectAdapter.SubjectViewHolder>() {
+class SubjectAdapter(val listener: HandleClickListener) :
+    RecyclerView.Adapter<SubjectAdapter.SubjectViewHolder>() {
 
-    inner class SubjectViewHolder(val binding:ItemSubjectBinding):RecyclerView.ViewHolder(binding.root)
+    inner class SubjectViewHolder(val binding: ItemSubjectBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
 
-
-    private val differCallback = object :DiffUtil.ItemCallback<SubjectName>(){
+    private val differCallback = object : DiffUtil.ItemCallback<SubjectName>() {
         override fun areItemsTheSame(oldItem: SubjectName, newItem: SubjectName): Boolean {
             return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(oldItem: SubjectName, newItem: SubjectName): Boolean {
-            return  oldItem==newItem
+            return oldItem == newItem
         }
 
     }
-    val differ = AsyncListDiffer(this,differCallback)
+    val differ = AsyncListDiffer(this, differCallback)
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SubjectViewHolder {
@@ -33,18 +34,20 @@ class SubjectAdapter:RecyclerView.Adapter<SubjectAdapter.SubjectViewHolder>() {
         return SubjectViewHolder(binding)
     }
 
-    override fun getItemCount()=differ.currentList.size
+    override fun getItemCount() = differ.currentList.size
 
 
     override fun onBindViewHolder(holder: SubjectViewHolder, position: Int) {
 
-        differ.currentList[position].let { subjectList->
+        differ.currentList[position].let { subjectList ->
 
             holder.binding.apply {
                 val contex = parentLayout.context
 //                ivSubjectIcon.setImageResource(subjectList.imageId)
-                tvSubjectName.text=subjectList.subject_name
-                Log.d("dksdfhj",subjectList.start_color)
+                tvSubjectName.text = subjectList.subject_name
+                Log.d("dksdfhj", subjectList.start_color)
+
+                parentLayout.setOnClickListener { listener.onClick(subjectList) }
 
 //
 //                val gradientDrawable = GradientDrawable().apply {
@@ -67,5 +70,10 @@ class SubjectAdapter:RecyclerView.Adapter<SubjectAdapter.SubjectViewHolder>() {
 
 
         }
+    }
+
+
+    interface HandleClickListener {
+        fun onClick(subjectName: SubjectName)
     }
 }

@@ -17,8 +17,8 @@ import com.example.bcsprokotlin.databinding.FragmentHomeBinding
 import com.example.bcsprokotlin.databinding.LayoutShowExamOptionBinding
 import com.example.bcsprokotlin.model.SharedData
 import com.example.bcsprokotlin.ui.SharedViewModel
+import com.example.bcsprokotlin.ui.base.BaseFragment
 import com.example.bcsprokotlin.ui.fragment.SubjectsFragment.SubjectViewModel
-import com.example.bcsprokotlin.ui.fragment.base.BaseFragment
 import com.example.bcsprokotlin.util.GeneralUtils
 import com.example.bcsprokotlin.util.Resource
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -104,13 +104,23 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
     private fun setListeners() = with(binding) {
         practice.setOnClickListener { findNavController().navigate(R.id.action_homeFragment_to_questionFragment) }
-        btnShowAllSubject.setOnClickListener { findNavController().navigate(R.id.action_homeFragment_to_subjectsFragment) }
+        btnShowAllSubject.setOnClickListener {
+            sharedViewModel.setStringData("subjectBasedQuestions")
+            findNavController().navigate(R.id.action_homeFragment_to_subjectsFragment)
+        }
         btnQuestionBank.setOnClickListener { findNavController().navigate(R.id.action_homeFragment_to_questionBankFragment) }
         exams.setOnClickListener { showExamOptions() }
+
+        subjectBasedExam.setOnClickListener {
+            sharedViewModel.setStringData("subjectBasedExamQuestions")
+            findNavController().navigate(R.id.action_homeFragment_to_subjectsFragment)
+        }
     }
 
 
     private fun showExamOptions() {
+
+
         val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDailogTheme)
         val bindingExamOption = LayoutShowExamOptionBinding.inflate(LayoutInflater.from(context))
 
@@ -133,7 +143,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
             btnExamStart.setOnClickListener {
                 if (questionAmount != 0) {
                     val data = SharedData(
-                        "", "normalExam", questionAmount, "normal", ""
+                        "", "normalExam", questionAmount, "normal", "", 0
                     )
                     sharedViewModel.setSharedData(data)
                     findNavController().navigate(R.id.action_homeFragment_to_questionFragment)
@@ -150,6 +160,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
         bottomSheetDialog.setContentView(bindingExamOption.root)
         bottomSheetDialog.show()
+
 
     }
 

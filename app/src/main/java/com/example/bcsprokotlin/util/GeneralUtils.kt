@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Base64
 import android.view.View
+import android.widget.EditText
 import androidx.recyclerview.widget.RecyclerView
 import com.facebook.shimmer.ShimmerFrameLayout
 import java.text.NumberFormat
@@ -39,5 +40,19 @@ object GeneralUtils {
         shimmerLayout.startShimmer()
         shimmerLayout.visibility = View.VISIBLE
         recyclerView.visibility = View.GONE
+    }
+
+
+    fun EditText.isEmpty(errorMessage: String): Boolean {
+
+        return if (this.text.toString().isEmpty()) {
+            this.error = errorMessage
+            true
+
+        } else {
+            false
+        }
+
+
     }
 }

@@ -1,4 +1,4 @@
-package com.example.bcsprokotlin.ui.fragment.base
+package com.example.bcsprokotlin.ui.base
 
 import android.os.Bundle
 import android.view.LayoutInflater

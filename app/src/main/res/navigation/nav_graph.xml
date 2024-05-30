@@ -55,7 +55,11 @@
         tools:layout="@layout/fragment_subjects">
         <action
             android:id="@+id/action_subjectsFragment_to_questionFragment"
-            app:destination="@id/questionFragment" />
+            app:destination="@id/questionFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment
@@ -67,7 +71,11 @@
         <action
             android:id="@+id/action_questionBankFragment_to_questionFragment"
             app:destination="@id/questionFragment"
-            app:launchSingleTop="false">
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:launchSingleTop="false"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right">
 
         </action>
 
