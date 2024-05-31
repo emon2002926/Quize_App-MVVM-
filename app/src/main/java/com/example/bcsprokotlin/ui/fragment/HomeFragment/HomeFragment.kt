@@ -63,7 +63,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         subjectViewModel.subjects.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is Resource.Error -> {
-//                    GeneralUtils.hideShimmerLayout(shimmerSubject, rvSubjects)
+                    GeneralUtils.showShimmerLayout(shimmerSubject, rvSubjects)
                 }
 
                 is Resource.Loading -> {
@@ -72,7 +72,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
                 is Resource.Success -> {
                     GeneralUtils.hideShimmerLayout(shimmerSubject, rvSubjects)
-                    response.data?.let { subjectAdapter.differ.submitList(it) }
+                    response.data?.let { subjectAdapter.submitList(it) }
                 }
             }
         }
@@ -89,7 +89,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
                 is Resource.Success -> {
                     GeneralUtils.hideShimmerLayout(binding.shimmerLiveExam, binding.rvLiveExam)
-                    response.data?.let { liveExamAdapter.differ.submitList(it) }
+                    response.data?.let { liveExamAdapter.submitList(it) }
                 }
             }
         }
@@ -103,11 +103,16 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     }
 
     private fun setListeners() = with(binding) {
-        practice.setOnClickListener { findNavController().navigate(R.id.action_homeFragment_to_questionFragment) }
+        practice.setOnClickListener {
+            sharedViewModel.setStringData("subjectBasedQuestions")
+            findNavController().navigate(R.id.action_homeFragment_to_subjectsFragment)
+        }
+
         btnShowAllSubject.setOnClickListener {
             sharedViewModel.setStringData("subjectBasedQuestions")
             findNavController().navigate(R.id.action_homeFragment_to_subjectsFragment)
         }
+
         btnQuestionBank.setOnClickListener { findNavController().navigate(R.id.action_homeFragment_to_questionBankFragment) }
         exams.setOnClickListener { showExamOptions() }
 
@@ -119,8 +124,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
 
     private fun showExamOptions() {
-
-
         val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDailogTheme)
         val bindingExamOption = LayoutShowExamOptionBinding.inflate(LayoutInflater.from(context))
 

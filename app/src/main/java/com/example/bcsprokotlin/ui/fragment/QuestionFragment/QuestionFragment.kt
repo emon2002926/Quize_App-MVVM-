@@ -17,8 +17,6 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionBinding::inflate) {
-
-
     private var questionAdapter = QuestionAdapter()
     private val sharedViewModel: SharedViewModel by activityViewModels()
 
@@ -51,8 +49,6 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionB
         })
 
 
-
-
         viewModel.questions.observe(viewLifecycleOwner) { response ->
             when (response) {
 
@@ -63,7 +59,7 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionB
                 is Resource.Success -> {
                     GeneralUtils.hideShimmerLayout(binding.shimmerLayout, binding.rvQuestion)
                     response.data?.let { questionList ->
-                        questionAdapter.differ.submitList(questionList)
+                        questionAdapter.submitList(questionList)
                         GeneralUtils.hideShimmerLayout(
                             binding.shimmerLayout,
                             binding.rvQuestion

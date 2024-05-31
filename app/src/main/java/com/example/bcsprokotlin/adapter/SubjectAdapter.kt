@@ -1,77 +1,27 @@
 package com.example.bcsprokotlin.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.AsyncListDiffer
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.RecyclerView
 import com.example.bcsprokotlin.databinding.ItemSubjectBinding
 import com.example.bcsprokotlin.ui.fragment.SubjectsFragment.SubjectName
 
 class SubjectAdapter(val listener: HandleClickListener) :
-    RecyclerView.Adapter<SubjectAdapter.SubjectViewHolder>() {
+    BaseAdapter<SubjectName, ItemSubjectBinding>(
+        areItemsTheSame = { oldItem, newItem -> oldItem.id == newItem.id },
+        areContentsTheSame = { oldItem, newItem -> oldItem == newItem }) {
 
-    inner class SubjectViewHolder(val binding: ItemSubjectBinding) :
-        RecyclerView.ViewHolder(binding.root)
-
-
-    private val differCallback = object : DiffUtil.ItemCallback<SubjectName>() {
-        override fun areItemsTheSame(oldItem: SubjectName, newItem: SubjectName): Boolean {
-            return oldItem.id == newItem.id
-        }
-
-        override fun areContentsTheSame(oldItem: SubjectName, newItem: SubjectName): Boolean {
-            return oldItem == newItem
-        }
-
-    }
-    val differ = AsyncListDiffer(this, differCallback)
-
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SubjectViewHolder {
-        val binding = ItemSubjectBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return SubjectViewHolder(binding)
+    override fun createBinding(parent: ViewGroup, viewType: Int): ItemSubjectBinding {
+        return ItemSubjectBinding.inflate(LayoutInflater.from(parent.context), parent, false)
     }
 
-    override fun getItemCount() = differ.currentList.size
+    override fun bind(binding: ItemSubjectBinding, item: SubjectName, position: Int) {
 
-
-    override fun onBindViewHolder(holder: SubjectViewHolder, position: Int) {
-
-        differ.currentList[position].let { subjectList ->
-
-            holder.binding.apply {
-                val contex = parentLayout.context
-//                ivSubjectIcon.setImageResource(subjectList.imageId)
-                tvSubjectName.text = subjectList.subject_name
-                Log.d("dksdfhj", subjectList.start_color)
-
-                parentLayout.setOnClickListener { listener.onClick(subjectList) }
-
-//
-//                val gradientDrawable = GradientDrawable().apply {
-//                    shape = GradientDrawable.RECTANGLE
-//                    colors = intArrayOf(
-//                        Color.parseColor(subjectList.start_color), // Start color (replace "#FF0000" with your hex code)
-//                        Color.parseColor(subjectList.end_color)  // End color (replace "#00FF00" with your hex code)
-//                    )
-//                    cornerRadius = contex.resources.getDimension(R.dimen.corner_radius) // Corner radius in dp
-//                    setStroke(
-//                        contex.resources.getDimensionPixelSize(R.dimen.stroke_width),
-//                        Color.parseColor("#FFFFFF") // Stroke color (replace "#FFFFFF" with your hex code)
-//                    )
-//                    orientation = GradientDrawable.Orientation.LEFT_RIGHT
-//                }
-//
-//                parentLayout.background = gradientDrawable
-
-            }
-
+        with(binding) {
+            tvSubjectName.text = item.subject_name
+            parentLayout.setOnClickListener { listener.onClick(item) }
 
         }
     }
-
 
     interface HandleClickListener {
         fun onClick(subjectName: SubjectName)

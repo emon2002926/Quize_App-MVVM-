@@ -48,7 +48,7 @@ class QuestionBankFragment :
                 is Resource.Success -> {
                     GeneralUtils.hideShimmerLayout(binding.shimmerLayout, binding.rvQuestionBank)
                     response.data?.let {
-                        questionBankAdapter.differ.submitList(it)
+                        questionBankAdapter.submitList(it)
                     }
                 }
             }

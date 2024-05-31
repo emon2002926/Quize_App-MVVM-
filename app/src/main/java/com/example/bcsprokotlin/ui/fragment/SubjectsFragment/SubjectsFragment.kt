@@ -57,7 +57,7 @@ class SubjectsFragment : BaseFragment<FragmentSubjectsBinding>(FragmentSubjectsB
             when (response) {
                 is Resource.Success -> {
                     GeneralUtils.hideShimmerLayout(binding.shimmerLayout, binding.rvSubjects)
-                    response.data?.let { subjectAdapter.differ.submitList(it) }
+                    response.data?.let { subjectAdapter.submitList(it) }
                 }
 
                 is Resource.Error -> {
