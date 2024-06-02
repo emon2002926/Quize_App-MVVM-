@@ -40,6 +40,7 @@
 
     <color name="tangerine">#fc944c</color>
     <color name="liteGreen">#f6fcf2</color>
+    <color name="transParent">@android:color/transparent</color>
 
 
 </resources>

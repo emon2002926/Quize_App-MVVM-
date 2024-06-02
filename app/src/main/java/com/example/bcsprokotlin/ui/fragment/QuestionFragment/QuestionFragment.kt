@@ -8,6 +8,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.bcsprokotlin.adapter.QuestionAdapter
 import com.example.bcsprokotlin.databinding.FragmentQuestionBinding
+import com.example.bcsprokotlin.model.Question
+import com.example.bcsprokotlin.model.SharedData
 import com.example.bcsprokotlin.ui.SharedViewModel
 import com.example.bcsprokotlin.ui.base.BaseFragment
 import com.example.bcsprokotlin.util.GeneralUtils
@@ -17,70 +19,86 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionBinding::inflate) {
-    private var questionAdapter = QuestionAdapter()
+    private val questionAdapter by lazy { QuestionAdapter() }
     private val sharedViewModel: SharedViewModel by activityViewModels()
-
     private val viewModel: QuestionViewModel by viewModels()
 
     override fun onCreateView() {
 
 
+        setupUI()
+        observeSharedData()
+        observeQuestions()
+    }
+
+
+    private fun setupUI() {
         binding.backButton.setOnClickListener { findNavController().navigateUp() }
-
-        sharedViewModel.sharedData.observe(viewLifecycleOwner, { data ->
-            viewModel.viewModelScope.launch {
-
-                when (data.action) {
-                    "normalExam" -> viewModel.getExamQuestions(data.totalQuestion)
-                    "questionBank" -> viewModel.getPreviousYearQuestions(
-                        200,
-                        data.batchOrSubjectName
-                    )
-
-                    "subjectBasedQuestions" -> viewModel.getSubjectExamQuestions(
-                        data.batchOrSubjectName,
-                        data.totalQuestion
-                    )
-
-                }
-
-
-            }
-        })
-
-
-        viewModel.questions.observe(viewLifecycleOwner) { response ->
-            when (response) {
-
-                is Resource.Loading -> {
-                    GeneralUtils.showShimmerLayout(binding.shimmerLayout, binding.rvQuestion)
-                }
-
-                is Resource.Success -> {
-                    GeneralUtils.hideShimmerLayout(binding.shimmerLayout, binding.rvQuestion)
-                    response.data?.let { questionList ->
-                        questionAdapter.submitList(questionList)
-                        GeneralUtils.hideShimmerLayout(
-                            binding.shimmerLayout,
-                            binding.rvQuestion
-                        )
-
-                    }
-                }
-
-                is Resource.Error -> {
-                    GeneralUtils.hideShimmerLayout(binding.shimmerLayout, binding.rvQuestion)
-                    response.message?.let { message ->
-                        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-        }
-
-
         setupRecyclerView()
     }
 
+    private fun observeSharedData() {
+        sharedViewModel.sharedData.observe(viewLifecycleOwner) { data ->
+            viewModel.viewModelScope.launch {
+                handleAction(data)
+            }
+        }
+    }
+
+    private suspend fun handleAction(data: SharedData) = binding.apply {
+        when (data.action) {
+            "normalExam" -> {
+                tvTitle.text = data.title
+                viewModel.getExamQuestions(data.totalQuestion)
+            }
+
+            "liveModelTest" -> {
+                tvTitle.text = data.title
+                viewModel.getExamQuestions(data.totalQuestion)
+            }
+
+            "questionBank" -> {
+                tvTitle.text = data.batchOrSubjectName
+                viewModel.getPreviousYearQuestions(200, data.batchOrSubjectName)
+            }
+
+            "subjectBasedQuestions" -> {
+                tvTitle.text = data.title
+                viewModel.getSubjectExamQuestions(
+                    data.batchOrSubjectName,
+                    data.totalQuestion
+                )
+            }
+        }
+    }
+
+    private fun observeQuestions() {
+        viewModel.questions.observe(viewLifecycleOwner) { response ->
+            when (response) {
+                is Resource.Loading -> GeneralUtils.showShimmerLayout(
+                    binding.shimmerLayout,
+                    binding.rvQuestion
+                )
+
+                is Resource.Success -> handleSuccess(response.data)
+                is Resource.Error -> handleError(response.message)
+            }
+        }
+    }
+
+    private fun handleSuccess(questionList: List<Question>?) {
+        GeneralUtils.hideShimmerLayout(binding.shimmerLayout, binding.rvQuestion)
+        questionList?.let {
+            questionAdapter.submitList(it)
+        }
+    }
+
+    private fun handleError(message: String?) {
+        GeneralUtils.hideShimmerLayout(binding.shimmerLayout, binding.rvQuestion)
+        message?.let {
+            Toast.makeText(activity, it, Toast.LENGTH_SHORT).show()
+        }
+    }
 
     private fun setupRecyclerView() = binding.rvQuestion.apply {
         adapter = questionAdapter

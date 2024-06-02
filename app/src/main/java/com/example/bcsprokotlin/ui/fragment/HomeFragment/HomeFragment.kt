@@ -15,9 +15,11 @@ import com.example.bcsprokotlin.adapter.LiveExamAdapter
 import com.example.bcsprokotlin.adapter.SubjectAdapterHomeScreen
 import com.example.bcsprokotlin.databinding.FragmentHomeBinding
 import com.example.bcsprokotlin.databinding.LayoutShowExamOptionBinding
+import com.example.bcsprokotlin.model.LiveExam
 import com.example.bcsprokotlin.model.SharedData
 import com.example.bcsprokotlin.ui.SharedViewModel
 import com.example.bcsprokotlin.ui.base.BaseFragment
+import com.example.bcsprokotlin.ui.fragment.SubjectsFragment.SubjectName
 import com.example.bcsprokotlin.ui.fragment.SubjectsFragment.SubjectViewModel
 import com.example.bcsprokotlin.util.GeneralUtils
 import com.example.bcsprokotlin.util.Resource
@@ -26,15 +28,15 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate) {
+class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate),
+    LiveExamAdapter.HandleClickListener, SubjectAdapterHomeScreen.HandleClickListener {
 
     private val subjectViewModel: SubjectViewModel by viewModels()
     private val liveExamViewModel: HomeFragmentViewModel by viewModels()
-
     private val sharedViewModel: SharedViewModel by activityViewModels()
 
-    private val subjectAdapter = SubjectAdapterHomeScreen()
-    private val liveExamAdapter = LiveExamAdapter()
+    private val subjectAdapter = SubjectAdapterHomeScreen(this)
+    private val liveExamAdapter = LiveExamAdapter(this)
     private var questionAmount = 0
 
 
@@ -122,7 +124,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         }
     }
 
-
     private fun showExamOptions() {
         val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDailogTheme)
         val bindingExamOption = LayoutShowExamOptionBinding.inflate(LayoutInflater.from(context))
@@ -146,7 +147,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
             btnExamStart.setOnClickListener {
                 if (questionAmount != 0) {
                     val data = SharedData(
-                        "", "normalExam", questionAmount, "normal", "", 0
+                        "সামগ্রিক পরীক্ষা", "normalExam", questionAmount, "normal", "", 0
                     )
                     sharedViewModel.setSharedData(data)
                     findNavController().navigate(R.id.action_homeFragment_to_questionFragment)
@@ -174,5 +175,31 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     fun eraseIcon(imageView: ImageView, imageView2: ImageView) {
         imageView.setImageResource(R.drawable.round_back_white50_100)
         imageView2.setImageResource(R.drawable.round_back_white50_100)
+    }
+
+    override fun onClickLiveExam(item: LiveExam) {
+
+        val data = SharedData(
+            "ডেইলি মডেল টেস্ট ", "liveModelTest", item.totalQc, "normal", "", 0
+        )
+        sharedViewModel.setSharedData(data)
+        findNavController().navigate(R.id.action_homeFragment_to_questionFragment)
+    }
+
+    override fun onSubjectClick(subjectName: SubjectName) {
+        showSubjectBasedQuestion(subjectName)
+    }
+
+    fun showSubjectBasedQuestion(subjectName: SubjectName) {
+        val data = SharedData(
+            subjectName.subject_name,
+            "subjectBasedQuestions",
+            20,
+            "",
+            subjectName.subject_code,
+            0
+        )
+        sharedViewModel.setSharedData(data)
+        findNavController().navigate(R.id.action_homeFragment_to_questionFragment)
     }
 }

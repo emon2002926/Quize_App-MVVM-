@@ -5,10 +5,11 @@ import android.view.ViewGroup
 import com.example.bcsprokotlin.databinding.LiveModelTestLayoutBinding
 import com.example.bcsprokotlin.model.LiveExam
 
-class LiveExamAdapter : BaseAdapter<LiveExam, LiveModelTestLayoutBinding>(
-    areContentsTheSame = { oldItem, newItem -> oldItem.id == newItem.id },
-    areItemsTheSame = { oldItem, newItem -> oldItem.id == newItem.id }) {
-    
+class LiveExamAdapter(val listener: HandleClickListener) :
+    BaseAdapter<LiveExam, LiveModelTestLayoutBinding>(
+        areContentsTheSame = { oldItem, newItem -> oldItem.id == newItem.id },
+        areItemsTheSame = { oldItem, newItem -> oldItem.id == newItem.id }) {
+
     override fun createBinding(parent: ViewGroup, viewType: Int): LiveModelTestLayoutBinding {
 
         return LiveModelTestLayoutBinding.inflate(
@@ -22,8 +23,13 @@ class LiveExamAdapter : BaseAdapter<LiveExam, LiveModelTestLayoutBinding>(
         with(binding) {
             examDate.text = item.dailyExam
             examDetails.text = item.details
+            parentLayout.setOnClickListener { listener.onClickLiveExam(item) }
         }
 
+    }
+
+    interface HandleClickListener {
+        fun onClickLiveExam(item: LiveExam)
     }
 
 

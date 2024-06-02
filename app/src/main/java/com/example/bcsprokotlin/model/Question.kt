@@ -16,5 +16,6 @@ data class Question(
     val option4: String,
     val option4Image: String,
     val question: String,
-    val subjects: String
+    val subjects: String,
+    var userSelectedAnswer: Int = 0
 )

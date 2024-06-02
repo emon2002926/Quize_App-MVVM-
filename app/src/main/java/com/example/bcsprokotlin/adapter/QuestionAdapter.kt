@@ -5,7 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import com.example.bcsprokotlin.R
 import com.example.bcsprokotlin.databinding.McqLayoutBinding
 import com.example.bcsprokotlin.model.Question
@@ -19,79 +18,142 @@ class QuestionAdapter : BaseAdapter<Question, McqLayoutBinding>(
         return McqLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
     }
 
-    override fun bind(binding: McqLayoutBinding, questionList: Question, position: Int) {
+    override fun bind(binding: McqLayoutBinding, item: Question, position: Int) {
 
         val context = binding.fullLayout.context
 
+        var userSelectedAnswer = item.userSelectedAnswer
+        val correctAnswer = item.answer.toInt()
+
         with(binding) {
-            option1Layout.setBackgroundResource(0)
-            option2Layout.setBackgroundResource(0)
-            option3Layout.setBackgroundResource(0)
-            option4Layout.setBackgroundResource(0)
 
-            option1Icon.setImageResource(R.drawable.round_back_white50_100)
-            option2Icon.setImageResource(R.drawable.round_back_white50_100)
-            option3Icon.setImageResource(R.drawable.round_back_white50_100)
-            option4Icon.setImageResource(R.drawable.round_back_white50_100)
-
-            option1Layout.setEnabled(true)
-            option2Layout.setEnabled(true)
-            option3Layout.setEnabled(true)
-            option4Layout.setEnabled(true)
-
-            option1Tv.setTextColor(ContextCompat.getColor(context, R.color.LiteBlack))
-            option2Tv.setTextColor(ContextCompat.getColor(context, R.color.LiteBlack))
-            option3Tv.setTextColor(ContextCompat.getColor(context, R.color.LiteBlack))
-            option4Tv.setTextColor(ContextCompat.getColor(context, R.color.LiteBlack))
             explainIv.visibility = View.GONE
 
-            
             tvQuestionPosition.text =
-                GeneralUtils.convertEnglishToBengaliNumber("${position + 1}" + ")")
+                GeneralUtils.convertEnglishToBengaliNumber("${position + 1})")
 
-            //For Question
-            showImgOrTextView(questionList.question, questionList.image, questionIv, questionTv)
-            //For Option1
-            showImgOrTextView(
-                questionList.option1,
-                questionList.option1Image,
-                option1Iv,
-                option1Tv
-            )
-            //For Option2
-            showImgOrTextView(
-                questionList.option2,
-                questionList.option2Image,
-                option2Iv,
-                option2Tv
-            )
-            //For Option3
-            showImgOrTextView(
-                questionList.option3,
-                questionList.option3Image,
-                option3Iv,
-                option3Tv
-            )
-            //For Option4
-            showImgOrTextView(
-                questionList.option4,
-                questionList.option4Image,
-                option4Iv,
-                option4Tv
-            )
-            //For Explain
-            showImgOrTextView(
-                questionList.explanation,
-                questionList.explanationImage,
-                explainIv,
-                explainTv
-            )
+            showImgOrTextView(item.question, item.image, questionIv, questionTv)
+            showImgOrTextView(item.option1, item.option1Image, option1Iv, option1Tv)
+            showImgOrTextView(item.option2, item.option2Image, option2Iv, option2Tv)
+            showImgOrTextView(item.option3, item.option3Image, option3Iv, option3Tv)
+            showImgOrTextView(item.option4, item.option4Image, option4Iv, option4Tv)
 
+            // Reset all options to default state
+            resetOption(option1Layout, option1Icon)
+            resetOption(option2Layout, option2Icon)
+            resetOption(option3Layout, option3Icon)
+            resetOption(option4Layout, option4Icon)
 
+            // Handle option selection
+            option1Layout.setOnClickListener {
+                if (item.userSelectedAnswer == 0) selectOption(
+                    1,
+                    item,
+                    option1Layout,
+                    option1Icon,
+                    binding
+                )
+
+//                if (item.userSelectedAnswer == 0) {
+//                    correctAnswer(1, item, option1Layout, option1Icon)
+//                }
+            }
+            option2Layout.setOnClickListener {
+                if (item.userSelectedAnswer == 0) selectOption(
+                    2,
+                    item,
+                    option2Layout,
+                    option2Icon,
+                    binding
+                )
+            }
+            option3Layout.setOnClickListener {
+                if (item.userSelectedAnswer == 0) selectOption(
+                    3,
+                    item,
+                    option3Layout,
+                    option3Icon,
+                    binding
+                )
+            }
+            option4Layout.setOnClickListener {
+                if (item.userSelectedAnswer == 0) selectOption(
+                    4,
+                    item,
+                    option4Layout,
+                    option4Icon,
+                    binding
+                )
+            }
+
+            // Highlight selected option and disable others
+            if (userSelectedAnswer > 0) {
+                when (userSelectedAnswer) {
+                    1 -> {
+                        if (correctAnswer == 1) {
+
+                        }
+                        markSelectedOption(option1Layout, option1Icon)
+                    }
+
+                    2 -> markSelectedOption(option2Layout, option2Icon)
+                    3 -> markSelectedOption(option3Layout, option3Icon)
+                    4 -> markSelectedOption(option4Layout, option4Icon)
+                }
+                disableAllOptions(binding)
+            }
         }
     }
 
-    fun showImgOrTextView(
+    private fun selectOption(
+        selectedOption: Int,
+        item: Question,
+        optionLayout: View,
+        optionIcon: ImageView,
+        binding: McqLayoutBinding
+    ) {
+        item.userSelectedAnswer = selectedOption
+        markSelectedOption(optionLayout, optionIcon)
+        disableAllOptions(binding)
+    }
+
+    private fun markSelectedOption(optionLayout: View, image: ImageView) {
+        optionLayout.setBackgroundResource(R.drawable.round_back_selected_option)
+        image.setImageResource(R.drawable.black_dot)
+    }
+
+    private fun correctAnswer(
+        selectedOption: Int,
+        item: Question,
+        optionLayout: View, image: ImageView
+    ) {
+        item.userSelectedAnswer = selectedOption
+        if (item.answer.toInt() == item.userSelectedAnswer) {
+            optionLayout.setBackgroundResource(R.drawable.round_back_selected_option)
+            image.setImageResource(R.drawable.black_dot)
+        } else {
+            optionLayout.setBackgroundResource(R.drawable.round_back_selected_option)
+            image.setImageResource(R.drawable.baseline_close_24)
+        }
+
+    }
+
+    private fun resetOption(optionLayout: View, optionIcon: ImageView) {
+        optionIcon.setImageResource(0)
+        optionLayout.setBackgroundResource(0)
+        optionLayout.isEnabled = true
+    }
+
+    private fun disableAllOptions(binding: McqLayoutBinding) {
+        with(binding) {
+            option1Layout.isEnabled = false
+            option2Layout.isEnabled = false
+            option3Layout.isEnabled = false
+            option4Layout.isEnabled = false
+        }
+    }
+
+    private fun showImgOrTextView(
         text: String,
         base64ImageString: String,
         imageView: ImageView,
@@ -107,9 +169,7 @@ class QuestionAdapter : BaseAdapter<Question, McqLayoutBinding>(
                 textView.visibility = View.GONE
                 imageView.setImageBitmap(GeneralUtils.convertBase64ToBitmap(base64ImageString))
             }
-
         }
-
     }
-
 }
+

@@ -118,9 +118,7 @@
                     android:textColor="@color/LiteBlack"
                     android:textSize="16dp" />
 
-
             </LinearLayout>
-
 
             <TextView
                 android:id="@+id/option1Tv"
@@ -151,7 +149,6 @@
                 android:src="@drawable/baseline_check_24"
                 android:visibility="gone"
                 app:shapeAppearanceOverlay="@style/round_image_style" />
-
 
             <ImageView
                 android:id="@+id/option1Iv"
@@ -198,8 +195,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:padding="3dp"
+
                         android:scaleType="fitXY"
-                        android:src="@drawable/black_dot" />
+                        app:shapeAppearanceOverlay="@style/round_image_style" />
 
                 </LinearLayout>
 
@@ -293,7 +291,8 @@
                         android:layout_height="match_parent"
                         android:padding="3dp"
                         android:scaleType="fitXY"
-                        android:src="@drawable/black_dot" />
+
+                        app:shapeAppearanceOverlay="@style/round_image_style" />
 
                 </LinearLayout>
 
@@ -386,7 +385,9 @@
                         android:layout_height="match_parent"
                         android:padding="3dp"
                         android:scaleType="fitXY"
-                        android:src="@drawable/black_dot" />
+                        app:shapeAppearanceOverlay="@style/round_image_style"
+
+                        />
 
                 </LinearLayout>
 

@@ -97,7 +97,6 @@ class SubjectsFragment : BaseFragment<FragmentSubjectsBinding>(FragmentSubjectsB
 
 
     fun showSubjectBasedQuestion(subjectName: SubjectName) {
-
         val data = SharedData(
             subjectName.subject_name,
             "subjectBasedQuestions",
