@@ -23,9 +23,8 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionB
     private val sharedViewModel: SharedViewModel by activityViewModels()
     private val viewModel: QuestionViewModel by viewModels()
 
-    override fun onCreateView() {
-
-
+    override fun loadUi() {
+        
         setupUI()
         observeSharedData()
         observeQuestions()

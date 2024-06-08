@@ -7,7 +7,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MoreFragment : BaseFragment<FragmentMoreBinding>(FragmentMoreBinding::inflate) {
 
-    override fun onCreateView() {
+    override fun loadUi() {
 
     }
 

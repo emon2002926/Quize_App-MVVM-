@@ -23,12 +23,22 @@ abstract class BaseFragment<viewBinding : ViewBinding>(
     ): View? {
 
         _binding = bindingInflater.invoke(inflater)
-        onCreateView()
 
         return binding.root
     }
 
-    abstract fun onCreateView()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        loadUi()
+    }
+
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    abstract fun loadUi()
 
 
 }

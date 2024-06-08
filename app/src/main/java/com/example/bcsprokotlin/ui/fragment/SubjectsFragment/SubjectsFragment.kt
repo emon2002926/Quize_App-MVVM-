@@ -30,7 +30,7 @@ class SubjectsFragment : BaseFragment<FragmentSubjectsBinding>(FragmentSubjectsB
     private lateinit var subjectAdapter: SubjectAdapter
 
 
-    override fun onCreateView() {
+    override fun loadUi() {
 
         subjectAdapter = SubjectAdapter(this)
 

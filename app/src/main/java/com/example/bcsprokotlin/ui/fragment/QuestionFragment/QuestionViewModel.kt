@@ -14,109 +14,101 @@ import javax.inject.Inject
 
 @HiltViewModel
 class QuestionViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
-    private val apiNumber = 1
-    val pageNumber = 1
 
     private val _questions: MutableLiveData<Resource<MutableList<Question>>> = MutableLiveData()
     val questions: LiveData<Resource<MutableList<Question>>> = _questions
+    private val apiNumber = 1
+    val pageNumber = 1
 
+    // Track if data is already loaded
+    private var isDataLoaded = false
 
     suspend fun getQuestion() {
-        _questions.postValue(Resource.Loading())
-        try {
-            if (hasInternetConnection()) {
-                val questionResponse = repository.getQuestion(apiNumber, pageNumber, PAGE_SIZE)
-
-
-                _questions.postValue(handleQuestionResponse(questionResponse))
-            } else {
-                _questions.postValue(Resource.Error("No internet connection"))
-            }
-        } catch (t: Throwable) {
-            when (t) {
-                is IOException -> _questions.postValue(Resource.Error("Network Failure"))
-                else -> _questions.postValue(Resource.Error("Conversion Error "))
+        if (!isDataLoaded) {
+            _questions.postValue(Resource.Loading())
+            try {
+                if (hasInternetConnection()) {
+                    val questionResponse = repository.getQuestion(apiNumber, pageNumber, PAGE_SIZE)
+                    _questions.postValue(handleQuestionResponse(questionResponse))
+                    isDataLoaded = true
+                } else {
+                    _questions.postValue(Resource.Error("No internet connection"))
+                }
+            } catch (t: Throwable) {
+                handleThrowable(t)
             }
         }
     }
 
-
-    //////////////////////////////////////
+    // Similar logic for other methods...
     suspend fun getPreviousYearQuestions(totalQuestion: Int, batchName: String) {
-        _questions.postValue(Resource.Loading())
-        try {
-            if (hasInternetConnection()) {
-                val questionResponse =
-                    repository.getPreviousYearQuestion(
-                        9,
-                        pageNumber,
-                        totalQuestion,
-                        batchName
-                    )
-
-
-                _questions.postValue(handleQuestionResponse(questionResponse))
-            } else {
-                _questions.postValue(Resource.Error("No internet connection"))
-            }
-        } catch (t: Throwable) {
-            when (t) {
-                is IOException -> _questions.postValue(Resource.Error("Network Failure"))
-                else -> _questions.postValue(Resource.Error("Conversion Error "))
+        if (!isDataLoaded) {
+            _questions.postValue(Resource.Loading())
+            try {
+                if (hasInternetConnection()) {
+                    val questionResponse =
+                        repository.getPreviousYearQuestion(9, pageNumber, totalQuestion, batchName)
+                    _questions.postValue(handleQuestionResponse(questionResponse))
+                    isDataLoaded = true
+                } else {
+                    _questions.postValue(Resource.Error("No internet connection"))
+                }
+            } catch (t: Throwable) {
+                handleThrowable(t)
             }
         }
     }
 
-
-    //////////////////////////////////////
     suspend fun getExamQuestions(totalQuestion: Int) {
-        _questions.postValue(Resource.Loading())
-        try {
-            if (hasInternetConnection()) {
-                val questionResponse =
-                    repository.getExamQuestion(totalQuestion)
-
-
-                _questions.postValue(handleQuestionResponse(questionResponse))
-            } else {
-                _questions.postValue(Resource.Error("No internet connection"))
-            }
-        } catch (t: Throwable) {
-            when (t) {
-                is IOException -> _questions.postValue(Resource.Error("Network Failure"))
-                else -> _questions.postValue(Resource.Error("Conversion Error "))
+        if (!isDataLoaded) {
+            _questions.postValue(Resource.Loading())
+            try {
+                if (hasInternetConnection()) {
+                    val questionResponse = repository.getExamQuestion(totalQuestion)
+                    _questions.postValue(handleQuestionResponse(questionResponse))
+                    isDataLoaded = true
+                } else {
+                    _questions.postValue(Resource.Error("No internet connection"))
+                }
+            } catch (t: Throwable) {
+                handleThrowable(t)
             }
         }
     }
-
 
     suspend fun getSubjectExamQuestions(subjectName: String, totalQuestion: Int) {
-        _questions.postValue(Resource.Loading())
-        try {
-            if (hasInternetConnection()) {
-                val questionResponse =
-                    repository.getSubjectBasedExamQuestion(subjectName, totalQuestion)
-
-                _questions.postValue(handleQuestionResponse(questionResponse))
-            } else {
-                _questions.postValue(Resource.Error("No internet connection"))
-            }
-        } catch (t: Throwable) {
-            when (t) {
-                is IOException -> _questions.postValue(Resource.Error("Network Failure"))
-                else -> _questions.postValue(Resource.Error("Conversion Error "))
+        if (!isDataLoaded) {
+            _questions.postValue(Resource.Loading())
+            try {
+                if (hasInternetConnection()) {
+                    val questionResponse =
+                        repository.getSubjectBasedExamQuestion(subjectName, totalQuestion)
+                    _questions.postValue(handleQuestionResponse(questionResponse))
+                    isDataLoaded = true
+                } else {
+                    _questions.postValue(Resource.Error("No internet connection"))
+                }
+            } catch (t: Throwable) {
+                handleThrowable(t)
             }
         }
     }
 
+    private fun handleThrowable(t: Throwable) {
+        _questions.postValue(
+            when (t) {
+                is IOException -> Resource.Error("Network Failure")
+                else -> Resource.Error("Conversion Error")
+            }
+        )
+    }
 
     private fun handleQuestionResponse(response: Response<MutableList<Question>>): Resource<MutableList<Question>> {
-        if (response.isSuccessful) {
-            response.body()?.let {
-                return Resource.Success(it)
-            }
+        return if (response.isSuccessful) {
+            response.body()?.let { Resource.Success(it) } ?: Resource.Error("No data")
+        } else {
+            Resource.Error(response.message())
         }
-        return Resource.Error(response.message())
     }
 
 

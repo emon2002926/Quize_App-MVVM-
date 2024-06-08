@@ -26,7 +26,7 @@ class QuestionBankFragment :
 
     private val questionBankAdapter = QuestionBankAdapter(this)
 
-    override fun onCreateView() {
+    override fun loadUi() {
 
         binding.backButton.setOnClickListener { findNavController().navigateUp() }
 

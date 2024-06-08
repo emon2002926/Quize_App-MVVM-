@@ -40,7 +40,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     private var questionAmount = 0
 
 
-    override fun onCreateView() {
+    override fun loadUi() {
 
 
         // Launching coroutines in the appropriate ViewModel scope
@@ -202,4 +202,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         sharedViewModel.setSharedData(data)
         findNavController().navigate(R.id.action_homeFragment_to_questionFragment)
     }
+
+
 }

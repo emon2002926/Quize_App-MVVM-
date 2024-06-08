@@ -106,17 +106,6 @@
 
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/tVIndication1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="5sp"
-                    android:layout_marginBottom="5sp"
-                    android:text="ক)"
-                    android:textColor="@color/LiteBlack"
-                    android:textSize="16dp" />
 
             </LinearLayout>
 
@@ -124,7 +113,7 @@
                 android:id="@+id/option1Tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="45dp"
+                android:layout_marginStart="35dp"
                 android:layout_marginTop="5sp"
                 android:layout_marginEnd="15sp"
                 android:layout_marginBottom="5sp"
@@ -201,18 +190,6 @@
 
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/tVIndication2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="5sp"
-                    android:layout_marginBottom="5sp"
-                    android:text="খ)"
-                    android:textColor="@color/LiteBlack"
-                    android:textSize="16dp" />
-
 
             </LinearLayout>
 
@@ -221,7 +198,7 @@
                 android:id="@+id/option2Tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="45sp"
+                android:layout_marginStart="35sp"
                 android:layout_marginTop="5sp"
                 android:layout_marginEnd="15sp"
                 android:layout_marginBottom="5sp"
@@ -296,18 +273,6 @@
 
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/tVIndication3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="5sp"
-                    android:layout_marginBottom="5sp"
-                    android:text="গ)"
-                    android:textColor="@color/LiteBlack"
-                    android:textSize="16dp" />
-
 
             </LinearLayout>
 
@@ -316,7 +281,7 @@
                 android:id="@+id/option3Tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="45sp"
+                android:layout_marginStart="35sp"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="15dp"
                 android:layout_marginBottom="5sp"
@@ -391,17 +356,6 @@
 
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/tVIndication4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="5sp"
-                    android:layout_marginBottom="5sp"
-                    android:text="ঘ)"
-                    android:textColor="@color/LiteBlack"
-                    android:textSize="16dp" />
 
             </LinearLayout>
 
@@ -410,7 +364,7 @@
                 android:id="@+id/option4Tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="45sp"
+                android:layout_marginStart="35sp"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="15dp"
                 android:layout_marginBottom="5dp"
