@@ -4,7 +4,7 @@ import com.example.bcsprokotlin.api.ApiService
 import com.example.bcsprokotlin.model.BcsYearName
 import com.example.bcsprokotlin.model.LiveExam
 import com.example.bcsprokotlin.model.Question
-import com.example.bcsprokotlin.ui.fragment.SubjectsFragment.SubjectName
+import com.example.bcsprokotlin.model.SubjectName
 import com.example.bcsprokotlin.util.Constants.Companion.API_KEY
 import com.example.bcsprokotlin.util.Constants.Companion.NORMAL_EXAM
 import com.example.bcsprokotlin.util.Constants.Companion.SUBJECT_BASED_EXAM

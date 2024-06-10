@@ -11,6 +11,7 @@ import com.example.bcsprokotlin.adapter.SubjectAdapter
 import com.example.bcsprokotlin.databinding.FragmentSubjectsBinding
 import com.example.bcsprokotlin.databinding.SubjectBasedExamSubmitionBinding
 import com.example.bcsprokotlin.model.SharedData
+import com.example.bcsprokotlin.model.SubjectName
 import com.example.bcsprokotlin.ui.SharedViewModel
 import com.example.bcsprokotlin.ui.base.BaseFragment
 import com.example.bcsprokotlin.util.GeneralUtils
@@ -86,8 +87,9 @@ class SubjectsFragment : BaseFragment<FragmentSubjectsBinding>(FragmentSubjectsB
 
         sharedViewModel.sharedString.observe(viewLifecycleOwner, { data ->
             when (data) {
-                "subjectBasedQuestions" -> showSubjectBasedQuestion(subjectName)
-                "subjectBasedExamQuestions" -> subjectBasedExamSubmission(
+                "subjectBasedPractise" -> showSubjectBasedQuestion(subjectName)
+
+                "subjectBasedExam" -> subjectBasedExamSubmission(
                     subjectName.subject_name,
                     subjectName.subject_code
                 )
@@ -126,7 +128,7 @@ class SubjectsFragment : BaseFragment<FragmentSubjectsBinding>(FragmentSubjectsB
 
                     val data = SharedData(
                         subjectCode,
-                        "subjectBasedQuestions",
+                        "subjectBasedExam",
                         question.toInt(),
                         "",
                         subjectCode,

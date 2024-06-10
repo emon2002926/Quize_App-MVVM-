@@ -1,4 +1,4 @@
-package com.example.bcsprokotlin.ui.fragment.SubjectsFragment
+package com.example.bcsprokotlin.model
 
 data class SubjectName(
     val end_color: String,

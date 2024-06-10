@@ -17,9 +17,9 @@ import com.example.bcsprokotlin.databinding.FragmentHomeBinding
 import com.example.bcsprokotlin.databinding.LayoutShowExamOptionBinding
 import com.example.bcsprokotlin.model.LiveExam
 import com.example.bcsprokotlin.model.SharedData
+import com.example.bcsprokotlin.model.SubjectName
 import com.example.bcsprokotlin.ui.SharedViewModel
 import com.example.bcsprokotlin.ui.base.BaseFragment
-import com.example.bcsprokotlin.ui.fragment.SubjectsFragment.SubjectName
 import com.example.bcsprokotlin.ui.fragment.SubjectsFragment.SubjectViewModel
 import com.example.bcsprokotlin.util.GeneralUtils
 import com.example.bcsprokotlin.util.Resource
@@ -106,20 +106,21 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
     private fun setListeners() = with(binding) {
         practice.setOnClickListener {
-            sharedViewModel.setStringData("subjectBasedQuestions")
+            sharedViewModel.setStringData("subjectBasedPractise")
             findNavController().navigate(R.id.action_homeFragment_to_subjectsFragment)
         }
 
         btnShowAllSubject.setOnClickListener {
-            sharedViewModel.setStringData("subjectBasedQuestions")
+            sharedViewModel.setStringData("subjectBasedPractise")
             findNavController().navigate(R.id.action_homeFragment_to_subjectsFragment)
         }
 
         btnQuestionBank.setOnClickListener { findNavController().navigate(R.id.action_homeFragment_to_questionBankFragment) }
+
         exams.setOnClickListener { showExamOptions() }
 
         subjectBasedExam.setOnClickListener {
-            sharedViewModel.setStringData("subjectBasedExamQuestions")
+            sharedViewModel.setStringData("subjectBasedExam")
             findNavController().navigate(R.id.action_homeFragment_to_subjectsFragment)
         }
     }

@@ -3,7 +3,7 @@ package com.example.bcsprokotlin.api
 import com.example.bcsprokotlin.model.BcsYearName
 import com.example.bcsprokotlin.model.LiveExam
 import com.example.bcsprokotlin.model.Question
-import com.example.bcsprokotlin.ui.fragment.SubjectsFragment.SubjectName
+import com.example.bcsprokotlin.model.SubjectName
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query

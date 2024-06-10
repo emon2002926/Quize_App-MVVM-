@@ -16,133 +16,234 @@ class QuestionAdapter : BaseAdapter<Question, McqLayoutBinding>(
     areItemsTheSame = { oldItem, newItem -> oldItem.id == newItem.id },
     areContentsTheSame = { oldItem, newItem -> oldItem == newItem }
 ) {
+
     override fun createBinding(parent: ViewGroup, viewType: Int): McqLayoutBinding {
         return McqLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
     }
 
+    private var showAnswers: Boolean = false
+
+    fun showAnswer(show: Boolean) {
+        showAnswers = show
+        notifyDataSetChanged()
+    }
+
+    private var showExamUi = ""
+
+    fun changeUiForExam(show: String) {
+        showExamUi = show
+        notifyDataSetChanged()
+    }
+
+
     override fun bind(binding: McqLayoutBinding, item: Question, position: Int) {
-
-        val context = binding.fullLayout.context
-
         with(binding) {
             explainIv.visibility = View.GONE
+            tvQuestionPosition.text = GeneralUtils.convertEnglishToBengaliNumber("${position + 1})")
 
-            tvQuestionPosition.text =
-                GeneralUtils.convertEnglishToBengaliNumber("${position + 1})")
+            // Set question and options
+            bindQuestionAndOptions(item, this)
+            // Reset options to default state
+            resetOptions(this)
 
+
+            when (showExamUi) {
+                "examQuestion" -> {
+
+                    if (item.userSelectedAnswer > 0) {
+
+                        disableOptions(binding)
+                        when (item.userSelectedAnswer) {
+                            1 -> {
+                                highLightClickedOptionForExam(option1Layout, option1Icon)
+                                makeGrayText(option2Layout, option2Tv, option2Layout.context)
+                                makeGrayText(option3Layout, option3Tv, option3Layout.context)
+                                makeGrayText(option4Layout, option4Tv, option4Layout.context)
+                            }
+
+                            2 -> {
+                                highLightClickedOptionForExam(option2Layout, option2Icon)
+                                makeGrayText(option1Layout, option1Tv, option1Layout.context)
+                                makeGrayText(option3Layout, option3Tv, option3Layout.context)
+                                makeGrayText(option4Layout, option4Tv, option4Layout.context)
+                            }
+
+                            3 -> {
+                                highLightClickedOptionForExam(option3Layout, option3Icon)
+                                makeGrayText(option1Layout, option1Tv, option1Layout.context)
+                                makeGrayText(option2Layout, option2Tv, option2Layout.context)
+                                makeGrayText(option4Layout, option4Tv, option4Layout.context)
+                            }
+
+                            4 -> {
+                                highLightClickedOptionForExam(option4Layout, option4Icon)
+                                makeGrayText(option1Layout, option1Tv, option1Layout.context)
+                                makeGrayText(option2Layout, option2Tv, option2Layout.context)
+                                makeGrayText(option3Layout, option3Tv, option3Layout.context)
+                            }
+                        }
+
+
+                    }
+
+                    option1Layout.setOnClickListener {
+                        item.userSelectedAnswer = 1
+                        highLightClickedOptionForExam(option1Layout, option1Icon)
+                        makeGrayText(option2Layout, option2Tv, option2Layout.context)
+                        makeGrayText(option3Layout, option3Tv, option3Layout.context)
+                        makeGrayText(option4Layout, option4Tv, option4Layout.context)
+                        disableOptions(binding)
+
+
+                    }
+                    option2Layout.setOnClickListener {
+                        item.userSelectedAnswer = 2
+                        highLightClickedOptionForExam(option2Layout, option2Icon)
+                        makeGrayText(option1Layout, option1Tv, option1Layout.context)
+                        makeGrayText(option3Layout, option3Tv, option3Layout.context)
+                        makeGrayText(option4Layout, option4Tv, option4Layout.context)
+                        disableOptions(binding)
+
+                    }
+                    option3Layout.setOnClickListener {
+                        item.userSelectedAnswer = 3
+                        highLightClickedOptionForExam(option3Layout, option3Icon)
+                        makeGrayText(option1Layout, option1Tv, option1Layout.context)
+                        makeGrayText(option2Layout, option2Tv, option2Layout.context)
+                        makeGrayText(option4Layout, option4Tv, option4Layout.context)
+                        disableOptions(binding)
+
+                    }
+                    option4Layout.setOnClickListener {
+                        item.userSelectedAnswer = 4
+                        highLightClickedOptionForExam(option4Layout, option4Icon)
+                        makeGrayText(option1Layout, option1Tv, option1Layout.context)
+                        makeGrayText(option2Layout, option2Tv, option2Layout.context)
+                        makeGrayText(option3Layout, option3Tv, option3Layout.context)
+                        disableOptions(binding)
+
+                    }
+                }
+
+                "normalQuestion" -> {
+
+
+                    if (showAnswers) {
+                        showImgOrTextView(
+                            item.explanation,
+                            item.explanationImage,
+                            explainIv,
+                            explainTv
+                        )
+                        highlightCorrectAnswer(this, item)
+                    } else {
+                        explainIv.visibility = View.GONE
+                        explainTv.visibility = View.GONE
+                    }
+
+                    if (item.userSelectedAnswer != 0) {
+                        disableOptions(this)
+                        highlightUserSelection(this, item)
+                    }
+
+                    val onClickListener = View.OnClickListener { view ->
+                        showImgOrTextView(
+                            item.explanation,
+                            item.explanationImage,
+                            explainIv,
+                            explainTv
+                        )
+                        item.userSelectedAnswer = getOptionIndex(view, this)
+                        highlightUserSelection(this, item)
+                        disableOptions(this)
+                    }
+
+                    // Set click listeners for all option layouts
+                    setOptionClickListeners(this, onClickListener)
+                }
+
+            }
+
+
+        }
+    }
+
+    private fun bindQuestionAndOptions(item: Question, binding: McqLayoutBinding) {
+        with(binding) {
             showImgOrTextView(item.question, item.image, questionIv, questionTv)
             showImgOrTextView("ক) ${item.option1}", item.option1Image, option1Iv, option1Tv)
             showImgOrTextView("খ) ${item.option2}", item.option2Image, option2Iv, option2Tv)
             showImgOrTextView("গ) ${item.option3}", item.option3Image, option3Iv, option3Tv)
             showImgOrTextView("ঘ) ${item.option4}", item.option4Image, option4Iv, option4Tv)
+        }
+    }
 
-            // Reset all options to default state
-            resetOption(option1Layout, option1Icon, option1Tv, context)
-            resetOption(option2Layout, option2Icon, option2Tv, context)
-            resetOption(option3Layout, option3Icon, option3Tv, context)
-            resetOption(option4Layout, option4Icon, option4Tv, context)
+    private fun resetOptions(binding: McqLayoutBinding) {
+        with(binding) {
+            resetOption(option1Layout, option1Icon, option1Tv, option1Layout.context)
+            resetOption(option2Layout, option2Icon, option2Tv, option2Layout.context)
+            resetOption(option3Layout, option3Icon, option3Tv, option3Layout.context)
+            resetOption(option4Layout, option4Icon, option4Tv, option4Layout.context)
+        }
+    }
 
-            // Apply saved state
-            if (item.userSelectedAnswer != 0) {
+    private fun highlightCorrectAnswer(binding: McqLayoutBinding, item: Question) {
+        with(binding) {
+            val correctAnswer = item.answer.toInt()
+            highlightAnswer(option1Layout, option1Icon, option1Tv, 1, correctAnswer)
+            highlightAnswer(option2Layout, option2Icon, option2Tv, 2, correctAnswer)
+            highlightAnswer(option3Layout, option3Icon, option3Tv, 3, correctAnswer)
+            highlightAnswer(option4Layout, option4Icon, option4Tv, 4, correctAnswer)
+        }
+    }
 
-                // Highlight the correct answer
-                when (item.userSelectedAnswer) {
+    private fun highlightUserSelection(binding: McqLayoutBinding, item: Question) {
+        val userAnswer = item.userSelectedAnswer
+        val correctAnswer = item.answer.toInt()
+        with(binding) {
+            highlightAnswer(option1Layout, option1Icon, option1Tv, 1, correctAnswer, userAnswer)
+            highlightAnswer(option2Layout, option2Icon, option2Tv, 2, correctAnswer, userAnswer)
+            highlightAnswer(option3Layout, option3Icon, option3Tv, 3, correctAnswer, userAnswer)
+            highlightAnswer(option4Layout, option4Icon, option4Tv, 4, correctAnswer, userAnswer)
+        }
+    }
 
-                    1 -> {
-                        disableAllOptions(binding)
-                        highlightAnswers(binding, item, context)
-                        if (item.userSelectedAnswer == item.answer.toInt()) {
-                            correctAnswer(option1Layout, option1Icon, option1Tv)
-                        } else {
-                            wrongAnswer(option1Layout, option1Icon, option1Tv)
-                        }
-//                        applySelectionState(option1Layout, option1Icon, option1Tv, item, context)
-                    }
+    private fun highlightAnswer(
+        layout: View,
+        icon: ImageView,
+        text: TextView,
+        optionIndex: Int,
+        correctAnswer: Int,
+        userAnswer: Int = 0
+    ) {
+        if (optionIndex == correctAnswer) {
+            correctAnswer(layout, icon, text)
+        } else if (userAnswer != 0 && optionIndex == userAnswer) {
+            wrongAnswer(layout, icon, text)
+        } else {
+            makeGrayText(layout, text, layout.context)
+        }
+    }
 
-                    2 -> {
-                        disableAllOptions(binding)
-                        highlightAnswers(binding, item, context)
-                        if (item.userSelectedAnswer == item.answer.toInt()) {
-                            correctAnswer(option2Layout, option2Icon, option2Tv)
-                        } else {
-                            wrongAnswer(option2Layout, option2Icon, option2Tv)
-                        }
-                    }
-
-                    3 -> {
-                        disableAllOptions(binding)
-                        highlightAnswers(binding, item, context)
-                        if (item.userSelectedAnswer == item.answer.toInt()) {
-                            correctAnswer(option3Layout, option3Icon, option3Tv)
-                        } else {
-                            wrongAnswer(option3Layout, option3Icon, option3Tv)
-                        }
-                    }
-
-                    4 -> {
-                        disableAllOptions(binding)
-                        highlightAnswers(binding, item, context)
-                        if (item.userSelectedAnswer == item.answer.toInt()) {
-                            correctAnswer(option4Layout, option4Icon, option4Tv)
-                        } else {
-                            wrongAnswer(option4Layout, option4Icon, option4Tv)
-                        }
-                    }
-                }
-            }
-
-            val onClickListener = View.OnClickListener { view ->
-                showImgOrTextView(item.explanation, item.explanationImage, explainIv, explainTv)
-                // Determine selected option
-                var selectedOption = 0
-                var img: ImageView? = null
-                var option: TextView? = null
-                when (view) {
-                    option1Layout -> {
-                        selectedOption = 1
-                        img = option1Icon
-                        option = option1Tv
-                    }
-
-                    option2Layout -> {
-                        selectedOption = 2
-                        img = option2Icon
-                        option = option2Tv
-                    }
-
-                    option3Layout -> {
-                        selectedOption = 3
-                        img = option3Icon
-                        option = option3Tv
-                    }
-
-                    option4Layout -> {
-                        selectedOption = 4
-                        img = option4Icon
-                        option = option4Tv
-                    }
-                }
-                item.userSelectedAnswer = selectedOption
-
-                // Highlight correct and wrong answers
-                highlightAnswers(binding, item, context)
-
-                // Highlight selected option
-                if (img != null && option != null) {
-                    if (selectedOption == item.answer.toInt()) {
-                        correctAnswer(view, img, option)
-                    } else {
-                        wrongAnswer(view, img, option)
-                    }
-                }
-
-                disableAllOptions(binding)
-            }
-
+    private fun setOptionClickListeners(
+        binding: McqLayoutBinding,
+        onClickListener: View.OnClickListener
+    ) {
+        with(binding) {
             option1Layout.setOnClickListener(onClickListener)
             option2Layout.setOnClickListener(onClickListener)
             option3Layout.setOnClickListener(onClickListener)
             option4Layout.setOnClickListener(onClickListener)
+        }
+    }
+
+    private fun getOptionIndex(view: View, binding: McqLayoutBinding): Int {
+        return when (view) {
+            binding.option1Layout -> 1
+            binding.option2Layout -> 2
+            binding.option3Layout -> 3
+            binding.option4Layout -> 4
+            else -> 0
         }
     }
 
@@ -170,47 +271,17 @@ class QuestionAdapter : BaseAdapter<Question, McqLayoutBinding>(
         context: Context
     ) {
         optionIcon.setImageResource(0)
-        optionLayout.setBackgroundResource(0) // Default background resource
-        optionText.setTextColor(
-            ContextCompat.getColor(
-                context,
-                R.color.LiteBlack
-            )
-        ) // Default text color resource
+        optionLayout.setBackgroundResource(0)
+        optionText.setTextColor(ContextCompat.getColor(context, R.color.LiteBlack))
         optionLayout.isEnabled = true
     }
 
-    private fun disableAllOptions(binding: McqLayoutBinding) {
+    private fun disableOptions(binding: McqLayoutBinding) {
         with(binding) {
             option1Layout.isEnabled = false
             option2Layout.isEnabled = false
             option3Layout.isEnabled = false
             option4Layout.isEnabled = false
-        }
-    }
-
-
-    private fun highlightAnswers(binding: McqLayoutBinding, item: Question, context: Context) {
-        with(binding) {
-            // Reset all options to default state
-
-//            resetOption(option1Layout, option1Icon, option1Tv, context)
-//            resetOption(option2Layout, option2Icon, option2Tv, context)
-//            resetOption(option3Layout, option3Icon, option3Tv, context)
-//            resetOption(option4Layout, option4Icon, option4Tv, context)
-
-            // Highlight the correct answer
-            when (item.answer.toInt()) {
-                1 -> correctAnswer(option1Layout, option1Icon, option1Tv)
-                2 -> correctAnswer(option2Layout, option2Icon, option2Tv)
-                3 -> correctAnswer(option3Layout, option3Icon, option3Tv)
-                4 -> correctAnswer(option4Layout, option4Icon, option4Tv)
-            }
-            // Gray out the incorrect answers
-            if (item.answer.toInt() != 1) makeGrayText(option1Layout, option1Tv, context)
-            if (item.answer.toInt() != 2) makeGrayText(option2Layout, option2Tv, context)
-            if (item.answer.toInt() != 3) makeGrayText(option3Layout, option3Tv, context)
-            if (item.answer.toInt() != 4) makeGrayText(option4Layout, option4Tv, context)
         }
     }
 
@@ -224,12 +295,22 @@ class QuestionAdapter : BaseAdapter<Question, McqLayoutBinding>(
             imageView.visibility = View.GONE
             textView.text = text
             textView.visibility = View.VISIBLE
-        } else {
-            if (base64ImageString.isNotEmpty()) {
-                imageView.visibility = View.VISIBLE
-                textView.visibility = View.GONE
-                imageView.setImageBitmap(GeneralUtils.convertBase64ToBitmap(base64ImageString))
-            }
+        } else if (base64ImageString.isNotEmpty()) {
+            imageView.visibility = View.VISIBLE
+            textView.visibility = View.GONE
+            imageView.setImageBitmap(GeneralUtils.convertBase64ToBitmap(base64ImageString))
         }
+    }
+
+
+    private fun highLightClickedOptionForExam(
+        optionLayout: View,
+        optionIcon: ImageView
+    ) {
+        optionIcon.setImageResource(R.drawable.black_dot)
+        optionLayout.setBackgroundResource(R.drawable.round_back_selected_option)
+        optionLayout.isEnabled = false
+
+
     }
 }

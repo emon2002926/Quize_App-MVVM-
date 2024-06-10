@@ -2,6 +2,7 @@ package com.example.bcsprokotlin.ui.fragment.SubjectsFragment
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.bcsprokotlin.model.SubjectName
 import com.example.bcsprokotlin.repository.Repository
 import com.example.bcsprokotlin.util.Constants
 import com.example.bcsprokotlin.util.Resource

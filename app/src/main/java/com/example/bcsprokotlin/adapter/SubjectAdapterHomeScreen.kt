@@ -3,7 +3,7 @@ package com.example.bcsprokotlin.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.example.bcsprokotlin.databinding.SubjectItemLinerBinding
-import com.example.bcsprokotlin.ui.fragment.SubjectsFragment.SubjectName
+import com.example.bcsprokotlin.model.SubjectName
 
 class SubjectAdapterHomeScreen(val listener: HandleClickListener) :
     BaseAdapter<SubjectName, SubjectItemLinerBinding>(
