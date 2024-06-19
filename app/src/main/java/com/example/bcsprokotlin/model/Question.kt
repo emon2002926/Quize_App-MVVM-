@@ -1,5 +1,10 @@
 package com.example.bcsprokotlin.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+
+@Parcelize
 data class Question(
     val answer: String,
     val batch: String,
@@ -18,4 +23,4 @@ data class Question(
     val question: String,
     val subjects: String,
     var userSelectedAnswer: Int = 0
-)
+) : Parcelable

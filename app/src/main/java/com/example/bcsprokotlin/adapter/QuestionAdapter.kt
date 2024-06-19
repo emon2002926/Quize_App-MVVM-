@@ -12,10 +12,12 @@ import com.example.bcsprokotlin.databinding.McqLayoutBinding
 import com.example.bcsprokotlin.model.Question
 import com.example.bcsprokotlin.util.GeneralUtils
 
-class QuestionAdapter : BaseAdapter<Question, McqLayoutBinding>(
-    areItemsTheSame = { oldItem, newItem -> oldItem.id == newItem.id },
-    areContentsTheSame = { oldItem, newItem -> oldItem == newItem }
-) {
+class QuestionAdapter(private val listener: OnItemSelectedListener) :
+    BaseAdapter<Question, McqLayoutBinding>(
+        areItemsTheSame = { oldItem, newItem -> oldItem.id == newItem.id },
+        areContentsTheSame = { oldItem, newItem -> oldItem == newItem }
+    ) {
+
 
     override fun createBinding(parent: ViewGroup, viewType: Int): McqLayoutBinding {
         return McqLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -47,9 +49,9 @@ class QuestionAdapter : BaseAdapter<Question, McqLayoutBinding>(
             resetOptions(this)
 
 
+
             when (showExamUi) {
                 "examQuestion" -> {
-
                     if (item.userSelectedAnswer > 0) {
 
                         disableOptions(binding)
@@ -85,44 +87,102 @@ class QuestionAdapter : BaseAdapter<Question, McqLayoutBinding>(
 
 
                     }
+                    //////////////////////////////////////////////////////////
 
-                    option1Layout.setOnClickListener {
-                        item.userSelectedAnswer = 1
-                        highLightClickedOptionForExam(option1Layout, option1Icon)
-                        makeGrayText(option2Layout, option2Tv, option2Layout.context)
-                        makeGrayText(option3Layout, option3Tv, option3Layout.context)
-                        makeGrayText(option4Layout, option4Tv, option4Layout.context)
-                        disableOptions(binding)
 
+                    val context = fullLayout.context
+
+                    val optionClickListener = View.OnClickListener { view: View ->
+                        var selectedOption = 0
+                        var img: ImageView? = null
+                        // Determine which option was clicked based on the view that was clicked
+                        if (view === option1Layout) {
+                            selectedOption = 1
+                            img = option1Icon
+                        } else if (view === option2Layout) {
+                            selectedOption = 2
+                            img = option2Icon
+                        } else if (view === option3Layout) {
+                            selectedOption = 3
+                            img = option3Icon
+                        } else if (view === option4Layout) {
+                            selectedOption = 4
+                            img = optionIcon4
+                        }
+                        // Change text color of all options to default
+
+
+                        makeGrayText(option1Layout, option1Tv, context)
+                        makeGrayText(option2Layout, option2Tv, context)
+                        makeGrayText(option3Layout, option3Tv, context)
+                        makeGrayText(option4Layout, option4Tv, context)
+
+                        when (selectedOption) {
+                            1 -> option1Tv.setTextColor(
+                                ContextCompat.getColor(
+                                    context,
+                                    R.color.black
+                                )
+                            )
+
+                            2 -> option2Tv.setTextColor(
+                                ContextCompat.getColor(
+                                    context,
+                                    R.color.black
+                                )
+                            )
+
+                            3 -> option3Tv.setTextColor(
+                                ContextCompat.getColor(
+                                    context,
+                                    R.color.black
+                                )
+                            )
+
+                            4 -> option4Tv.setTextColor(
+                                ContextCompat.getColor(
+                                    context,
+                                    R.color.black
+                                )
+                            )
+                        }
+
+
+                        item.userSelectedAnswer = selectedOption
+                        listener.onItemSelected(item)
+
+
+                        if (img != null) {
+                            highLightClickedOptionForExam(view, img)
+                        }
+
+                        option1Layout.setEnabled(false)
+                        option2Layout.setEnabled(false)
+                        option3Layout.setEnabled(false)
+                        option4Layout.setEnabled(false)
+
+
+//
+//                        val intent: Intent =
+//                            Intent(ctx, ActivityExam::class.java)
+//                        intent.setAction("xy@4gfk@9*2cxlds&0k@#hLAnsx!")
+//                        intent.putExtra(
+//                            "xy@4gfk@9*2cxlds&0k@#hLAnsx!",
+//                            questionslists as Serializable?
+//                        )
+//                        intent.putExtra("totalQuestion", NUM_OF_QUESTION)
+//                        LocalBroadcastManager.getInstance(context).sendBroadcast(intent)
 
                     }
-                    option2Layout.setOnClickListener {
-                        item.userSelectedAnswer = 2
-                        highLightClickedOptionForExam(option2Layout, option2Icon)
-                        makeGrayText(option1Layout, option1Tv, option1Layout.context)
-                        makeGrayText(option3Layout, option3Tv, option3Layout.context)
-                        makeGrayText(option4Layout, option4Tv, option4Layout.context)
-                        disableOptions(binding)
+                    option1Layout.setOnClickListener(optionClickListener)
+                    option2Layout.setOnClickListener(optionClickListener)
+                    option3Layout.setOnClickListener(optionClickListener)
+                    option4Layout.setOnClickListener(optionClickListener)
 
-                    }
-                    option3Layout.setOnClickListener {
-                        item.userSelectedAnswer = 3
-                        highLightClickedOptionForExam(option3Layout, option3Icon)
-                        makeGrayText(option1Layout, option1Tv, option1Layout.context)
-                        makeGrayText(option2Layout, option2Tv, option2Layout.context)
-                        makeGrayText(option4Layout, option4Tv, option4Layout.context)
-                        disableOptions(binding)
 
-                    }
-                    option4Layout.setOnClickListener {
-                        item.userSelectedAnswer = 4
-                        highLightClickedOptionForExam(option4Layout, option4Icon)
-                        makeGrayText(option1Layout, option1Tv, option1Layout.context)
-                        makeGrayText(option2Layout, option2Tv, option2Layout.context)
-                        makeGrayText(option3Layout, option3Tv, option3Layout.context)
-                        disableOptions(binding)
+                    //////////////////////////////////////////////////////////
 
-                    }
+
                 }
 
                 "normalQuestion" -> {
@@ -166,6 +226,11 @@ class QuestionAdapter : BaseAdapter<Question, McqLayoutBinding>(
 
 
         }
+    }
+
+
+    interface OnItemSelectedListener {
+        fun onItemSelected(item: Question)
     }
 
     private fun bindQuestionAndOptions(item: Question, binding: McqLayoutBinding) {

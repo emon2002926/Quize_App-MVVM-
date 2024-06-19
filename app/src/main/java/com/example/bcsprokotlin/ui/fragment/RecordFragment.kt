@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.bcsprokotlin.R
-import com.example.bcsprokotlin.adapter.QuestionAdapter
 import com.example.bcsprokotlin.databinding.FragmentRecordBinding
 import com.example.bcsprokotlin.ui.fragment.QuestionFragment.QuestionViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -17,7 +16,6 @@ import dagger.hilt.android.AndroidEntryPoint
 class RecordFragment : Fragment() {
     lateinit var binding: FragmentRecordBinding
 
-     private var questionAdapter= QuestionAdapter()
 
     private val viewModel: QuestionViewModel by activityViewModels()
 
@@ -28,7 +26,8 @@ class RecordFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?): View {
+        savedInstanceState: Bundle?
+    ): View {
         val view = inflater.inflate(R.layout.fragment_record, container, false)
         binding = FragmentRecordBinding.bind(view.rootView)
 
@@ -74,8 +73,6 @@ class RecordFragment : Fragment() {
     }
 
 //
-
-
 
 
 }
