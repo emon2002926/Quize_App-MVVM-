@@ -3,6 +3,7 @@ package com.example.bcsprokotlin.ui.fragment.QuestionFragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.bcsprokotlin.model.ExamResult
 import com.example.bcsprokotlin.model.Question
 import com.example.bcsprokotlin.repository.Repository
 import com.example.bcsprokotlin.util.Constants.Companion.PAGE_SIZE
@@ -112,16 +113,6 @@ class QuestionViewModel @Inject constructor(private val repository: Repository) 
     }
 
 
-//    private fun handleExamQuestionResponse(response: Response<MutableList<Question>>): Resource<MutableList<Question>> {
-//        if (response.isSuccessful) {
-//            response.body()?.let {
-//                return Resource.Success(it)
-//            }
-//        }
-//        return Resource.Error(response.message())
-//    }
-
-
     private fun hasInternetConnection(): Boolean {
 //        val connectivityManager = getApplication<BcsApplication>().getSystemService(
 //            Context.CONNECTIVITY_SERVICE
@@ -149,6 +140,83 @@ class QuestionViewModel @Inject constructor(private val repository: Repository) 
 //        }
         return true
     }
+
+    private val _results = MutableLiveData<List<ExamResult>>()
+    val results: LiveData<List<ExamResult>> = _results
+
+    private val subjects = listOf(
+        "internationalAffairs",
+        "bangladeshAffairs",
+        "bangla",
+        "ethicsAndGooGovernance",
+        "geography",
+        "math",
+        "english",
+        "mentalAbility",
+        "generalScience",
+        "ict"
+    )
+
+    fun submitAnswer(examType: String, questionLists: List<Question>) {
+        val sectionSizes = sectionSizeSelector(examType) ?: return
+
+        var currentIndex = 0
+        val results = mutableListOf<ExamResult>()
+
+        sectionSizes.forEachIndexed { index, sectionSize ->
+            var correctAnswers = 0
+            var wrongAnswers = 0
+            var answeredQuestions = 0
+
+            for (i in 0 until sectionSize) {
+                val question = questionLists.getOrNull(currentIndex)
+                if (question != null) {
+                    if (question.userSelectedAnswer != 0) {
+                        answeredQuestions++
+                        if (question.userSelectedAnswer == question.answer.toInt()) {
+                            correctAnswers++
+                        } else {
+                            wrongAnswers++
+                        }
+                    }
+                    currentIndex++
+                }
+            }
+
+            val mark =
+                correctAnswers * (100.0 / sectionSizes.sum()) // Adjust this formula as needed
+            results.add(
+                ExamResult(
+                    subjectName = subjects.getOrNull(index) ?: "Unknown",
+                    mark = mark,
+                    correctAnswer = correctAnswers,
+                    wrongAnswer = wrongAnswers,
+                    answeredQuestions = answeredQuestions
+                )
+            )
+        }
+
+        _results.value = results
+    }
+
+    private fun sectionSizeSelector(examType: String): IntArray? {
+        return when (examType) {
+            "200QuestionExam" -> intArrayOf(20, 30, 35, 10, 10, 15, 35, 15, 15, 15)
+            "100QuestionExam" -> intArrayOf(10, 15, 18, 5, 5, 7, 17, 8, 7, 8)
+            "50QuestionExam" -> intArrayOf(5, 7, 9, 3, 3, 4, 8, 4, 3, 4)
+            else -> null
+        }
+    }
+
+
+//    private fun handleExamQuestionResponse(response: Response<MutableList<Question>>): Resource<MutableList<Question>> {
+//        if (response.isSuccessful) {
+//            response.body()?.let {
+//                return Resource.Success(it)
+//            }
+//        }
+//        return Resource.Error(response.message())
+//    }
 
 
 }

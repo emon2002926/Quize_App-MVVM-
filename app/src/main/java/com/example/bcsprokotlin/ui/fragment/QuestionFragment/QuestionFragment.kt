@@ -186,22 +186,182 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionB
 
     override fun onItemSelected(item: Question) {
         questionLists.add(item)
-        binding.btnShowAnswer.setOnClickListener { submitAnswer() }
+        viewModel.submitAnswer("50QuestionExam", questionLists)
+        binding.btnShowAnswer.setOnClickListener { resultObserver() }
 
     }
+    ////////////////////////////////////
 
-    fun submitAnswer() {
+
+    fun resultObserver() {
+        viewModel.results.observe(viewLifecycleOwner) { result ->
+            result.forEach { resultw ->
+                logger(
+                    "Subject: ${resultw.subjectName}, Mark: ${resultw.mark}" +
+                            ", Correct: ${resultw.correctAnswer}, Wrong: ${resultw.wrongAnswer}" +
+                            ", Answered: ${resultw.answeredQuestions}"
+                )
+            }
+        }
+    }
+
+    /*
+    // For Now
+    val subjects = listOf(
+        "internationalAffairs",
+        "bangladeshAffairs",
+        "bangla",
+        "ethicsAndGooGovernance",
+        "geography",
+        "math",
+        "english",
+        "mentalAbility",
+        "generalScience",
+        "ict"
+    )
+
+    fun submitAnswer(examType: String) {
+        val sectionSizes = sectionSizeSelector(examType) ?: return
         val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDailogTheme)
         val bindingExamOption = SubmitAnswerOptionBinding.inflate(LayoutInflater.from(context))
 
-        var answerdQuestions = 0
+        var currentIndex = 0
+        val results = mutableListOf<ExamResult>()
+
+        sectionSizes.forEachIndexed { index, sectionSize ->
+            var correctAnswers = 0
+            var wrongAnswers = 0
+            var answeredQuestions = 0
+
+            for (i in 0 until sectionSize) {
+                val question = questionLists.getOrNull(currentIndex)
+                if (question != null) {
+                    if (question.userSelectedAnswer != 0) {
+                        answeredQuestions++
+                        if (question.userSelectedAnswer == question.answer.toInt()) {
+                            correctAnswers++
+                        } else {
+                            wrongAnswers++
+                        }
+                    }
+                    currentIndex++
+                }
+            }
+
+            val mark =
+                correctAnswers * (100.0 / sectionSizes.sum()) // Adjust this formula as needed
+            results.add(
+                ExamResult(
+                    subjectName = subjects.getOrNull(index) ?: "Unknown",
+                    mark = mark,
+                    correctAnswer = correctAnswers,
+                    wrongAnswer = wrongAnswers,
+                    answeredQuestions = answeredQuestions
+                )
+            )
+        }
+
+        // Log or display results
+        results.forEach { result ->
+            logger("Subject: ${result.subjectName}, Mark: ${result.mark}, Correct: ${result.correctAnswer}, Wrong: ${result.wrongAnswer}, Answered: ${result.answeredQuestions}")
+        }
+
+        bindingExamOption.apply {
+
+        }
+        bottomSheetDialog.setContentView(bindingExamOption.root)
+        bottomSheetDialog.show()
+
+        // Additional UI handling for showing the result can go here
+    }
+
+
+     */
+
+
+    //////////////////
+    fun submitAnswer2() {
+        val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDailogTheme)
+        val bindingExamOption = SubmitAnswerOptionBinding.inflate(LayoutInflater.from(context))
+
+
+        var answeredQuestions = 0
+        var correctAnswers = 0
+        var wrongAnswers = 0
         for (i in 0..questionLists.size - 1) {
+
             if (questionLists.get(i).userSelectedAnswer != 0) {
-                answerdQuestions++
+                answeredQuestions++
+            }
+            if (questionLists.get(i).userSelectedAnswer == questionLists.get(i).answer.toInt()) {
+                correctAnswers++
+            } else {
+                wrongAnswers++
+            }
+        }
+        logger(
+            "answeredQuestions:$answeredQuestions \n correctAnswers:$correctAnswers  \n " +
+                    "wrongAnswers:$wrongAnswers"
+        )
+
+
+        /*
+        else {
+            val sectionSize = sectionSizeSelector("50QuestionExam")
+            val startIndex = 0
+
+            var answeredQuestions = 0
+            var correctAnswers = 0
+            var wrongAnswers = 0
+            if (sectionSize != null) {
+                for (i in 0..sectionSize.size) {
+
+                    val endIndex = Math.min(startIndex + sectionSize[i], questionLists.size)
+                    val sectionQuestions: List<Question> =
+                        questionLists.subList(startIndex, endIndex)
+
+
+                    for (i in 0..sectionQuestions.size - 1) {
+
+                        if (sectionQuestions.get(i).userSelectedAnswer != 0) {
+                            answeredQuestions++
+                        }
+
+                        if (sectionQuestions.get(i).userSelectedAnswer == sectionQuestions.get(i).answer.toInt()) {
+                            correctAnswers++
+                        } else {
+                            wrongAnswers++
+
+                        }
+
+                    }
+
+                    when (i) {
+                        0 -> logger("Inrenational Affairs \n Correct Answer:$correctAnswers Wrong Answer:$wrongAnswers")
+                        1 -> logger("Bangladesh Affairs \n Correct Answer:$correctAnswers Wrong Answer:$wrongAnswers")
+                        2 -> {}
+                        3 -> {}
+                        4 -> {}
+                        5 -> {}
+                        6 -> {}
+                        7 -> {}
+                        8 -> {}
+                        9 -> {}
+
+                    }
+
+
+                }
+
+
             }
         }
 
-        logger("$answerdQuestions")
+
+         */
+
+        ///
+
         bindingExamOption.apply {
 
         }
@@ -215,7 +375,16 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionB
 
     fun logger(message: String) = Log.d("QuestionFragmentLog", message)
 
-
+    fun sectionSizeSelector(examType: String): IntArray? {
+        return when (examType) {
+            "200QuestionExam" -> intArrayOf(20, 30, 35, 10, 10, 15, 35, 15, 15, 15)
+            "100QuestionExam" -> intArrayOf(10, 15, 18, 5, 5, 7, 17, 8, 7, 8)
+            "50QuestionExam" -> intArrayOf(5, 7, 9, 3, 3, 4, 8, 4, 3, 4)
+            else -> null
+        }
+    }
+    /*
+    //Old
     fun sectionSizeSelector(examType: String): IntArray? {
         var sectionSize: IntArray? = null
         if (examType.isNotEmpty()) {
@@ -231,4 +400,6 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionB
         }
         return sectionSize
     }
+
+     */
 }
