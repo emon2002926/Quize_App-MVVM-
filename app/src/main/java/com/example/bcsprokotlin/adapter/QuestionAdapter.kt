@@ -52,6 +52,8 @@ class QuestionAdapter(private val listener: OnItemSelectedListener) :
 
             when (showExamUi) {
                 "examQuestion" -> {
+
+                    showExplanation(showAnswers, item, this)
                     if (item.userSelectedAnswer > 0) {
 
                         disableOptions(binding)
@@ -87,8 +89,6 @@ class QuestionAdapter(private val listener: OnItemSelectedListener) :
 
 
                     }
-                    //////////////////////////////////////////////////////////
-
 
                     val context = fullLayout.context
 
@@ -179,27 +179,11 @@ class QuestionAdapter(private val listener: OnItemSelectedListener) :
                     option3Layout.setOnClickListener(optionClickListener)
                     option4Layout.setOnClickListener(optionClickListener)
 
-
-                    //////////////////////////////////////////////////////////
-
-
                 }
 
                 "normalQuestion" -> {
 
-
-                    if (showAnswers) {
-                        showImgOrTextView(
-                            item.explanation,
-                            item.explanationImage,
-                            explainIv,
-                            explainTv
-                        )
-                        highlightCorrectAnswer(this, item)
-                    } else {
-                        explainIv.visibility = View.GONE
-                        explainTv.visibility = View.GONE
-                    }
+                    showExplanation(showAnswers, item, this)
 
                     if (item.userSelectedAnswer != 0) {
                         disableOptions(this)
@@ -231,6 +215,23 @@ class QuestionAdapter(private val listener: OnItemSelectedListener) :
 
     interface OnItemSelectedListener {
         fun onItemSelected(item: Question)
+    }
+
+    private fun showExplanation(show: Boolean, item: Question, binding: McqLayoutBinding) {
+        if (show) {
+            showImgOrTextView(
+                item.explanation,
+                item.explanationImage,
+                binding.explainIv,
+                binding.explainTv
+            )
+            highlightCorrectAnswer(binding, item)
+        } else {
+            binding.explainIv.visibility = View.GONE
+            binding.explainTv.visibility = View.GONE
+        }
+
+
     }
 
     private fun bindQuestionAndOptions(item: Question, binding: McqLayoutBinding) {

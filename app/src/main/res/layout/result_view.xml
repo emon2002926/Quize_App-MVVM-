@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bottom_sheet_baground"
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="60dp"
+        android:layout_height="5dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/view_bar" />
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:gravity="center"
+        android:paddingStart="10dp"
+        android:text="@string/overall_result"
+        android:textColor="@color/black"
+        android:textSize="20sp" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="12dp"
+        android:orientation="horizontal"
+        android:weightSum="5">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="center_vertical"
+            android:paddingStart="20dp"
+            android:text="#"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".70"
+            android:gravity="center"
+            android:text="@string/total"
+            android:textColor="@color/black"
+            android:textSize="17sp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".80"
+            android:gravity="center"
+            android:text="@string/correct"
+            android:textColor="@color/color3"
+            android:textSize="17sp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".75"
+            android:gravity="center"
+            android:text="@string/wrong"
+            android:textColor="@color/liteRed"
+            android:textSize="17sp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".75"
+            android:gravity="center"
+            android:text="@string/marks"
+            android:textColor="@color/dodger_blue"
+            android:textSize="17sp" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/_5sdp"
+        android:paddingBottom="@dimen/_5sdp"
+        android:weightSum="5">
+
+        <TextView
+            android:id="@+id/tvSubjectName"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:paddingStart="10dp"
+            android:text="ফলাফল"
+            android:textColor="@color/LiteBlack"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvAnsweredQuestion"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".70"
+            android:gravity="center"
+            android:text=""
+            android:textColor="@color/DeepGrey"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvCorrectAnswer"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".80"
+            android:gravity="center"
+            android:text=""
+            android:textColor="@color/DeepGrey"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvWrongAnswer"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".75"
+            android:gravity="center"
+            android:text=""
+            android:textColor="@color/DeepGrey"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvMarks"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".75"
+            android:gravity="center"
+            android:text=""
+            android:textColor="@color/DeepGrey"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvResultView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>

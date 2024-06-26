@@ -4,8 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.bcsprokotlin.model.ExamResult
+import com.example.bcsprokotlin.model.OverallResult
 import com.example.bcsprokotlin.model.Question
 import com.example.bcsprokotlin.repository.Repository
+import com.example.bcsprokotlin.util.Constants
 import com.example.bcsprokotlin.util.Constants.Companion.PAGE_SIZE
 import com.example.bcsprokotlin.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -141,27 +143,23 @@ class QuestionViewModel @Inject constructor(private val repository: Repository) 
         return true
     }
 
+
+    private val _overallResult = MutableLiveData<OverallResult>()
+    val overallResult: LiveData<OverallResult> = _overallResult
+
     private val _results = MutableLiveData<List<ExamResult>>()
     val results: LiveData<List<ExamResult>> = _results
 
-    private val subjects = listOf(
-        "internationalAffairs",
-        "bangladeshAffairs",
-        "bangla",
-        "ethicsAndGooGovernance",
-        "geography",
-        "math",
-        "english",
-        "mentalAbility",
-        "generalScience",
-        "ict"
-    )
 
     fun submitAnswer(examType: String, questionLists: List<Question>) {
         val sectionSizes = sectionSizeSelector(examType) ?: return
 
         var currentIndex = 0
         val results = mutableListOf<ExamResult>()
+        var totalCorrectAnswers = 0
+        var totalWrongAnswers = 0
+        var totalAnsweredQuestions = 0
+        var totalMark = 0.0
 
         sectionSizes.forEachIndexed { index, sectionSize ->
             var correctAnswers = 0
@@ -183,11 +181,18 @@ class QuestionViewModel @Inject constructor(private val repository: Repository) 
                 }
             }
 
-            val mark =
-                correctAnswers * (100.0 / sectionSizes.sum()) // Adjust this formula as needed
+            totalCorrectAnswers += correctAnswers
+            totalWrongAnswers += wrongAnswers
+            totalAnsweredQuestions += answeredQuestions
+
+
+            val mark = (correctAnswers - ((wrongAnswers / 2).toDouble()))
+
+
+
             results.add(
                 ExamResult(
-                    subjectName = subjects.getOrNull(index) ?: "Unknown",
+                    subjectName = Constants.subjectsName.getOrNull(index) ?: "Unknown",
                     mark = mark,
                     correctAnswer = correctAnswers,
                     wrongAnswer = wrongAnswers,
@@ -196,6 +201,14 @@ class QuestionViewModel @Inject constructor(private val repository: Repository) 
             )
         }
 
+        totalMark = (totalCorrectAnswers - ((totalWrongAnswers / 2).toDouble()))
+
+        _overallResult.value = OverallResult(
+            answeredQuestions = totalAnsweredQuestions,
+            correctAnswers = totalCorrectAnswers,
+            wrongAnswers = totalWrongAnswers,
+            mark = totalMark
+        )
         _results.value = results
     }
 

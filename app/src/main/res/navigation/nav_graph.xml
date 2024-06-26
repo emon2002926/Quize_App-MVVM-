@@ -32,6 +32,9 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_homeFragment_to_examFragment"
+            app:destination="@id/examFragment" />
     </fragment>
     <fragment
         android:id="@+id/moreFragment"
@@ -60,6 +63,9 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_subjectsFragment_to_examFragment"
+            app:destination="@id/examFragment" />
     </fragment>
 
     <fragment
@@ -81,4 +87,9 @@
 
 
     </fragment>
+    <fragment
+        android:id="@+id/examFragment"
+        android:name="com.example.bcsprokotlin.ui.fragment.ExamFragment.ExamFragment"
+        android:label="fragment_exam"
+        tools:layout="@layout/fragment_exam" />
 </navigation>

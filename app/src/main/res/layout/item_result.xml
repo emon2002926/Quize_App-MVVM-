@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardElevation="2dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/_5sdp"
+        android:paddingBottom="@dimen/_5sdp"
+        android:weightSum="5">
+
+        <TextView
+            android:id="@+id/tvSubjectName"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:paddingStart="10dp"
+            android:text="@string/International_afirs"
+            android:textColor="@color/LiteBlack"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tvAnsweredQuestion"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".70"
+            android:gravity="center"
+            android:text=""
+            android:textColor="@color/DeepGrey"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tvCorrectAnswer"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".80"
+            android:gravity="center"
+            android:text=""
+            android:textColor="@color/DeepGrey"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tvWrongAnswer"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".75"
+            android:gravity="center"
+            android:text=""
+            android:textColor="@color/DeepGrey"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tvMarks"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".75"
+            android:gravity="center"
+            android:text=""
+            android:textColor="@color/DeepGrey"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
+

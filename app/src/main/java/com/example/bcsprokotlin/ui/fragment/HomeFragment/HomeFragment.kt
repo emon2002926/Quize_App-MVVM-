@@ -38,6 +38,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     private val subjectAdapter = SubjectAdapterHomeScreen(this)
     private val liveExamAdapter = LiveExamAdapter(this)
     private var questionAmount = 0
+    private var examType = ""
 
 
     override fun loadUi() {
@@ -129,29 +130,34 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDailogTheme)
         val bindingExamOption = LayoutShowExamOptionBinding.inflate(LayoutInflater.from(context))
 
+
+
         bindingExamOption.apply {
             layout25Min.setOnClickListener {
                 questionAmount = 50
                 selectIcon(option25Icon)
                 eraseIcon(option50Icon, option100Icon)
+                examType = "50QuestionExam"
             }
             layout50Min.setOnClickListener {
                 questionAmount = 100
                 selectIcon(option50Icon)
                 eraseIcon(option25Icon, option100Icon)
+                examType = "100QuestionExam"
             }
             layout100Min.setOnClickListener {
                 questionAmount = 200
                 selectIcon(option100Icon)
                 eraseIcon(option25Icon, option50Icon)
+                examType = "200QuestionExam"
             }
             btnExamStart.setOnClickListener {
                 if (questionAmount != 0) {
                     val data = SharedData(
-                        "সামগ্রিক পরীক্ষা", "normalExam", questionAmount, "normal", "", 0
+                        "সামগ্রিক পরীক্ষা", "normalExam", questionAmount, examType, "", 0
                     )
                     sharedViewModel.setSharedData(data)
-                    findNavController().navigate(R.id.action_homeFragment_to_questionFragment)
+                    findNavController().navigate(R.id.action_homeFragment_to_examFragment)
                     bottomSheetDialog.dismiss()
                 } else {
                     Toast.makeText(context, "Please select an option", Toast.LENGTH_SHORT).show()
@@ -184,7 +190,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
             "ডেইলি মডেল টেস্ট ", "liveModelTest", item.totalQc, "normal", "", 0
         )
         sharedViewModel.setSharedData(data)
-        findNavController().navigate(R.id.action_homeFragment_to_questionFragment)
+        findNavController().navigate(R.id.action_homeFragment_to_examFragment)
     }
 
     override fun onSubjectClick(subjectName: SubjectName) {
