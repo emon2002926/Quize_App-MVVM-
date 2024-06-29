@@ -20,6 +20,7 @@ import com.example.bcsprokotlin.model.Question
 import com.example.bcsprokotlin.model.SharedData
 import com.example.bcsprokotlin.ui.SharedViewModel
 import com.example.bcsprokotlin.ui.base.BaseFragment
+import com.example.bcsprokotlin.ui.fragment.ExamFragment.ResultViewModel
 import com.example.bcsprokotlin.util.GeneralUtils
 import com.example.bcsprokotlin.util.Resource
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -30,6 +31,8 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionBinding::inflate),
     QuestionAdapter.OnItemSelectedListener {
+    private val resultViewModel: ResultViewModel by viewModels()
+
     private val questionAdapter by lazy { QuestionAdapter(this) }
     private val sharedViewModel: SharedViewModel by activityViewModels()
     private val viewModel: QuestionViewModel by viewModels()

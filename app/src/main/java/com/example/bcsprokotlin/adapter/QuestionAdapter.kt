@@ -12,7 +12,9 @@ import com.example.bcsprokotlin.databinding.McqLayoutBinding
 import com.example.bcsprokotlin.model.Question
 import com.example.bcsprokotlin.util.GeneralUtils
 
-class QuestionAdapter(private val listener: OnItemSelectedListener) :
+class QuestionAdapter(
+    private val listener: OnItemSelectedListener
+) :
     BaseAdapter<Question, McqLayoutBinding>(
         areItemsTheSame = { oldItem, newItem -> oldItem.id == newItem.id },
         areContentsTheSame = { oldItem, newItem -> oldItem == newItem }
@@ -24,6 +26,9 @@ class QuestionAdapter(private val listener: OnItemSelectedListener) :
     }
 
     private var showAnswers: Boolean = false
+
+    val questionLists = mutableListOf<Question>()
+
 
     fun showAnswer(show: Boolean) {
         showAnswers = show
@@ -39,8 +44,11 @@ class QuestionAdapter(private val listener: OnItemSelectedListener) :
 
 
     override fun bind(binding: McqLayoutBinding, item: Question, position: Int) {
+
+
         with(binding) {
             explainIv.visibility = View.GONE
+
             tvQuestionPosition.text = GeneralUtils.convertEnglishToBengaliNumber("${position + 1})")
 
             // Set question and options
@@ -48,14 +56,13 @@ class QuestionAdapter(private val listener: OnItemSelectedListener) :
             // Reset options to default state
             resetOptions(this)
 
-
+            //todo new code can update or delete this
+//            resultViewModel.addQuestion(item)
 
             when (showExamUi) {
                 "examQuestion" -> {
-
                     showExplanation(showAnswers, item, this)
                     if (item.userSelectedAnswer > 0) {
-
                         disableOptions(binding)
                         when (item.userSelectedAnswer) {
                             1 -> {
@@ -86,7 +93,6 @@ class QuestionAdapter(private val listener: OnItemSelectedListener) :
                                 makeGrayText(option3Layout, option3Tv, option3Layout.context)
                             }
                         }
-
 
                     }
 
@@ -147,9 +153,13 @@ class QuestionAdapter(private val listener: OnItemSelectedListener) :
                             )
                         }
 
-
                         item.userSelectedAnswer = selectedOption
                         listener.onItemSelected(item)
+
+                        questionLists.addAll(listOf(item))
+
+                        //todo new code can update or delete this
+//                        resultViewModel.addQuestion(item)
 
 
                         if (img != null) {
@@ -161,17 +171,6 @@ class QuestionAdapter(private val listener: OnItemSelectedListener) :
                         option3Layout.setEnabled(false)
                         option4Layout.setEnabled(false)
 
-
-//
-//                        val intent: Intent =
-//                            Intent(ctx, ActivityExam::class.java)
-//                        intent.setAction("xy@4gfk@9*2cxlds&0k@#hLAnsx!")
-//                        intent.putExtra(
-//                            "xy@4gfk@9*2cxlds&0k@#hLAnsx!",
-//                            questionslists as Serializable?
-//                        )
-//                        intent.putExtra("totalQuestion", NUM_OF_QUESTION)
-//                        LocalBroadcastManager.getInstance(context).sendBroadcast(intent)
 
                     }
                     option1Layout.setOnClickListener(optionClickListener)
@@ -216,6 +215,7 @@ class QuestionAdapter(private val listener: OnItemSelectedListener) :
     interface OnItemSelectedListener {
         fun onItemSelected(item: Question)
     }
+
 
     private fun showExplanation(show: Boolean, item: Question, binding: McqLayoutBinding) {
         if (show) {

@@ -185,10 +185,7 @@ class QuestionViewModel @Inject constructor(private val repository: Repository) 
             totalWrongAnswers += wrongAnswers
             totalAnsweredQuestions += answeredQuestions
 
-
             val mark = (correctAnswers - ((wrongAnswers / 2).toDouble()))
-
-
 
             results.add(
                 ExamResult(

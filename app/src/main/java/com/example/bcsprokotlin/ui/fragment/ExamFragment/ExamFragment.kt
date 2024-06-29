@@ -31,31 +31,31 @@ import kotlinx.coroutines.launch
 class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::inflate),
     QuestionAdapter.OnItemSelectedListener {
 
-
     private val questionAdapter by lazy { QuestionAdapter(this) }
     private val sharedViewModel: SharedViewModel by activityViewModels()
     private val viewModel: QuestionViewModel by viewModels()
-    private var mBooleanValue = false
+    private val resultViewmodel: ResultViewModel by viewModels()
 
     private var examType = ""
-
-    private var questionLists = ArrayList<Question>()
-
-    private var resultList = ArrayList<ExamResult>()
     private var answeredQuestions = 0
-
     private var totalQuestion = 0
+    private var stringQuestion = ""
 
     override fun loadUi() {
+        observeResult()
 
         binding.btnShowAnswer.setOnClickListener {
+
+            resultViewmodel.overallResult.observe(viewLifecycleOwner) {
+                answeredQuestions = it.answeredQuestions
+            }
             submitAnswer("null")
         }
         observeSharedData()
         observeQuestions()
         setupRecyclerView()
+        observeResult()
     }
-
 
     private fun observeSharedData() {
         sharedViewModel.sharedData.observe(viewLifecycleOwner) { data ->
@@ -73,7 +73,6 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
                 questionAdapter.changeUiForExam("examQuestion")
                 viewModel.getExamQuestions(data.totalQuestion)
                 examType = data.questionType
-
             }
 
             "liveModelTest" -> {
@@ -109,7 +108,6 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
                 is Resource.Success -> {
                     GeneralUtils.hideShimmerLayout(binding.shimmerLayout, binding.rvExamQuestion)
                     response.data?.let {
-                        binding.btnShowAnswer.setOnClickListener { submitAnswer("null") }
                         questionAdapter.submitList(it)
                     }
                     binding.btnShowAnswer.visibility = View.VISIBLE
@@ -123,23 +121,21 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
         }
     }
 
-
     private fun setupRecyclerView() = binding.rvExamQuestion.apply {
         adapter = questionAdapter
         layoutManager = LinearLayoutManager(context)
     }
 
-
     override fun onItemSelected(item: Question) {
-        questionLists.add(item)
+        resultViewmodel.addQuestion(item)
         binding.btnShowAnswer.setOnClickListener { submitAnswer("notNull") }
-        viewModel.results.observe(viewLifecycleOwner) {
-            resultList.addAll(it)
-            it.forEach {
-                answeredQuestions = it.answeredQuestions
-            }
+
+        logger(answeredQuestions.toString())
+
+        resultViewmodel.calculateResults(examType)
+        resultViewmodel.overallResult.observe(viewLifecycleOwner) {
+            answeredQuestions = it.answeredQuestions
         }
-        answeredQuestions++
     }
 
     @SuppressLint("SetTextI18n")
@@ -150,7 +146,11 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
         when (action) {
             "null" -> bindingResult.tvDis.text =
                 "আপনি ${GeneralUtils.convertEnglishToBengaliNumber(totalQuestion.toString())}" +
-                        " প্রশ্নের মধ্যে ${GeneralUtils.convertEnglishToBengaliNumber("0")} টি প্রশ্নের উত্তর দিয়েছেন"
+                        " প্রশ্নের মধ্যে ${
+                            GeneralUtils.convertEnglishToBengaliNumber(
+                                answeredQuestions.toString()
+                            )
+                        } টি প্রশ্নের উত্তর দিয়েছেন"
 
             "notNull" -> bindingResult.tvDis.text =
                 "আপনি ${GeneralUtils.convertEnglishToBengaliNumber(totalQuestion.toString())}" +
@@ -161,22 +161,34 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
                         } টি প্রশ্নের উত্তর দিয়েছেন"
         }
 
+        
         bindingResult.apply {
             btnSubmit.setOnClickListener {
                 when (action) {
                     "null" -> {
-                        Toast.makeText(
-                            context,
-                            "Please answer Question to see result",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        if (answeredQuestions == 0) {
+                            Toast.makeText(
+                                context,
+                                "Please answer Question to see result",
+                                Toast.LENGTH_SHORT
+
+                            ).show()
+                        } else {
+
+                            bottomSheetDialog.hide()
+                            questionAdapter.showAnswer(true)
+                            resultViewmodel.results.observe(viewLifecycleOwner) {
+                                resultView(it)
+                            }
+
+                        }
+
                     }
 
                     "notNull" -> {
                         bottomSheetDialog.hide()
                         questionAdapter.showAnswer(true)
-                        viewModel.submitAnswer("50QuestionExam", questionLists)
-                        viewModel.results.observe(viewLifecycleOwner) {
+                        resultViewmodel.results.observe(viewLifecycleOwner) {
                             resultView(it)
                         }
                     }
@@ -194,7 +206,7 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
 
         val resultAdapter by lazy { ResultAdapter() }
         bindingResult.apply {
-            viewModel.overallResult.observe(viewLifecycleOwner) {
+            resultViewmodel.overallResult.observe(viewLifecycleOwner) {
                 tvAnsweredQuestion.text = "${it.answeredQuestions}"
                 tvMarks.text = "${it.mark}"
                 tvCorrectAnswer.text = "${it.correctAnswers}"
@@ -208,6 +220,11 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
         bottomSheetDialog.show()
     }
 
-    fun logger(message: String) = Log.d("QuestionFragmentLog", message)
+    private fun observeResult() {
+        resultViewmodel.overallResult.observe(viewLifecycleOwner) {
+            stringQuestion = it.answeredQuestions.toString()
+        }
+    }
 
+    fun logger(message: String) = Log.d("QuestionFragmentLog", message)
 }
