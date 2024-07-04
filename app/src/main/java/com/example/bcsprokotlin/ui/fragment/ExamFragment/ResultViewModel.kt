@@ -10,13 +10,20 @@ import com.example.bcsprokotlin.util.Constants
 
 class ResultViewModel : ViewModel() {
     private val _questionLists = MutableLiveData<MutableList<Question>>(mutableListOf())
-    val questionLists: LiveData<MutableList<Question>> = _questionLists
+
+    private val _isResultSubmitted = MutableLiveData<Boolean>()
+    val resultSubmission: LiveData<Boolean> get() = _isResultSubmitted
+
 
     private val _overallResult = MutableLiveData<OverallResult>()
     val overallResult: LiveData<OverallResult> = _overallResult
 
-    private val _results = MutableLiveData<List<ExamResult>>()
-    val results: LiveData<List<ExamResult>> = _results
+    private val _individualSubResult = MutableLiveData<List<ExamResult>>()
+    val individualSubResultVm: LiveData<List<ExamResult>> = _individualSubResult
+
+    fun setBooleanValue(value: Boolean) {
+        _isResultSubmitted.value = value
+    }
 
     fun addQuestion(item: Question) {
         _questionLists.value?.add(item)
@@ -79,7 +86,7 @@ class ResultViewModel : ViewModel() {
             wrongAnswers = totalWrongAnswers,
             mark = totalMark
         )
-        _results.value = results
+        _individualSubResult.value = results
     }
 
     private fun sectionSizeSelector(examType: String): IntArray? {

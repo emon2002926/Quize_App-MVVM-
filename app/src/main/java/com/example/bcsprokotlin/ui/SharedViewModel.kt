@@ -8,6 +8,7 @@ import com.example.bcsprokotlin.model.SharedData
 class SharedViewModel : ViewModel() {
     private val _sharedData = MutableLiveData<SharedData>()
     val sharedData: LiveData<SharedData> get() = _sharedData
+
     private val _sharedString = MutableLiveData<String>()
     val sharedString: LiveData<String> get() = _sharedString
 

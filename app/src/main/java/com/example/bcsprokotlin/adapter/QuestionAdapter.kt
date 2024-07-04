@@ -20,16 +20,8 @@ class QuestionAdapter(
         areContentsTheSame = { oldItem, newItem -> oldItem == newItem }
     ) {
 
-
-    override fun createBinding(parent: ViewGroup, viewType: Int): McqLayoutBinding {
-        return McqLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-    }
-
     private var showAnswers: Boolean = false
-
     val questionLists = mutableListOf<Question>()
-
-
     fun showAnswer(show: Boolean) {
         showAnswers = show
         notifyDataSetChanged()
@@ -42,23 +34,19 @@ class QuestionAdapter(
         notifyDataSetChanged()
     }
 
+    override fun createBinding(parent: ViewGroup, viewType: Int): McqLayoutBinding {
+        return McqLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+    }
 
     override fun bind(binding: McqLayoutBinding, item: Question, position: Int) {
-
-
         with(binding) {
             explainIv.visibility = View.GONE
 
             tvQuestionPosition.text = GeneralUtils.convertEnglishToBengaliNumber("${position + 1})")
-
             // Set question and options
             bindQuestionAndOptions(item, this)
             // Reset options to default state
             resetOptions(this)
-
-            //todo new code can update or delete this
-//            resultViewModel.addQuestion(item)
-
             when (showExamUi) {
                 "examQuestion" -> {
                     showExplanation(showAnswers, item, this)
@@ -93,7 +81,6 @@ class QuestionAdapter(
                                 makeGrayText(option3Layout, option3Tv, option3Layout.context)
                             }
                         }
-
                     }
 
                     val context = fullLayout.context
@@ -116,8 +103,6 @@ class QuestionAdapter(
                             img = optionIcon4
                         }
                         // Change text color of all options to default
-
-
                         makeGrayText(option1Layout, option1Tv, context)
                         makeGrayText(option2Layout, option2Tv, context)
                         makeGrayText(option3Layout, option3Tv, context)
@@ -158,20 +143,13 @@ class QuestionAdapter(
 
                         questionLists.addAll(listOf(item))
 
-                        //todo new code can update or delete this
-//                        resultViewModel.addQuestion(item)
-
-
                         if (img != null) {
                             highLightClickedOptionForExam(view, img)
                         }
-
                         option1Layout.setEnabled(false)
                         option2Layout.setEnabled(false)
                         option3Layout.setEnabled(false)
                         option4Layout.setEnabled(false)
-
-
                     }
                     option1Layout.setOnClickListener(optionClickListener)
                     option2Layout.setOnClickListener(optionClickListener)
@@ -181,7 +159,6 @@ class QuestionAdapter(
                 }
 
                 "normalQuestion" -> {
-
                     showExplanation(showAnswers, item, this)
 
                     if (item.userSelectedAnswer != 0) {
@@ -200,25 +177,20 @@ class QuestionAdapter(
                         highlightUserSelection(this, item)
                         disableOptions(this)
                     }
-
                     // Set click listeners for all option layouts
                     setOptionClickListeners(this, onClickListener)
                 }
-
             }
-
-
         }
     }
-
 
     interface OnItemSelectedListener {
         fun onItemSelected(item: Question)
     }
 
-
     private fun showExplanation(show: Boolean, item: Question, binding: McqLayoutBinding) {
         if (show) {
+            disableOptions(binding)
             showImgOrTextView(
                 item.explanation,
                 item.explanationImage,
@@ -230,8 +202,6 @@ class QuestionAdapter(
             binding.explainIv.visibility = View.GONE
             binding.explainTv.visibility = View.GONE
         }
-
-
     }
 
     private fun bindQuestionAndOptions(item: Question, binding: McqLayoutBinding) {
@@ -368,7 +338,6 @@ class QuestionAdapter(
         }
     }
 
-
     private fun highLightClickedOptionForExam(
         optionLayout: View,
         optionIcon: ImageView
@@ -376,7 +345,5 @@ class QuestionAdapter(
         optionIcon.setImageResource(R.drawable.black_dot)
         optionLayout.setBackgroundResource(R.drawable.round_back_selected_option)
         optionLayout.isEnabled = false
-
-
     }
 }

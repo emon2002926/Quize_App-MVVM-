@@ -79,7 +79,7 @@
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/btnShowAnswer"
+        android:id="@+id/fabShowResult"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
@@ -87,7 +87,7 @@
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="100dp"
         android:scaleType="fitXY"
-        android:src="@drawable/hide_answer"
+        android:src="@drawable/baseline_check_24"
         android:visibility="visible"
         app:backgroundTint="#FFFFFF"
         app:fabSize="auto" />

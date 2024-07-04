@@ -1,18 +1,19 @@
 package com.example.bcsprokotlin.ui.fragment.QuestionFragment
 
+import android.os.CountDownTimer
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.bcsprokotlin.model.ExamResult
-import com.example.bcsprokotlin.model.OverallResult
 import com.example.bcsprokotlin.model.Question
 import com.example.bcsprokotlin.repository.Repository
-import com.example.bcsprokotlin.util.Constants
 import com.example.bcsprokotlin.util.Constants.Companion.PAGE_SIZE
+import com.example.bcsprokotlin.util.GeneralUtils
 import com.example.bcsprokotlin.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import okio.IOException
 import retrofit2.Response
+import java.util.Locale
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltViewModel
@@ -143,90 +144,38 @@ class QuestionViewModel @Inject constructor(private val repository: Repository) 
         return true
     }
 
+    private val _timeLeft = MutableLiveData<String>()
+    val timeLeft: LiveData<String> get() = _timeLeft
 
-    private val _overallResult = MutableLiveData<OverallResult>()
-    val overallResult: LiveData<OverallResult> = _overallResult
+    private val _isTimerFinished = MutableLiveData<Boolean>()
+    val isTimerFinished: LiveData<Boolean> get() = _isTimerFinished
 
-    private val _results = MutableLiveData<List<ExamResult>>()
-    val results: LiveData<List<ExamResult>> = _results
+    private var countDownTimer: CountDownTimer? = null
 
 
-    fun submitAnswer(examType: String, questionLists: List<Question>) {
-        val sectionSizes = sectionSizeSelector(examType) ?: return
+    fun startCountDown(maxTimerSeconds: Int) {
+        _isTimerFinished.value = false  // Reset the finish state
 
-        var currentIndex = 0
-        val results = mutableListOf<ExamResult>()
-        var totalCorrectAnswers = 0
-        var totalWrongAnswers = 0
-        var totalAnsweredQuestions = 0
-        var totalMark = 0.0
+        countDownTimer = object : CountDownTimer(maxTimerSeconds * 1000L, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                val getHour = TimeUnit.MILLISECONDS.toHours(millisUntilFinished)
+                val getMinutes = TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)
+                val getSecond = TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished)
 
-        sectionSizes.forEachIndexed { index, sectionSize ->
-            var correctAnswers = 0
-            var wrongAnswers = 0
-            var answeredQuestions = 0
-
-            for (i in 0 until sectionSize) {
-                val question = questionLists.getOrNull(currentIndex)
-                if (question != null) {
-                    if (question.userSelectedAnswer != 0) {
-                        answeredQuestions++
-                        if (question.userSelectedAnswer == question.answer.toInt()) {
-                            correctAnswers++
-                        } else {
-                            wrongAnswers++
-                        }
-                    }
-                    currentIndex++
-                }
+                val generateTime = String.format(
+                    Locale.getDefault(), "%02d:%02d:%02d", getHour,
+                    getMinutes - TimeUnit.HOURS.toMinutes(getHour),
+                    getSecond - TimeUnit.MINUTES.toSeconds(getMinutes)
+                )
+                _timeLeft.value = GeneralUtils.convertEnglishToBengaliNumber(generateTime)
             }
 
-            totalCorrectAnswers += correctAnswers
-            totalWrongAnswers += wrongAnswers
-            totalAnsweredQuestions += answeredQuestions
-
-            val mark = (correctAnswers - ((wrongAnswers / 2).toDouble()))
-
-            results.add(
-                ExamResult(
-                    subjectName = Constants.subjectsName.getOrNull(index) ?: "Unknown",
-                    mark = mark,
-                    correctAnswer = correctAnswers,
-                    wrongAnswer = wrongAnswers,
-                    answeredQuestions = answeredQuestions
-                )
-            )
+            override fun onFinish() {
+                _timeLeft.value = "00:00:00"
+                _isTimerFinished.value = true  // Set the finish state to true
+            }
         }
-
-        totalMark = (totalCorrectAnswers - ((totalWrongAnswers / 2).toDouble()))
-
-        _overallResult.value = OverallResult(
-            answeredQuestions = totalAnsweredQuestions,
-            correctAnswers = totalCorrectAnswers,
-            wrongAnswers = totalWrongAnswers,
-            mark = totalMark
-        )
-        _results.value = results
+        countDownTimer?.start()
     }
-
-    private fun sectionSizeSelector(examType: String): IntArray? {
-        return when (examType) {
-            "200QuestionExam" -> intArrayOf(20, 30, 35, 10, 10, 15, 35, 15, 15, 15)
-            "100QuestionExam" -> intArrayOf(10, 15, 18, 5, 5, 7, 17, 8, 7, 8)
-            "50QuestionExam" -> intArrayOf(5, 7, 9, 3, 3, 4, 8, 4, 3, 4)
-            else -> null
-        }
-    }
-
-
-//    private fun handleExamQuestionResponse(response: Response<MutableList<Question>>): Resource<MutableList<Question>> {
-//        if (response.isSuccessful) {
-//            response.body()?.let {
-//                return Resource.Success(it)
-//            }
-//        }
-//        return Resource.Error(response.message())
-//    }
-
 
 }

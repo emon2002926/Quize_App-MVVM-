@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
+import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import com.example.bcsprokotlin.R
 import com.example.bcsprokotlin.databinding.ActivityMainBinding
@@ -23,35 +24,47 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigationView.setupWithNavController(navController)
 
 
-        // Handle item selection events
-//        binding.bottomNavigationView.setOnNavigationItemSelectedListener { item ->
-//            when (item.itemId) {
-//                R.id.homeFragment2 -> {
-//                    // Navigate to homeFragment2 when "Home" item is selected
-//                    navController.navigate(R.id.homeFragment2)
-//                    true
-//                }
-//                R.id.questionFragment -> {
-//                    // Navigate to questionFragment and hide the bottom navigation view
-//                    navController.navigate(R.id.questionFragment)
-//                    hideBottomNavigationView()
-//                    true
-//                }
-//                else -> {
-//                    // Delegate navigation action to NavigationUI
-//                    NavigationUI.onNavDestinationSelected(item, navController)
-//                }
-//            }
-//        }
-//
-//        // Set listener to control visibility of bottom navigation view
-//        navController.addOnDestinationChangedListener { _, destination, _ ->
-//            if (destination.id == R.id.questionFragment) {
-//                hideBottomNavigationView()
-//            } else {
-//                showBottomNavigationView()
-//            }
-//        }
+//         Handle item selection events
+        binding.bottomNavigationView.setOnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.homeFragment -> {
+                    // Navigate to homeFragment2 when "Home" item is selected
+                    navController.navigate(R.id.homeFragment)
+                    true
+                }
+
+                R.id.questionFragment -> {
+                    // Navigate to questionFragment and hide the bottom navigation view
+                    navController.navigate(R.id.questionFragment)
+                    hideBottomNavigationView()
+                    true
+                }
+
+                R.id.examFragment -> {
+                    navController.navigate(R.id.examFragment)
+                    hideBottomNavigationView()
+                    true
+                }
+
+                else -> {
+                    // Delegate navigation action to NavigationUI
+                    NavigationUI.onNavDestinationSelected(item, navController)
+                }
+            }
+        }
+
+        // Set listener to control visibility of bottom navigation view
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if (destination.id == R.id.questionFragment) {
+                hideBottomNavigationView()
+            } else if (destination.id == R.id.examFragment) {
+                hideBottomNavigationView()
+            } else {
+                showBottomNavigationView()
+            }
+        }
+
+
     }
 
     private fun hideBottomNavigationView() {

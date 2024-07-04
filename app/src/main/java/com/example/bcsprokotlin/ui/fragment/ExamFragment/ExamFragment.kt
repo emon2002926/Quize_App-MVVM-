@@ -1,6 +1,7 @@
 package com.example.bcsprokotlin.ui.fragment.ExamFragment
 
 import android.annotation.SuppressLint
+import android.os.CountDownTimer
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.bcsprokotlin.R
 import com.example.bcsprokotlin.adapter.QuestionAdapter
@@ -40,21 +42,62 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
     private var answeredQuestions = 0
     private var totalQuestion = 0
     private var stringQuestion = ""
+    private var isResultSubmitted = false
+    private var countDownTimer: CountDownTimer? = null
+
+    private var individualSubResult: List<ExamResult> = emptyList()
 
     override fun loadUi() {
-        observeResult()
-
-        binding.btnShowAnswer.setOnClickListener {
-
-            resultViewmodel.overallResult.observe(viewLifecycleOwner) {
-                answeredQuestions = it.answeredQuestions
+        binding.apply {
+            fabShowResult.setOnClickListener {
+                setUpFabIcon()
             }
-            submitAnswer("null")
+            backButton.setOnClickListener { findNavController().navigateUp() }
+
         }
         observeSharedData()
         observeQuestions()
         setupRecyclerView()
-        observeResult()
+        observeResultViewModel()
+    }
+
+    
+    private fun setUpFabIcon() = binding.apply {
+        if (isResultSubmitted) {
+            showResultView()
+        } else {
+            submitAnswer()
+        }
+    }
+
+    private fun timeObserver(time: Int) = viewModel.apply {
+        timeLeft.observe(viewLifecycleOwner) {
+
+            binding.apply {
+                tvTimer.visibility = View.VISIBLE
+                tvTimer.text = "${it}"
+            }
+        }
+        isTimerFinished.observe(viewLifecycleOwner) { isFinished ->
+            if (isFinished) {
+                showResultView()
+            }
+
+        }
+        startCountDown(time)
+    }
+
+    private fun observeResultViewModel() = with(resultViewmodel) {
+        overallResult.observe(viewLifecycleOwner) {
+            stringQuestion = it.answeredQuestions.toString()
+            answeredQuestions = it.answeredQuestions
+        }
+        resultSubmission.observe(viewLifecycleOwner) {
+            isResultSubmitted = it
+        }
+        individualSubResultVm.observe(viewLifecycleOwner) {
+            individualSubResult = it
+        }
     }
 
     private fun observeSharedData() {
@@ -73,6 +116,7 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
                 questionAdapter.changeUiForExam("examQuestion")
                 viewModel.getExamQuestions(data.totalQuestion)
                 examType = data.questionType
+                timeObserver(data.time)
             }
 
             "liveModelTest" -> {
@@ -102,7 +146,7 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
                         binding.shimmerLayout,
                         binding.rvExamQuestion
                     )
-                    binding.btnShowAnswer.visibility = View.GONE
+                    binding.fabShowResult.visibility = View.GONE
                 }
 
                 is Resource.Success -> {
@@ -110,7 +154,8 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
                     response.data?.let {
                         questionAdapter.submitList(it)
                     }
-                    binding.btnShowAnswer.visibility = View.VISIBLE
+                    binding.fabShowResult.visibility = View.VISIBLE
+//                    countDownTimer(50)
                 }
 
                 is Resource.Error -> {
@@ -128,8 +173,6 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
 
     override fun onItemSelected(item: Question) {
         resultViewmodel.addQuestion(item)
-        binding.btnShowAnswer.setOnClickListener { submitAnswer("notNull") }
-
         logger(answeredQuestions.toString())
 
         resultViewmodel.calculateResults(examType)
@@ -139,71 +182,43 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
     }
 
     @SuppressLint("SetTextI18n")
-    fun submitAnswer(action: String) {
+    fun submitAnswer() {
         val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDailogTheme)
         val bindingResult = SubmitAnswerOptionBinding.inflate(LayoutInflater.from(context))
 
-        when (action) {
-            "null" -> bindingResult.tvDis.text =
-                "আপনি ${GeneralUtils.convertEnglishToBengaliNumber(totalQuestion.toString())}" +
-                        " প্রশ্নের মধ্যে ${
-                            GeneralUtils.convertEnglishToBengaliNumber(
-                                answeredQuestions.toString()
-                            )
-                        } টি প্রশ্নের উত্তর দিয়েছেন"
+        bindingResult.tvDis.text =
+            "আপনি ${GeneralUtils.convertEnglishToBengaliNumber(totalQuestion.toString())}" +
+                    " প্রশ্নের মধ্যে ${
+                        GeneralUtils.convertEnglishToBengaliNumber(
+                            answeredQuestions.toString()
+                        )
+                    } টি প্রশ্নের উত্তর দিয়েছেন"
 
-            "notNull" -> bindingResult.tvDis.text =
-                "আপনি ${GeneralUtils.convertEnglishToBengaliNumber(totalQuestion.toString())}" +
-                        " প্রশ্নের মধ্যে ${
-                            GeneralUtils.convertEnglishToBengaliNumber(
-                                answeredQuestions.toString()
-                            )
-                        } টি প্রশ্নের উত্তর দিয়েছেন"
-        }
-
-        
         bindingResult.apply {
             btnSubmit.setOnClickListener {
-                when (action) {
-                    "null" -> {
-                        if (answeredQuestions == 0) {
-                            Toast.makeText(
-                                context,
-                                "Please answer Question to see result",
-                                Toast.LENGTH_SHORT
-
-                            ).show()
-                        } else {
-
-                            bottomSheetDialog.hide()
-                            questionAdapter.showAnswer(true)
-                            resultViewmodel.results.observe(viewLifecycleOwner) {
-                                resultView(it)
-                            }
-
-                        }
-
-                    }
-
-                    "notNull" -> {
-                        bottomSheetDialog.hide()
-                        questionAdapter.showAnswer(true)
-                        resultViewmodel.results.observe(viewLifecycleOwner) {
-                            resultView(it)
-                        }
-                    }
+                if (answeredQuestions == 0) {
+                    Toast.makeText(
+                        context,
+                        "Please answer Question to see result",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    binding.fabShowResult.setImageResource(R.drawable.baseline_keyboard_double_arrow_up_24)
+                    bottomSheetDialog.dismiss()
+                    questionAdapter.showAnswer(true)
+                    showResultView()
                 }
             }
         }
-
         bottomSheetDialog.setContentView(bindingResult.root)
         bottomSheetDialog.show()
     }
 
-    private fun resultView(examResult: List<ExamResult>) {
+    private fun showResultView() {
         val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDailogTheme)
         val bindingResult = ResultViewBinding.inflate(LayoutInflater.from(context))
 
+        resultViewmodel.setBooleanValue(true)
         val resultAdapter by lazy { ResultAdapter() }
         bindingResult.apply {
             resultViewmodel.overallResult.observe(viewLifecycleOwner) {
@@ -212,7 +227,7 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
                 tvCorrectAnswer.text = "${it.correctAnswers}"
                 tvWrongAnswer.text = "${it.wrongAnswers}"
             }
-            resultAdapter.submitList(examResult)
+            resultAdapter.submitList(individualSubResult)
             rvResultView.adapter = resultAdapter
             rvResultView.layoutManager = LinearLayoutManager(context)
         }
@@ -220,11 +235,65 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
         bottomSheetDialog.show()
     }
 
-    private fun observeResult() {
-        resultViewmodel.overallResult.observe(viewLifecycleOwner) {
-            stringQuestion = it.answeredQuestions.toString()
+
+    /*
+    private fun countDownTimer(maxTimerSeconds: Int) {
+        countDownTimer = object : CountDownTimer(maxTimerSeconds * 1000L, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                val getHour = TimeUnit.MILLISECONDS.toHours(millisUntilFinished)
+                val getMinutes = TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)
+                val getSecond = TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished)
+
+                val generateTime = String.format(
+                    Locale.getDefault(), "%02d:%02d:%02d", getHour,
+                    getMinutes - TimeUnit.HOURS.toMinutes(getHour),
+                    getSecond - TimeUnit.MINUTES.toSeconds(getMinutes)
+                )
+                binding.tvTimer.visibility = View.VISIBLE
+                binding.tvTimer.text = "${GeneralUtils.convertEnglishToBengaliNumber(generateTime)}"
+            }
+
+            override fun onFinish() {
+
+                showResultView()
+            }
         }
+        (countDownTimer as CountDownTimer).start()
     }
+
+     */
+
+//    private fun startTimer(maxTimerSeconds: Int, textViewTimer: TextView) {
+//        countDownTimer = object : CountDownTimer(maxTimerSeconds * 1000L, 1000) {
+//            override fun onTick(millisUntilFinished: Long) {
+//                val getHour = TimeUnit.MILLISECONDS.toHours(millisUntilFinished)
+//                val getMinutes = TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)
+//                val getSecond = TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished)
+//
+//                val generateTime = String.format(
+//                    Locale.getDefault(), "%02d:%02d:%02d", getHour,
+//                    getMinutes - TimeUnit.HOURS.toMinutes(getHour),
+//                    getSecond - TimeUnit.MINUTES.toSeconds(getMinutes)
+//                )
+//                textViewTimer.setText(convertToBengaliString(generateTime))
+//            }
+//
+//            override fun onFinish() {
+//                if (timerCallback != null) {
+//                    timerCallback.onTimerFinish()
+//                }
+//            }
+//        }
+//        (countDownTimer as CountDownTimer).start()
+//    }
+//
+//    fun stopTimer() {
+//        if (countDownTimer != null) {
+//            countDownTimer.cancel()
+//            textViewTimer.setVisibility(View.GONE)
+//        }
+//    }
+
 
     fun logger(message: String) = Log.d("QuestionFragmentLog", message)
 }

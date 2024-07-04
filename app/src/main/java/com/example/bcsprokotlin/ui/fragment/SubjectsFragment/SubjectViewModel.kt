@@ -14,11 +14,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SubjectViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
-
     val pageNumber = 1
-
-
     val subjects: MutableLiveData<Resource<MutableList<SubjectName>>> = MutableLiveData()
+
 
     suspend fun getSubjectName(apiNumber: Int) {
         subjects.postValue(Resource.Loading())
