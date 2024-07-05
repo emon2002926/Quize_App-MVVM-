@@ -32,7 +32,7 @@ class HomeFragmentViewModel @Inject constructor(
                 try {
                     if (hasInternetConnection()) {
                         val response = repository.getExamInfo(apiNumber, pageNumber, PAGE_SIZE)
-                        val result = handleSubjectNameResponse(response)
+                        val result = handleLiveExamResponse(response)
                         _liveExamInfo.postValue(result)
 
                         if (result is Resource.Success) {
@@ -57,7 +57,7 @@ class HomeFragmentViewModel @Inject constructor(
         }
     }
 
-    private fun handleSubjectNameResponse(response: Response<MutableList<LiveExam>>): Resource<MutableList<LiveExam>> {
+    private fun handleLiveExamResponse(response: Response<MutableList<LiveExam>>): Resource<MutableList<LiveExam>> {
         if (response.isSuccessful) {
             response.body()?.let {
                 return Resource.Success(it)

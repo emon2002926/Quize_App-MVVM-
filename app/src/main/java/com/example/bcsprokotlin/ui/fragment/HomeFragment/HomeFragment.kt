@@ -7,7 +7,6 @@ import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,7 +18,6 @@ import com.example.bcsprokotlin.databinding.LayoutShowExamOptionBinding
 import com.example.bcsprokotlin.model.LiveExam
 import com.example.bcsprokotlin.model.SharedData
 import com.example.bcsprokotlin.model.SubjectName
-import com.example.bcsprokotlin.repository.ExamInfoRepository
 import com.example.bcsprokotlin.ui.SharedViewModel
 import com.example.bcsprokotlin.ui.base.BaseFragment
 import com.example.bcsprokotlin.ui.fragment.SubjectsFragment.SubjectViewModel
@@ -28,7 +26,6 @@ import com.example.bcsprokotlin.util.Resource
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate),
@@ -37,43 +34,30 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     private val subjectViewModel: SubjectViewModel by viewModels()
     private val liveExamViewModel: HomeFragmentViewModel by viewModels()
     private val sharedViewModel: SharedViewModel by activityViewModels()
-
-    @Inject
-    lateinit var examInfoRepository: ExamInfoRepository
-
     private val subjectAdapter = SubjectAdapterHomeScreen(this)
     private val liveExamAdapter = LiveExamAdapter(this)
     private var questionAmount = 0
     private var time = 0
     private var examType = ""
 
-//    val allExamInfo: List<LiveExam> = examInfoRepository.allExamInfo
-
 
     override fun loadUi() {
 
-        // Launching coroutines in the appropriate ViewModel scope
-        subjectViewModel.viewModelScope.launch { subjectViewModel.getSubjectName(3) }
+//        subjectViewModel.viewModelScope.launch { subjectViewModel.getSubjectName(3) }
 
-
-//        liveExamViewModel.viewModelScope.launch { liveExamViewModel.getExamInfo(2) }
-
-
-        // Disable horizontal scroll bar
         binding.horizontalScrollView.isHorizontalScrollBarEnabled = false
 
-        // Observing LiveData
-        observeViewModel()
-
+        observeLiveExamInfo()
+        observeSubjectName()
         // Setting up RecyclerViews
-
-        examInfoRepository.allExamInfo
-
         setupRecyclerView(binding.rvSubjects, subjectAdapter)
         setupRecyclerView(binding.rvLiveExam, liveExamAdapter)
-        // Setting up listeners
         setListeners()
 
+
+    }
+
+    private fun observeLiveExamInfo() = binding.apply {
 
         // Observe network call results
         liveExamViewModel.liveExamInfo.observe(viewLifecycleOwner) { response ->
@@ -99,22 +83,20 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         liveExamViewModel.getExamsFromDatabase().observe(viewLifecycleOwner) { exams ->
             liveExamAdapter.submitList(exams)
         }
-
         // Check for data and decide to fetch from network or not
         viewLifecycleOwner.lifecycleScope.launch {
             liveExamViewModel.getExamInfo(apiNumber = 2)
         }
 
-
     }
 
-
-    private fun observeViewModel() = binding.apply {
-
-        subjectViewModel.subjects.observe(viewLifecycleOwner) { response ->
+    private fun observeSubjectName() = binding.apply {
+        // Observe network call results
+        subjectViewModel.subjectName.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is Resource.Error -> {
                     GeneralUtils.showShimmerLayout(shimmerSubject, rvSubjects)
+                    Log.d("HomeFragment", response.message.toString())
                 }
 
                 is Resource.Loading -> {
@@ -129,29 +111,17 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                 }
             }
         }
-
-//        liveExamViewModel.liveExamInfo.observe(viewLifecycleOwner) { response ->
-//            when (response) {
-//                is Resource.Error -> {
-//                    Log.d("HomeFragment", response.message.toString())
-//                }
-//
-//                is Resource.Loading -> {
-//                    GeneralUtils.showShimmerLayout(binding.shimmerLiveExam, binding.rvLiveExam)
-//                }
-//
-//                is Resource.Success -> {
-//                    GeneralUtils.hideShimmerLayout(binding.shimmerLiveExam, binding.rvLiveExam)
-//                    response.data?.let {
-//
-//                        liveExamAdapter.submitList(it)
-//                    }
-//                }
-//            }
-//        }
-
+        // Observe data from Room database
+        subjectViewModel.getSubjectNameDatabase().observe(viewLifecycleOwner) { exams ->
+            subjectAdapter.submitList(exams)
+        }
+        // Check for data and decide to fetch from network or not
+        viewLifecycleOwner.lifecycleScope.launch {
+            subjectViewModel.getSubjectNameN(apiNumber = 3)
+        }
 
     }
+
 
     private fun setupRecyclerView(recyclerView: RecyclerView, adapter: RecyclerView.Adapter<*>) {
         recyclerView.apply {

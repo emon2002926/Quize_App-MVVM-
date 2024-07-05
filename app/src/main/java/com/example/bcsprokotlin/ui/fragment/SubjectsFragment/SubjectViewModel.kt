@@ -1,25 +1,95 @@
 package com.example.bcsprokotlin.ui.fragment.SubjectsFragment
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.bcsprokotlin.model.SubjectName
 import com.example.bcsprokotlin.repository.Repository
+import com.example.bcsprokotlin.repository.SubjectNameRepository
 import com.example.bcsprokotlin.util.Constants
 import com.example.bcsprokotlin.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import retrofit2.Response
 import java.io.IOException
 import javax.inject.Inject
 
 
 @HiltViewModel
-class SubjectViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
+class SubjectViewModel @Inject constructor(
+    private val repository: Repository,
+    private val subjectRepository: SubjectNameRepository
+) : ViewModel() {
     val pageNumber = 1
-    val subjects: MutableLiveData<Resource<MutableList<SubjectName>>> = MutableLiveData()
+    private val _subjects: MutableLiveData<Resource<MutableList<SubjectName>>> = MutableLiveData()
+    val subjectName: LiveData<Resource<MutableList<SubjectName>>> = _subjects
 
 
+    fun getSubjectNameN(apiNumber: Int) {
+        viewModelScope.launch {
+            if (subjectRepository.isDatabaseEmpty()) {
+                _subjects.postValue(Resource.Loading())
+                try {
+                    if (hasInternetConnection()) {
+                        val response = repository.getSubjects(
+                            apiNumber, pageNumber,
+                            Constants.PAGE_SIZE
+                        )
+                        val result = handleResponseApi(response)
+                        _subjects.postValue(result)
+
+                        if (result is Resource.Success) {
+                            saveExamsToDatabase(result.data)
+                        }
+                    } else {
+                        _subjects.postValue(Resource.Error("No internet connection"))
+                    }
+                } catch (t: Throwable) {
+                    when (t) {
+                        is IOException -> _subjects.postValue(Resource.Error("Network Failure"))
+                        else -> _subjects.postValue(Resource.Error("Conversion Error"))
+                    }
+                }
+            } else {
+                _subjects.postValue(
+                    Resource.Success(
+                        subjectRepository.getAllExamsNonLive().toMutableList()
+                    )
+                )
+            }
+        }
+    }
+
+    private fun handleResponseApi(response: Response<MutableList<SubjectName>>): Resource<MutableList<SubjectName>> {
+        if (response.isSuccessful) {
+            response.body()?.let {
+                return Resource.Success(it)
+            }
+        }
+        return Resource.Error(response.message())
+    }
+
+
+    private suspend fun saveExamsToDatabase(exams: MutableList<SubjectName>?) {
+        exams?.let {
+            subjectRepository.insertAll(it)
+        }
+    }
+
+
+    fun getSubjectNameDatabase(): LiveData<List<SubjectName>> {
+        return subjectRepository.getAllExams()
+    }
+
+//    private fun hasInternetConnection(): Boolean {
+//        return true
+//    }
+
+
+    ///////////////////////////////////////////////////////////////////////
     suspend fun getSubjectName(apiNumber: Int) {
-        subjects.postValue(Resource.Loading())
+        _subjects.postValue(Resource.Loading())
 
         try {
             if (hasInternetConnection()) {
@@ -27,14 +97,14 @@ class SubjectViewModel @Inject constructor(private val repository: Repository) :
                     apiNumber, pageNumber,
                     Constants.PAGE_SIZE
                 )
-                subjects.postValue(handleSubjectResponse(questionResponse))
+                _subjects.postValue(handleSubjectResponse(questionResponse))
             } else {
-                subjects.postValue(Resource.Error("No internet connection"))
+                _subjects.postValue(Resource.Error("No internet connection"))
             }
         } catch (t: Throwable) {
             when (t) {
-                is IOException -> subjects.postValue(Resource.Error("Network Failure"))
-                else -> subjects.postValue(Resource.Error("Conversion Error "))
+                is IOException -> _subjects.postValue(Resource.Error("Network Failure"))
+                else -> _subjects.postValue(Resource.Error("Conversion Error "))
             }
         }
     }

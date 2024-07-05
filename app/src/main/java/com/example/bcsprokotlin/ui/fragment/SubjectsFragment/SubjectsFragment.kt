@@ -1,10 +1,11 @@
 package com.example.bcsprokotlin.ui.fragment.SubjectsFragment
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.bcsprokotlin.R
 import com.example.bcsprokotlin.adapter.SubjectAdapter
@@ -25,7 +26,7 @@ import kotlinx.coroutines.launch
 class SubjectsFragment : BaseFragment<FragmentSubjectsBinding>(FragmentSubjectsBinding::inflate),
     SubjectAdapter.HandleClickListener {
 
-    private val viewModel: SubjectViewModel by viewModels()
+    private val subjectViewModel: SubjectViewModel by viewModels()
     private val sharedViewModel: SharedViewModel by activityViewModels()
 
     private lateinit var subjectAdapter: SubjectAdapter
@@ -36,15 +37,49 @@ class SubjectsFragment : BaseFragment<FragmentSubjectsBinding>(FragmentSubjectsB
         subjectAdapter = SubjectAdapter(this)
 
         setupRecyclerView()
-        setupObservers()
+//        setupObservers()
         setupListeners()
 
-        viewModel.viewModelScope.launch {
-            viewModel.getSubjectName(3)
-        }
+//        subjectViewModel.viewModelScope.launch {
+//            subjectViewModel.getSubjectName(3)
+//        }
 
+        observeSubjectName()
 
     }
+
+
+    private fun observeSubjectName() = binding.apply {
+        // Observe network call results
+        subjectViewModel.subjectName.observe(viewLifecycleOwner) { response ->
+            when (response) {
+                is Resource.Error -> {
+                    Log.d("HomeFragment", response.message.toString())
+                }
+
+                is Resource.Loading -> {
+                    GeneralUtils.showShimmerLayout(binding.shimmerLayout, binding.rvSubjects)
+                }
+
+                is Resource.Success -> {
+                    GeneralUtils.hideShimmerLayout(binding.shimmerLayout, binding.rvSubjects)
+                    response.data?.let {
+                        subjectAdapter.submitList(it)
+                    }
+                }
+            }
+        }
+        // Observe data from Room database
+        subjectViewModel.getSubjectNameDatabase().observe(viewLifecycleOwner) { exams ->
+            subjectAdapter.submitList(exams)
+        }
+        // Check for data and decide to fetch from network or not
+        viewLifecycleOwner.lifecycleScope.launch {
+            subjectViewModel.getSubjectNameN(apiNumber = 3)
+        }
+
+    }
+
 
     private fun setupRecyclerView() {
         binding.rvSubjects.apply {
@@ -54,7 +89,7 @@ class SubjectsFragment : BaseFragment<FragmentSubjectsBinding>(FragmentSubjectsB
 
     private fun setupObservers() {
 
-        viewModel.subjects.observe(viewLifecycleOwner) { response ->
+        subjectViewModel.subjectName.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is Resource.Success -> {
                     GeneralUtils.hideShimmerLayout(binding.shimmerLayout, binding.rvSubjects)
