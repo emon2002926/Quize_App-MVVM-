@@ -43,7 +43,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
     override fun loadUi() {
 
-//        subjectViewModel.viewModelScope.launch { subjectViewModel.getSubjectName(3) }
 
         binding.horizontalScrollView.isHorizontalScrollBarEnabled = false
 
@@ -54,8 +53,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         setupRecyclerView(binding.rvLiveExam, liveExamAdapter)
         setListeners()
 
-
     }
+
 
     private fun observeLiveExamInfo() = binding.apply {
 

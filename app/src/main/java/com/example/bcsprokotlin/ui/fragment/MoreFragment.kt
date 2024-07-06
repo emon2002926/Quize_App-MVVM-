@@ -11,7 +11,6 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MoreFragment : BaseFragment<FragmentMoreBinding>(FragmentMoreBinding::inflate) {
 
-    //    lateinit var  intent: Intent
     override fun loadUi() {
         listener()
     }

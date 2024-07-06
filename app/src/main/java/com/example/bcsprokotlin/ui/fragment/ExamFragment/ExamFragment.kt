@@ -1,8 +1,9 @@
 package com.example.bcsprokotlin.ui.fragment.ExamFragment
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.CountDownTimer
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
@@ -18,12 +19,15 @@ import com.example.bcsprokotlin.databinding.FragmentExamBinding
 import com.example.bcsprokotlin.databinding.ResultViewBinding
 import com.example.bcsprokotlin.databinding.SubmitAnswerOptionBinding
 import com.example.bcsprokotlin.model.ExamResult
+import com.example.bcsprokotlin.model.OverallResult
 import com.example.bcsprokotlin.model.Question
 import com.example.bcsprokotlin.model.SharedData
 import com.example.bcsprokotlin.ui.SharedViewModel
 import com.example.bcsprokotlin.ui.base.BaseFragment
 import com.example.bcsprokotlin.ui.fragment.QuestionFragment.QuestionViewModel
 import com.example.bcsprokotlin.util.GeneralUtils
+import com.example.bcsprokotlin.util.GeneralUtils.DataManager
+import com.example.bcsprokotlin.util.GeneralUtils.logger
 import com.example.bcsprokotlin.util.Resource
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
@@ -47,21 +51,32 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
 
     private var individualSubResult: List<ExamResult> = emptyList()
 
+    private lateinit var sharedPreferences: SharedPreferences
+
+    private val PREFS_NAME = "results_for_statistics"
+
+
     override fun loadUi() {
+
+        sharedPreferences = requireContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+
         binding.apply {
             fabShowResult.setOnClickListener {
                 setUpFabIcon()
             }
             backButton.setOnClickListener { findNavController().navigateUp() }
-
         }
+
+        context?.let { DataManager(it) }
+
+
         observeSharedData()
         observeQuestions()
         setupRecyclerView()
         observeResultViewModel()
     }
 
-    
+
     private fun setUpFabIcon() = binding.apply {
         if (isResultSubmitted) {
             showResultView()
@@ -98,6 +113,54 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
         individualSubResultVm.observe(viewLifecycleOwner) {
             individualSubResult = it
         }
+    }
+
+    private fun saveResultForStatic(overallResult: OverallResult) {
+        val overallNotAnswered: Int = totalQuestion - overallResult.answeredQuestions
+
+
+
+        if (getInt("totalQuestions", 0) > 1) {
+
+            val totalExam: Int = ((getInt("totalExam", 0)) + 1)
+            val totalQuestion11: Int = ((getInt("totalQuestions", 0)) + totalQuestion)
+            val overAllCorrectAnswer: Int =
+                ((getInt("overAllCorrectAnswer", 0)) + overallResult.correctAnswers)
+            val overAllWrongAnswer: Int =
+                ((getInt("overAllWrongAnswer", 0)) + overallResult.wrongAnswers)
+            val overAllNotAnswered: Int =
+                ((getInt("overAllNotAnswered", 0)) + overallNotAnswered)
+
+
+            saveInt("totalExam", totalExam)
+            saveInt("totalQuestions", totalQuestion11)
+            saveInt("overAllCorrectAnswer", overAllCorrectAnswer)
+            saveInt("overAllWrongAnswer", overAllWrongAnswer)
+            saveInt("overAllNotAnswered", overAllNotAnswered)
+
+        } else {
+            saveInt("totalExam", 1)
+
+            saveInt("totalQuestions", totalQuestion)
+            saveInt("overAllCorrectAnswer", overallResult.correctAnswers)
+            saveInt("overAllWrongAnswer", overallResult.wrongAnswers)
+            saveInt("overAllNotAnswered", overallNotAnswered)
+
+//
+//            logger(
+//                "new\n totalQuestions:${overallResult.answeredQuestions}" +
+//                        "overAllCorrectAnswer:${overallResult.correctAnswers}\n overAllWrongAnswer:${overallResult.wrongAnswers} "
+//            )
+        }
+
+    }
+
+    private fun saveInt(key: String, value: Int) {
+        sharedPreferences.edit().putInt(key, value).apply()
+    }
+
+    private fun getInt(key: String, defaultValue: Int): Int {
+        return sharedPreferences.getInt(key, defaultValue)
     }
 
     private fun observeSharedData() {
@@ -203,6 +266,9 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
                         Toast.LENGTH_SHORT
                     ).show()
                 } else {
+                    resultViewmodel.overallResult.observe(viewLifecycleOwner) {
+                        saveResultForStatic(it)
+                    }
                     binding.fabShowResult.setImageResource(R.drawable.baseline_keyboard_double_arrow_up_24)
                     bottomSheetDialog.dismiss()
                     questionAdapter.showAnswer(true)
@@ -236,64 +302,4 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
     }
 
 
-    /*
-    private fun countDownTimer(maxTimerSeconds: Int) {
-        countDownTimer = object : CountDownTimer(maxTimerSeconds * 1000L, 1000) {
-            override fun onTick(millisUntilFinished: Long) {
-                val getHour = TimeUnit.MILLISECONDS.toHours(millisUntilFinished)
-                val getMinutes = TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)
-                val getSecond = TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished)
-
-                val generateTime = String.format(
-                    Locale.getDefault(), "%02d:%02d:%02d", getHour,
-                    getMinutes - TimeUnit.HOURS.toMinutes(getHour),
-                    getSecond - TimeUnit.MINUTES.toSeconds(getMinutes)
-                )
-                binding.tvTimer.visibility = View.VISIBLE
-                binding.tvTimer.text = "${GeneralUtils.convertEnglishToBengaliNumber(generateTime)}"
-            }
-
-            override fun onFinish() {
-
-                showResultView()
-            }
-        }
-        (countDownTimer as CountDownTimer).start()
-    }
-
-     */
-
-//    private fun startTimer(maxTimerSeconds: Int, textViewTimer: TextView) {
-//        countDownTimer = object : CountDownTimer(maxTimerSeconds * 1000L, 1000) {
-//            override fun onTick(millisUntilFinished: Long) {
-//                val getHour = TimeUnit.MILLISECONDS.toHours(millisUntilFinished)
-//                val getMinutes = TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)
-//                val getSecond = TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished)
-//
-//                val generateTime = String.format(
-//                    Locale.getDefault(), "%02d:%02d:%02d", getHour,
-//                    getMinutes - TimeUnit.HOURS.toMinutes(getHour),
-//                    getSecond - TimeUnit.MINUTES.toSeconds(getMinutes)
-//                )
-//                textViewTimer.setText(convertToBengaliString(generateTime))
-//            }
-//
-//            override fun onFinish() {
-//                if (timerCallback != null) {
-//                    timerCallback.onTimerFinish()
-//                }
-//            }
-//        }
-//        (countDownTimer as CountDownTimer).start()
-//    }
-//
-//    fun stopTimer() {
-//        if (countDownTimer != null) {
-//            countDownTimer.cancel()
-//            textViewTimer.setVisibility(View.GONE)
-//        }
-//    }
-
-
-    fun logger(message: String) = Log.d("QuestionFragmentLog", message)
 }

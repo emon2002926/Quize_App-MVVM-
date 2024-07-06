@@ -2,7 +2,6 @@ package com.example.bcsprokotlin.ui.fragment.SubjectsFragment
 
 import android.util.Log
 import android.view.LayoutInflater
-import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -37,13 +36,7 @@ class SubjectsFragment : BaseFragment<FragmentSubjectsBinding>(FragmentSubjectsB
         subjectAdapter = SubjectAdapter(this)
 
         setupRecyclerView()
-//        setupObservers()
         setupListeners()
-
-//        subjectViewModel.viewModelScope.launch {
-//            subjectViewModel.getSubjectName(3)
-//        }
-
         observeSubjectName()
 
     }
@@ -87,29 +80,6 @@ class SubjectsFragment : BaseFragment<FragmentSubjectsBinding>(FragmentSubjectsB
         }
     }
 
-    private fun setupObservers() {
-
-        subjectViewModel.subjectName.observe(viewLifecycleOwner) { response ->
-            when (response) {
-                is Resource.Success -> {
-                    GeneralUtils.hideShimmerLayout(binding.shimmerLayout, binding.rvSubjects)
-                    response.data?.let { subjectAdapter.submitList(it) }
-                }
-
-                is Resource.Error -> {
-                    GeneralUtils.hideShimmerLayout(binding.shimmerLayout, binding.rvSubjects)
-                    response.message?.let { message ->
-                        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
-                    }
-                }
-
-                is Resource.Loading -> {
-                    GeneralUtils.showShimmerLayout(binding.shimmerLayout, binding.rvSubjects)
-
-                }
-            }
-        }
-    }
 
     private fun setupListeners() {
         binding.backButton.setOnClickListener {
