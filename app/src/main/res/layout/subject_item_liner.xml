@@ -3,20 +3,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/parentLayout"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/_150sdp"
     android:layout_marginEnd="@dimen/_10sdp"
     android:background="@drawable/round_bg"
     android:gravity="center_horizontal"
     android:orientation="vertical">
 
     <ImageView
-        android:layout_width="130dp"
-        android:layout_height="130dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         android:layout_marginStart="17dp"
         android:layout_marginTop="@dimen/_12sdp"
         android:layout_marginEnd="17dp"
         android:padding="@dimen/_12sdp"
-        android:src="@drawable/learning" />
+        android:src="@drawable/earth_bg_white" />
 
     <TextView
         android:id="@+id/tvSubjectName"
@@ -26,11 +26,11 @@
         android:fontFamily="@font/baloo_bhaina_2_medium"
         android:gravity="center"
         android:lineSpacingMultiplier="0.6"
-        android:maxLines="2"
-        android:text="আন্তর্জাতিক বিষয়াবলি"
-        android:textColor="@color/LiteBlack"
-        android:textSize="@dimen/_14ssp"
+        android:paddingStart="@dimen/_4sdp"
+        android:paddingEnd="@dimen/_4sdp"
+        android:paddingBottom="@dimen/_8sdp"
+        android:text="আন্তর্জাতিক বিষয়াবলি "
+        android:textColor="@color/white"
+        android:textSize="@dimen/_13ssp"
         android:textStyle="bold" />
 </LinearLayout>
-
-

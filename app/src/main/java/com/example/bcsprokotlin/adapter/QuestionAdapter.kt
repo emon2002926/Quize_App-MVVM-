@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import com.example.bcsprokotlin.R
 import com.example.bcsprokotlin.databinding.McqLayoutBinding
 import com.example.bcsprokotlin.model.Question
+import com.example.bcsprokotlin.util.Animations
 import com.example.bcsprokotlin.util.GeneralUtils
 
 class QuestionAdapter(
@@ -41,6 +42,7 @@ class QuestionAdapter(
     override fun bind(binding: McqLayoutBinding, item: Question, position: Int) {
         with(binding) {
             explainIv.visibility = View.GONE
+            Animations.setAnimationFadeIn(binding.root.context, binding.root, position)
 
             tvQuestionPosition.text = GeneralUtils.convertEnglishToBengaliNumber("${position + 1})")
             // Set question and options

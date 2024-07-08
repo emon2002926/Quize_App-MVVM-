@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.example.bcsprokotlin.databinding.ItemQuestionBankBinding
 import com.example.bcsprokotlin.model.BcsYearName
+import com.example.bcsprokotlin.util.Animations.setAnimationFadeIn
 import com.example.bcsprokotlin.util.GeneralUtils
 
 class QuestionBankAdapter(val listener: HandleClickListener) :
@@ -22,6 +23,9 @@ class QuestionBankAdapter(val listener: HandleClickListener) :
     @SuppressLint("SetTextI18n")
     override fun bind(binding: ItemQuestionBankBinding, item: BcsYearName, position: Int) {
         with(binding) {
+            
+            setAnimationFadeIn(binding.root.context, binding.root, position)
+
             questionBatch.text = item.bcsYearName
             numOfQuestion.text =
                 "প্রশ্নের পরিমাণ : ${GeneralUtils.convertEnglishToBengaliNumber(item.totalQuestion)}"

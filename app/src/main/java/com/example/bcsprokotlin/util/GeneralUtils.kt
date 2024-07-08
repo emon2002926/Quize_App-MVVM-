@@ -58,6 +58,16 @@ object GeneralUtils {
         }
     }
 
+//    var lastPosition = -1
+//
+//    fun setAnimation(ctx: Context?, viewToAnimate: View, position: Int) {
+//        if (position > lastPosition) {
+//            val slideIn = AnimationUtils.loadAnimation(ctx, R.anim.slide_in_left)
+//            viewToAnimate.animation = slideIn
+//            lastPosition = position
+//        }
+//    }
+
 
     private const val PREFS_NAME = "results_for"
     private var sharedPreferences: SharedPreferences? = null
