@@ -9,12 +9,13 @@ plugins {
 
 }
 
+//com.gdalamin.bcs_pro
 android {
-    namespace = "com.example.bcsprokotlin"
+    namespace = "com.gdalamin.bcs_pro"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.bcsprokotlin"
+        applicationId = "com.gdalamin.bcs_pro"
         minSdk = 24
         targetSdk = 34
         versionCode = 1

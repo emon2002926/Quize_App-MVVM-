@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.bcsprokotlin.ui.fragment.HomeFragment.HomeFragment"
+        android:name="com.gdalamin.bcs_pro.ui.fragment.HomeFragment.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home">
         <action
@@ -38,22 +38,22 @@
     </fragment>
     <fragment
         android:id="@+id/moreFragment"
-        android:name="com.example.bcsprokotlin.ui.fragment.MoreFragment"
+        android:name="com.gdalamin.bcs_pro.ui.fragment.MoreFragment"
         android:label="fragment_more"
         tools:layout="@layout/fragment_more" />
     <fragment
         android:id="@+id/questionFragment"
-        android:name="com.example.bcsprokotlin.ui.fragment.QuestionFragment.QuestionFragment"
+        android:name="com.gdalamin.bcs_pro.ui.fragment.QuestionFragment.QuestionFragment"
         android:label="fragment_question"
         tools:layout="@layout/fragment_question" />
     <fragment
         android:id="@+id/recordFragment"
-        android:name="com.example.bcsprokotlin.ui.fragment.RecordFragment"
+        android:name="com.gdalamin.bcs_pro.ui.fragment.RecordFragment"
         android:label="fragment_record"
         tools:layout="@layout/fragment_record" />
     <fragment
         android:id="@+id/subjectsFragment"
-        android:name="com.example.bcsprokotlin.ui.fragment.SubjectsFragment.SubjectsFragment"
+        android:name="com.gdalamin.bcs_pro.ui.fragment.SubjectsFragment.SubjectsFragment"
         android:label="fragment_subjects"
         tools:layout="@layout/fragment_subjects">
         <action
@@ -70,7 +70,7 @@
 
     <fragment
         android:id="@+id/questionBankFragment"
-        android:name="com.example.bcsprokotlin.ui.fragment.QuestionBankFragment.QuestionBankFragment"
+        android:name="com.gdalamin.bcs_pro.ui.fragment.QuestionBankFragment.QuestionBankFragment"
         android:label="fragment_question_bank"
         tools:layout="@layout/fragment_question_bank">
 
@@ -89,7 +89,7 @@
     </fragment>
     <fragment
         android:id="@+id/examFragment"
-        android:name="com.example.bcsprokotlin.ui.fragment.ExamFragment.ExamFragment"
+        android:name="com.gdalamin.bcs_pro.ui.fragment.ExamFragment.ExamFragment"
         android:label="fragment_exam"
         tools:layout="@layout/fragment_exam" />
 </navigation>
