@@ -7,7 +7,7 @@
     <corners android:radius="@dimen/_10sdp" />
 
 
-    <solid android:color="#4AA8F8" />
+    <solid android:color="@color/tangerine" />
     <corners android:radius="@dimen/_10sdp" />
     <!--    <stroke android:color="#EFEBEB"-->
     <!--        android:width="10dp"-->

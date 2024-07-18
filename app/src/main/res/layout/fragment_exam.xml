@@ -42,7 +42,7 @@
                     android:layout_weight=".85"
                     android:text="44th BCS Question "
                     android:textAlignment="textStart"
-                    android:textColor="@color/dodger_blue"
+                    android:textColor="@color/darkTangerine"
                     android:textSize="23sp"
                     android:textStyle="normal" />
 

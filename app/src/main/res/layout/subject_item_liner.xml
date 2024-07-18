@@ -13,7 +13,7 @@
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:layout_marginStart="17dp"
-        android:layout_marginTop="@dimen/_12sdp"
+        android:layout_marginTop="@dimen/_8sdp"
         android:layout_marginEnd="17dp"
         android:padding="@dimen/_12sdp"
         android:src="@drawable/earth_bg_white" />
@@ -31,6 +31,6 @@
         android:paddingBottom="@dimen/_8sdp"
         android:text="আন্তর্জাতিক বিষয়াবলি "
         android:textColor="@color/white"
-        android:textSize="@dimen/_13ssp"
+        android:textSize="@dimen/_12ssp"
         android:textStyle="bold" />
 </LinearLayout>

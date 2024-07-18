@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -13,30 +14,22 @@
         android:orientation="vertical">
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:elevation="30dp">
+            android:visibility="visible"
+            app:cardElevation="@dimen/_2sdp">
 
-            <LinearLayout
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:text="@string/more"
-                    android:textColor="@color/dodger_blue"
-                    android:textSize="25sp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
-
-
+                android:background="@color/white"
+                android:paddingStart="10dp"
+                android:paddingTop="7dp"
+                android:paddingBottom="4dp"
+                android:text="@string/more"
+                android:textColor="@color/DeepGrey"
+                android:textSize="@dimen/_20sdp"
+                android:textStyle="bold" />
         </androidx.cardview.widget.CardView>
 
 
@@ -74,7 +67,7 @@
                     android:padding="10dp"
                     android:text="@string/messangerChat"
                     android:textColor="@color/black"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
 
             </LinearLayout>
 
@@ -105,7 +98,7 @@
                     android:padding="10dp"
                     android:text="@string/facebookPage"
                     android:textColor="@color/black"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
 
             </LinearLayout>
 
@@ -135,7 +128,7 @@
                     android:padding="10dp"
                     android:text="@string/appRating"
                     android:textColor="@color/black"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -166,7 +159,7 @@
                     android:padding="10dp"
                     android:text="অ্যাপ শেয়ার"
                     android:textColor="@color/black"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
 
                     />
 
@@ -196,7 +189,7 @@
                     android:padding="10dp"
                     android:text="@string/about_us"
                     android:textColor="@color/black"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
 
             </LinearLayout>
 
@@ -227,7 +220,7 @@
                     android:padding="10dp"
                     android:text="@string/privircy_policy"
                     android:textColor="@color/black"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
 
             </LinearLayout>
 
@@ -255,7 +248,7 @@
                     android:padding="10dp"
                     android:text="@string/trems"
                     android:textColor="@color/black"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
 
             </LinearLayout>
         </LinearLayout>

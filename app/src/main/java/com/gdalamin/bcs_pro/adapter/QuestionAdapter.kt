@@ -209,10 +209,10 @@ class QuestionAdapter(
     private fun bindQuestionAndOptions(item: Question, binding: McqLayoutBinding) {
         with(binding) {
             showImgOrTextView(item.question, item.image, questionIv, questionTv)
-            showImgOrTextView("ক) ${item.option1}", item.option1Image, option1Iv, option1Tv)
-            showImgOrTextView("খ) ${item.option2}", item.option2Image, option2Iv, option2Tv)
-            showImgOrTextView("গ) ${item.option3}", item.option3Image, option3Iv, option3Tv)
-            showImgOrTextView("ঘ) ${item.option4}", item.option4Image, option4Iv, option4Tv)
+            showImgOrTextView(item.option1, item.option1Image, option1Iv, option1Tv)
+            showImgOrTextView(item.option2, item.option2Image, option2Iv, option2Tv)
+            showImgOrTextView(item.option3, item.option3Image, option3Iv, option3Tv)
+            showImgOrTextView(item.option4, item.option4Image, option4Iv, option4Tv)
         }
     }
 

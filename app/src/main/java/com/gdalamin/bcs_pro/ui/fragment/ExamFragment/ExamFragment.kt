@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.CountDownTimer
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
@@ -173,6 +174,7 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
             "liveModelTest" -> {
                 tvTitle.text = data.title
                 totalQuestion = data.totalQuestion
+                Log.d("bklbjhghds", "this one")
                 questionAdapter.changeUiForExam("examQuestion")
                 viewModel.getExamQuestions(data.totalQuestion)
                 timeObserver(data.time)
@@ -209,7 +211,6 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
                         questionAdapter.submitList(it)
                     }
                     binding.fabShowResult.visibility = View.VISIBLE
-//                    countDownTimer(50)
                 }
 
                 is Resource.Error -> {

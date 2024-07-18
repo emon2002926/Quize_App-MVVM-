@@ -16,8 +16,8 @@
         android:gravity="center"
         android:padding="15dp"
         android:text="@string/overAllExam"
-        android:textColor="@color/dodger_blue"
-        android:textSize="25sp"
+        android:textColor="@color/darkTangerine"
+        android:textSize="22sp"
         android:textStyle="bold" />
 
 
@@ -57,7 +57,7 @@
             android:layout_marginStart="20dp"
             android:text="@string/question50"
             android:textColor="@color/black"
-            android:textSize="17sp"
+            android:textSize="15sp"
             android:textStyle="bold" />
 
     </LinearLayout>
@@ -98,7 +98,7 @@
             android:layout_marginStart="20dp"
             android:text="@string/question100"
             android:textColor="@color/black"
-            android:textSize="17sp"
+            android:textSize="15sp"
             android:textStyle="bold"
 
             />
@@ -143,7 +143,7 @@
             android:layout_marginStart="20dp"
             android:text="@string/question200"
             android:textColor="@color/black"
-            android:textSize="17sp"
+            android:textSize="15sp"
             android:textStyle="bold" />
     </LinearLayout>
 
@@ -159,7 +159,7 @@
         android:padding="10dp"
         android:text="@string/start_exam"
         android:textColor="@color/white"
-        android:textSize="20dp" />
+        android:textSize="18dp" />
 
     <TextView
         android:id="@+id/btnCancel"
@@ -171,6 +171,6 @@
         android:padding="10dp"
         android:text="@string/not_now"
         android:textColor="@color/tangerine"
-        android:textSize="20sp" />
+        android:textSize="18sp" />
 
 </LinearLayout>

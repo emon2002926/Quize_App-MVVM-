@@ -1,5 +1,6 @@
 package com.gdalamin.bcs_pro.ui.fragment.SubjectsFragment
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,7 +10,9 @@ import com.gdalamin.bcs_pro.repository.Repository
 import com.gdalamin.bcs_pro.repository.SubjectNameRepository
 import com.gdalamin.bcs_pro.util.Constants
 import com.gdalamin.bcs_pro.util.Resource
+import com.gdalamin.bcs_pro.util.network.NetworkUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import retrofit2.Response
 import java.io.IOException
@@ -19,11 +22,15 @@ import javax.inject.Inject
 @HiltViewModel
 class SubjectViewModel @Inject constructor(
     private val repository: Repository,
-    private val subjectRepository: SubjectNameRepository
+    private val subjectRepository: SubjectNameRepository,
+    @ApplicationContext private val context: Context
+
 ) : ViewModel() {
     val pageNumber = 1
     private val _subjects: MutableLiveData<Resource<MutableList<SubjectName>>> = MutableLiveData()
     val subjectName: LiveData<Resource<MutableList<SubjectName>>> = _subjects
+
+    private val networkUtil = NetworkUtils(context)
 
 
     fun getSubjectNameN(apiNumber: Int) {
@@ -31,13 +38,13 @@ class SubjectViewModel @Inject constructor(
             if (subjectRepository.isDatabaseEmpty()) {
                 _subjects.postValue(Resource.Loading())
                 try {
-                    if (hasInternetConnection()) {
+                    if (networkUtil.isConnected()) {
                         val response = repository.getSubjects(
                             apiNumber, pageNumber,
                             Constants.PAGE_SIZE
                         )
                         val result = handleResponseApi(response)
-                        _subjects.postValue(result)
+                        _subjects.postValue(handleResponseApi(response))
 
                         if (result is Resource.Success) {
                             saveExamsToDatabase(result.data)

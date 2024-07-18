@@ -1,9 +1,7 @@
 package com.gdalamin.bcs_pro.ui.fragment.HomeFragment
 
+import android.content.BroadcastReceiver
 import android.util.Log
-import android.view.LayoutInflater
-import android.widget.ImageView
-import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -14,7 +12,6 @@ import com.gdalamin.bcs_pro.R
 import com.gdalamin.bcs_pro.adapter.LiveExamAdapter
 import com.gdalamin.bcs_pro.adapter.SubjectAdapterHomeScreen
 import com.gdalamin.bcs_pro.databinding.FragmentHomeBinding
-import com.gdalamin.bcs_pro.databinding.LayoutShowExamOptionBinding
 import com.gdalamin.bcs_pro.model.LiveExam
 import com.gdalamin.bcs_pro.model.SharedData
 import com.gdalamin.bcs_pro.model.SubjectName
@@ -23,26 +20,33 @@ import com.gdalamin.bcs_pro.ui.base.BaseFragment
 import com.gdalamin.bcs_pro.ui.fragment.SubjectsFragment.SubjectViewModel
 import com.gdalamin.bcs_pro.util.GeneralUtils
 import com.gdalamin.bcs_pro.util.Resource
-import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.gdalamin.bcs_pro.util.network.NetworkReceiverManager
+import com.gdalamin.bcs_pro.util.network.NetworkUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate),
-    LiveExamAdapter.HandleClickListener, SubjectAdapterHomeScreen.HandleClickListener {
+    LiveExamAdapter.HandleClickListener, SubjectAdapterHomeScreen.HandleClickListener,
+    NetworkReceiverManager.ConnectivityChangeListener {
 
     private val subjectViewModel: SubjectViewModel by viewModels()
     private val liveExamViewModel: HomeFragmentViewModel by viewModels()
     private val sharedViewModel: SharedViewModel by activityViewModels()
     private val subjectAdapter = SubjectAdapterHomeScreen(this)
     private val liveExamAdapter = LiveExamAdapter(this)
-    private var questionAmount = 0
-    private var time = 0
-    private var examType = ""
+
+    //    private var questionAmount = 0
+//    private var time = 0
+//    private var examType = ""
+    private var isConnected: Boolean = false
+    lateinit var networkUtil: NetworkUtils
+    private lateinit var networkReceiver: BroadcastReceiver
+
+    private lateinit var networkReceiverManager: NetworkReceiverManager
 
 
     override fun loadUi() {
-
 
         binding.horizontalScrollView.isHorizontalScrollBarEnabled = false
 
@@ -53,6 +57,62 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         setupRecyclerView(binding.rvLiveExam, liveExamAdapter)
         setListeners()
 
+
+//        networkUtil = NetworkUtils(requireContext())
+//
+//        // Check connectivity status
+//        if (networkUtil.isConnected()) {
+//            // Internet is connected
+//            observeSubjectName()
+//            observeLiveExamInfo()
+//            Toast.makeText(requireContext(), "Internet is connected", Toast.LENGTH_SHORT).show()
+//        } else {
+//            // Internet is not connected
+//
+//
+//            Toast.makeText(requireContext(), "Internet is not connected", Toast.LENGTH_SHORT).show()
+//        }
+
+        // Register a BroadcastReceiver to listen for network connectivity changes
+//        val intentFilter = IntentFilter()
+//        intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION)
+//
+//        networkReceiver = object : BroadcastReceiver() {
+//            override fun onReceive(context: Context, intent: Intent) {
+//                val newIsConnected: Boolean = isConnected()
+//                if (!isConnected && newIsConnected) {
+//                    // Internet connection is restored
+//                    observeLiveExamInfo()
+//                    observeSubjectName()
+//                } else if (isConnected && !newIsConnected) {
+//                    // Internet connection is gone
+////                    Toast.makeText(context, "Internet connection is gone", Toast.LENGTH_SHORT).show();
+//                }
+//                isConnected = newIsConnected
+//            }
+//        }
+//        requireContext().registerReceiver(networkReceiver, intentFilter)
+//        isConnected = isConnected()
+
+        networkReceiverManager = NetworkReceiverManager(requireContext(), this)
+        networkReceiverManager.register()
+
+    }
+
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        // Unregister the network receiver manager
+        networkReceiverManager.unregister()
+    }
+
+    override fun onConnected() {
+        observeSubjectName()
+        observeLiveExamInfo()
+    }
+
+
+    override fun onDisconnected() {
     }
 
 
@@ -63,6 +123,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
             when (response) {
                 is Resource.Error -> {
                     Log.d("HomeFragment", response.message.toString())
+
                 }
 
                 is Resource.Loading -> {
@@ -71,6 +132,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
                 is Resource.Success -> {
                     GeneralUtils.hideShimmerLayout(binding.shimmerLiveExam, binding.rvLiveExam)
+                    swipeRefreshLayout.isRefreshing = false
+
                     response.data?.let {
                         liveExamAdapter.submitList(it)
                     }
@@ -78,7 +141,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
             }
         }
 
-        // Observe data from Room database
         liveExamViewModel.getExamsFromDatabase().observe(viewLifecycleOwner) { exams ->
             liveExamAdapter.submitList(exams)
         }
@@ -89,27 +151,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
     }
 
+
     private fun observeSubjectName() = binding.apply {
-        // Observe network call results
-        subjectViewModel.subjectName.observe(viewLifecycleOwner) { response ->
-            when (response) {
-                is Resource.Error -> {
-                    GeneralUtils.showShimmerLayout(shimmerSubject, rvSubjects)
-                    Log.d("HomeFragment", response.message.toString())
-                }
-
-                is Resource.Loading -> {
-                    GeneralUtils.showShimmerLayout(shimmerSubject, rvSubjects)
-                }
-
-                is Resource.Success -> {
-                    GeneralUtils.hideShimmerLayout(shimmerSubject, rvSubjects)
-                    response.data?.let {
-                        subjectAdapter.submitList(it)
-                    }
-                }
-            }
-        }
+        networkCallForSubject()
         // Observe data from Room database
         subjectViewModel.getSubjectNameDatabase().observe(viewLifecycleOwner) { exams ->
             subjectAdapter.submitList(exams)
@@ -121,6 +165,32 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
     }
 
+    fun networkCallForSubject() = binding.apply {
+        subjectViewModel.subjectName.observe(viewLifecycleOwner) { response ->
+            when (response) {
+                is Resource.Error -> {
+                    GeneralUtils.showShimmerLayout(shimmerSubject, rvSubjects)
+
+                    Log.d("HomeFragment", response.message.toString())
+                    // Check connectivity status
+
+                }
+
+                is Resource.Loading -> {
+                    GeneralUtils.showShimmerLayout(shimmerSubject, rvSubjects)
+                }
+
+                is Resource.Success -> {
+                    GeneralUtils.hideShimmerLayout(shimmerSubject, rvSubjects)
+                    swipeRefreshLayout.isRefreshing = false
+                    response.data?.let {
+                        subjectAdapter.submitList(it)
+                    }
+                }
+            }
+        }
+    }
+
 
     private fun setupRecyclerView(recyclerView: RecyclerView, adapter: RecyclerView.Adapter<*>) {
         recyclerView.apply {
@@ -130,6 +200,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     }
 
     private fun setListeners() = with(binding) {
+
+        swipeRefreshLayout.setOnRefreshListener {
+            observeSubjectName()
+            observeLiveExamInfo()
+        }
         practice.setOnClickListener {
             sharedViewModel.setStringData("subjectBasedPractise")
             findNavController().navigate(R.id.action_homeFragment_to_subjectsFragment)
@@ -142,7 +217,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
         btnQuestionBank.setOnClickListener { findNavController().navigate(R.id.action_homeFragment_to_questionBankFragment) }
 
-        exams.setOnClickListener { showExamOptions() }
+        val examOptionsDialog = ExamOptionsBottomSheet(this@HomeFragment, sharedViewModel)
+
+        exams.setOnClickListener {
+            examOptionsDialog.show()
+
+        }
 
         subjectBasedExam.setOnClickListener {
             sharedViewModel.setStringData("subjectBasedExam")
@@ -150,70 +230,72 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         }
     }
 
-    private fun showExamOptions() {
-        val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDailogTheme)
-        val bindingExamOption = LayoutShowExamOptionBinding.inflate(LayoutInflater.from(context))
+//    private fun showExamOptions() {
+//        val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDailogTheme)
+//        val bindingExamOption = LayoutShowExamOptionBinding.inflate(LayoutInflater.from(context))
+//
+//        bindingExamOption.apply {
+//            layout25Min.setOnClickListener {
+//                questionAmount = 50
+//                time = 1500
+//                selectIcon(option25Icon)
+//                eraseIcon(option50Icon, option100Icon)
+//                examType = "50QuestionExam"
+//            }
+//            layout50Min.setOnClickListener {
+//                questionAmount = 100
+//                time = 3000
+//                selectIcon(option50Icon)
+//                eraseIcon(option25Icon, option100Icon)
+//                examType = "100QuestionExam"
+//            }
+//            layout100Min.setOnClickListener {
+//                questionAmount = 200
+//                time = 6000
+//                selectIcon(option100Icon)
+//                eraseIcon(option25Icon, option50Icon)
+//                examType = "200QuestionExam"
+//            }
+//            btnExamStart.setOnClickListener {
+//                if (questionAmount != 0) {
+//                    val data = SharedData(
+//                        "সামগ্রিক পরীক্ষা", "normalExam", questionAmount, examType, "", time
+//                    )
+//                    sharedViewModel.setSharedData(data)
+//                    findNavController().navigate(R.id.action_homeFragment_to_examFragment)
+//                    bottomSheetDialog.dismiss()
+//                } else {
+//                    Toast.makeText(context, "Please select an option", Toast.LENGTH_SHORT).show()
+//
+//                }
+//            }
+//            btnCancel.setOnClickListener { bottomSheetDialog.dismiss() }
+//
+//        }
+//        bottomSheetDialog.setContentView(bindingExamOption.root)
+//        bottomSheetDialog.show()
+//    }
 
-        bindingExamOption.apply {
-            layout25Min.setOnClickListener {
-                questionAmount = 50
-                time = 1500
-                selectIcon(option25Icon)
-                eraseIcon(option50Icon, option100Icon)
-                examType = "50QuestionExam"
-            }
-            layout50Min.setOnClickListener {
-                questionAmount = 100
-                time = 3000
-                selectIcon(option50Icon)
-                eraseIcon(option25Icon, option100Icon)
-                examType = "100QuestionExam"
-            }
-            layout100Min.setOnClickListener {
-                questionAmount = 200
-                time = 6000
-                selectIcon(option100Icon)
-                eraseIcon(option25Icon, option50Icon)
-                examType = "200QuestionExam"
-            }
-            btnExamStart.setOnClickListener {
-                if (questionAmount != 0) {
-                    val data = SharedData(
-                        "সামগ্রিক পরীক্ষা", "normalExam", questionAmount, examType, "", time
-                    )
-                    sharedViewModel.setSharedData(data)
-                    findNavController().navigate(R.id.action_homeFragment_to_examFragment)
-                    bottomSheetDialog.dismiss()
-                } else {
-                    Toast.makeText(context, "Please select an option", Toast.LENGTH_SHORT).show()
-
-                }
-            }
-            btnCancel.setOnClickListener { bottomSheetDialog.dismiss() }
-
-        }
-
-
-        bottomSheetDialog.setContentView(bindingExamOption.root)
-        bottomSheetDialog.show()
-
-
-    }
-
-    private fun selectIcon(imageView: ImageView) {
-        imageView.setImageResource(R.drawable.black_dot)
-    }
-
-    fun eraseIcon(imageView: ImageView, imageView2: ImageView) {
-        imageView.setImageResource(R.drawable.round_back_white50_100)
-        imageView2.setImageResource(R.drawable.round_back_white50_100)
-    }
+//    private fun selectIcon(imageView: ImageView) {
+//        imageView.setImageResource(R.drawable.black_dot)
+//    }
+//
+//    fun eraseIcon(imageView: ImageView, imageView2: ImageView) {
+//        imageView.setImageResource(R.drawable.round_back_white50_100)
+//        imageView2.setImageResource(R.drawable.round_back_white50_100)
+//    }
 
     override fun onClickLiveExam(item: LiveExam) {
-
         val data = SharedData(
-            "ডেইলি মডেল টেস্ট ", "liveModelTest", item.totalQc * 60, "normal", "", item.totalQc
+            title = "ডেইলি মডেল টেস্ট",
+            action = "liveModelTest",
+            totalQuestion = item.totalQc,
+            questionType = "normal",
+            batchOrSubjectName = "",
+            time = item.totalQc * 60
+
         )
+
         sharedViewModel.setSharedData(data)
         findNavController().navigate(R.id.action_homeFragment_to_examFragment)
     }

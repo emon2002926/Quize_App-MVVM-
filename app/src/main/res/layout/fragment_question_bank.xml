@@ -9,12 +9,14 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/card"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/_2sdp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/white">
+
 
             <ImageView
                 android:id="@+id/backButton"
@@ -28,17 +30,19 @@
                 android:id="@+id/titleTv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="14dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginTop="7dp"
+                android:layout_marginBottom="4dp"
+                android:paddingStart="@dimen/_8sdp"
                 android:text="@string/questionBank"
-                android:textColor="@color/dodger_blue"
-                android:textSize="27sp"
-                android:textStyle="normal" />
+                android:textColor="@color/DeepGrey"
+                android:textSize="25sp"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
 
     </androidx.cardview.widget.CardView>
+
 
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/shimmerLayout"
@@ -48,6 +52,7 @@
 
         <include layout="@layout/shimmer_question_bank_background" />
     </com.facebook.shimmer.ShimmerFrameLayout>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvQuestionBank"

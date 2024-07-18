@@ -16,19 +16,21 @@ import com.gdalamin.bcs_pro.ui.SharedViewModel
 import com.gdalamin.bcs_pro.ui.base.BaseFragment
 import com.gdalamin.bcs_pro.util.GeneralUtils
 import com.gdalamin.bcs_pro.util.Resource
+import com.gdalamin.bcs_pro.util.network.NetworkReceiverManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
 class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionBinding::inflate),
-    QuestionAdapter.OnItemSelectedListener {
+    QuestionAdapter.OnItemSelectedListener, NetworkReceiverManager.ConnectivityChangeListener {
 
     private val questionAdapter by lazy { QuestionAdapter(this) }
     private val sharedViewModel: SharedViewModel by activityViewModels()
     private val viewModel: QuestionViewModel by viewModels()
     private var mBooleanValue = false
 
+    private lateinit var networkReceiverManager: NetworkReceiverManager
 
     override fun loadUi() {
         binding.backButton.setOnClickListener { findNavController().navigateUp() }
@@ -36,6 +38,8 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionB
         observeSharedData()
         observeQuestions()
         setupRecyclerView()
+        networkReceiverManager = NetworkReceiverManager(requireContext(), this)
+        networkReceiverManager.register()
     }
 
 
@@ -49,7 +53,6 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionB
 
     private suspend fun handleAction(data: SharedData) = binding.apply {
         when (data.action) {
-
             "questionBank" -> {
                 tvTitle.text = data.batchOrSubjectName
                 setupFab()
@@ -85,7 +88,8 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionB
                     binding.btnShowAnswer.visibility = View.VISIBLE
                 }
 
-                is Resource.Error -> handleError(response.message)
+                is Resource.Error -> {}
+//                    handleError(response.message)
             }
         }
     }
@@ -126,6 +130,19 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionB
 
     override fun onItemSelected(item: Question) {
 
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        networkReceiverManager.unregister()
+    }
+
+    override fun onConnected() {
+        observeSharedData()
+        observeQuestions()
+    }
+
+    override fun onDisconnected() {
     }
 
 

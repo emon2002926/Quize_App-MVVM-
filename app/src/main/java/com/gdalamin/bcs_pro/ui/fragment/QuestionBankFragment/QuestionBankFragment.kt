@@ -14,28 +14,35 @@ import com.gdalamin.bcs_pro.ui.SharedViewModel
 import com.gdalamin.bcs_pro.ui.base.BaseFragment
 import com.gdalamin.bcs_pro.util.GeneralUtils
 import com.gdalamin.bcs_pro.util.Resource
+import com.gdalamin.bcs_pro.util.network.NetworkReceiverManager
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class QuestionBankFragment :
     BaseFragment<FragmentQuestionBankBinding>(FragmentQuestionBankBinding::inflate),
-    QuestionBankAdapter.HandleClickListener {
+    QuestionBankAdapter.HandleClickListener, NetworkReceiverManager.ConnectivityChangeListener {
 
     private val viewModel: QuestionBankViewModel by viewModels()
     private val sharedViewModel: SharedViewModel by activityViewModels()
 
     private val questionBankAdapter = QuestionBankAdapter(this)
+    private lateinit var networkReceiverManager: NetworkReceiverManager
 
     override fun loadUi() {
-
         binding.backButton.setOnClickListener { findNavController().navigateUp() }
 
+        observeQuestionYearName()
+        setupRecyclerView()
+        networkReceiverManager = NetworkReceiverManager(requireContext(), this)
+        networkReceiverManager.register()
+    }
 
+    private fun observeQuestionYearName() {
         viewModel.bcsYearName.observe(viewLifecycleOwner) { response ->
 
             when (response) {
                 is Resource.Error -> {
-                    GeneralUtils.hideShimmerLayout(binding.shimmerLayout, binding.rvQuestionBank)
+//                    GeneralUtils.hideShimmerLayout(binding.shimmerLayout, binding.rvQuestionBank)
                     response.message?.let { message ->
                         Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
                     }
@@ -54,7 +61,7 @@ class QuestionBankFragment :
             }
 
         }
-        setupRecyclerView()
+
     }
 
     private fun setupRecyclerView() = binding.rvQuestionBank.apply {
@@ -69,6 +76,18 @@ class QuestionBankFragment :
         sharedViewModel.setSharedData(data)
         findNavController().navigate(R.id.action_questionBankFragment_to_questionFragment)
 
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        networkReceiverManager.unregister()
+    }
+
+    override fun onConnected() {
+        observeQuestionYearName()
+    }
+
+    override fun onDisconnected() {
     }
 
 
