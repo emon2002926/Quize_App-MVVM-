@@ -39,7 +39,6 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionB
         observeQuestions()
         setupRecyclerView()
         networkReceiverManager = NetworkReceiverManager(requireContext(), this)
-        networkReceiverManager.register()
     }
 
 
@@ -54,7 +53,7 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionB
     private suspend fun handleAction(data: SharedData) = binding.apply {
         when (data.action) {
             "questionBank" -> {
-                tvTitle.text = data.batchOrSubjectName
+                tvTitle.text = data.title
                 setupFab()
                 questionAdapter.changeUiForExam("normalQuestion")
                 viewModel.getPreviousYearQuestions(200, data.batchOrSubjectName)
@@ -68,6 +67,13 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionB
                     data.batchOrSubjectName,
                     data.totalQuestion
                 )
+            }
+
+            "importantQuestion" -> {
+                tvTitle.text = data.title
+                setupFab()
+                questionAdapter.changeUiForExam("normalQuestion")
+                viewModel.getQuestion()
             }
         }
     }

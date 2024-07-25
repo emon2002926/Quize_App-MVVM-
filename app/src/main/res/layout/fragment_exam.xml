@@ -42,9 +42,9 @@
                     android:layout_weight=".85"
                     android:text="44th BCS Question "
                     android:textAlignment="textStart"
-                    android:textColor="@color/darkTangerine"
+                    android:textColor="@color/DeepGrey"
                     android:textSize="23sp"
-                    android:textStyle="normal" />
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tvTimer"
@@ -52,7 +52,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:text="00:00:00"
-                    android:textColor="@color/tangerine"
+                    android:textColor="@color/darkTangerine"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:visibility="invisible" />

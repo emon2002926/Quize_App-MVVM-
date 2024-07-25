@@ -5,7 +5,9 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.net.ConnectivityManager
+import androidx.annotation.Keep
 
+@Keep
 class NetworkReceiverManager(
     private val context: Context,
     private val connectivityChangeListener: ConnectivityChangeListener
@@ -16,6 +18,10 @@ class NetworkReceiverManager(
     interface ConnectivityChangeListener {
         fun onConnected()
         fun onDisconnected()
+    }
+
+    init {
+        register()
     }
 
     fun register() {

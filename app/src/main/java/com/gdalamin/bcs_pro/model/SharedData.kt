@@ -1,5 +1,8 @@
 package com.gdalamin.bcs_pro.model
 
+import androidx.annotation.Keep
+
+@Keep
 data class SharedData(
     val title: String,
     val action: String,

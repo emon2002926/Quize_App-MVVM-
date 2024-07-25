@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.gdalamin.bcs_pro.databinding.ItemResultBinding
 import com.gdalamin.bcs_pro.model.ExamResult
-import com.gdalamin.bcs_pro.util.GeneralUtils
+import com.gdalamin.bcs_pro.util.GeneralUtils.convertEnglishToBangla
 
 class ResultAdapter : BaseAdapter<ExamResult, ItemResultBinding>(
     areItemsTheSame = { oldItem, newItem -> oldItem.subjectName == newItem.subjectName },
@@ -16,7 +16,7 @@ class ResultAdapter : BaseAdapter<ExamResult, ItemResultBinding>(
 
     override fun bind(binding: ItemResultBinding, item: ExamResult, position: Int) {
         with(binding) {
-            tvSubjectName.text = GeneralUtils.convertEnglishToBengaliNumber(item.subjectName)
+            tvSubjectName.text = convertEnglishToBangla(item.subjectName)
             tvAnsweredQuestion.text = textConverter(item.answeredQuestions)
             tvCorrectAnswer.text = textConverter(item.correctAnswer)
             tvWrongAnswer.text = textConverter(item.wrongAnswer)
@@ -25,5 +25,5 @@ class ResultAdapter : BaseAdapter<ExamResult, ItemResultBinding>(
     }
 
     private fun textConverter(int: Int): String =
-        GeneralUtils.convertEnglishToBengaliNumber(int.toString())
+        convertEnglishToBangla(int.toString())
 }

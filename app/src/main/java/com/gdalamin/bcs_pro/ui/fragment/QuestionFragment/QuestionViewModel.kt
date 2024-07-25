@@ -32,7 +32,11 @@ class QuestionViewModel @Inject constructor(private val repository: Repository) 
             _questions.postValue(Resource.Loading())
             try {
                 if (hasInternetConnection()) {
-                    val questionResponse = repository.getQuestion(apiNumber, pageNumber, PAGE_SIZE)
+                    val questionResponse = repository.getQuestion(
+                        apiNumber = apiNumber,
+                        pageNumber = pageNumber,
+                        limit = PAGE_SIZE
+                    )
                     _questions.postValue(handleQuestionResponse(questionResponse))
                     isDataLoaded = true
                 } else {
@@ -51,7 +55,12 @@ class QuestionViewModel @Inject constructor(private val repository: Repository) 
             try {
                 if (hasInternetConnection()) {
                     val questionResponse =
-                        repository.getPreviousYearQuestion(9, pageNumber, totalQuestion, batchName)
+                        repository.getPreviousYearQuestion(
+                            apiNumber = 9,
+                            pageNumber = pageNumber,
+                            limit = totalQuestion,
+                            batch = batchName
+                        )
                     _questions.postValue(handleQuestionResponse(questionResponse))
                     isDataLoaded = true
                 } else {
@@ -167,7 +176,7 @@ class QuestionViewModel @Inject constructor(private val repository: Repository) 
                     getMinutes - TimeUnit.HOURS.toMinutes(getHour),
                     getSecond - TimeUnit.MINUTES.toSeconds(getMinutes)
                 )
-                _timeLeft.value = GeneralUtils.convertEnglishToBengaliNumber(generateTime)
+                _timeLeft.value = GeneralUtils.convertEnglishToBangla(generateTime)
             }
 
             override fun onFinish() {

@@ -1,6 +1,5 @@
 package com.gdalamin.bcs_pro.ui.fragment.QuestionBankFragment
 
-import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -12,7 +11,8 @@ import com.gdalamin.bcs_pro.model.BcsYearName
 import com.gdalamin.bcs_pro.model.SharedData
 import com.gdalamin.bcs_pro.ui.SharedViewModel
 import com.gdalamin.bcs_pro.ui.base.BaseFragment
-import com.gdalamin.bcs_pro.util.GeneralUtils
+import com.gdalamin.bcs_pro.util.GeneralUtils.hideShimmerLayout
+import com.gdalamin.bcs_pro.util.GeneralUtils.showShimmerLayout
 import com.gdalamin.bcs_pro.util.Resource
 import com.gdalamin.bcs_pro.util.network.NetworkReceiverManager
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,34 +34,27 @@ class QuestionBankFragment :
         observeQuestionYearName()
         setupRecyclerView()
         networkReceiverManager = NetworkReceiverManager(requireContext(), this)
-        networkReceiverManager.register()
     }
 
     private fun observeQuestionYearName() {
         viewModel.bcsYearName.observe(viewLifecycleOwner) { response ->
-
             when (response) {
                 is Resource.Error -> {
-//                    GeneralUtils.hideShimmerLayout(binding.shimmerLayout, binding.rvQuestionBank)
-                    response.message?.let { message ->
-                        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
-                    }
+                    showShimmerLayout(binding.shimmerLayout, binding.rvQuestionBank)
                 }
 
                 is Resource.Loading -> {
-                    GeneralUtils.showShimmerLayout(binding.shimmerLayout, binding.rvQuestionBank)
+                    showShimmerLayout(binding.shimmerLayout, binding.rvQuestionBank)
                 }
 
                 is Resource.Success -> {
-                    GeneralUtils.hideShimmerLayout(binding.shimmerLayout, binding.rvQuestionBank)
+                    hideShimmerLayout(binding.shimmerLayout, binding.rvQuestionBank)
                     response.data?.let {
                         questionBankAdapter.submitList(it)
                     }
                 }
             }
-
         }
-
     }
 
     private fun setupRecyclerView() = binding.rvQuestionBank.apply {
@@ -70,12 +63,15 @@ class QuestionBankFragment :
     }
 
     override fun onClick(bcsYearName: BcsYearName) {
-
-        val data = SharedData("", "questionBank", 50, "", bcsYearName.bcsYearName, 0)
-
+        val data = SharedData(
+            title = bcsYearName.bcsYearName,
+            action = "questionBank",
+            totalQuestion = 50, questionType = "",
+            batchOrSubjectName = bcsYearName.bcsYearName,
+            time = 0
+        )
         sharedViewModel.setSharedData(data)
         findNavController().navigate(R.id.action_questionBankFragment_to_questionFragment)
-
     }
 
     override fun onDestroyView() {

@@ -28,7 +28,7 @@ class QuestionBankAdapter(val listener: HandleClickListener) :
 
             questionBatch.text = item.bcsYearName
             numOfQuestion.text =
-                "প্রশ্নের পরিমাণ : ${GeneralUtils.convertEnglishToBengaliNumber(item.totalQuestion)}"
+                "প্রশ্নের পরিমাণ : ${GeneralUtils.convertEnglishToBangla(item.totalQuestion)}"
             fullLayout.setOnClickListener {
                 listener.onClick(item)
             }

@@ -1,7 +1,5 @@
 package com.gdalamin.bcs_pro.ui.fragment.HomeFragment
 
-import android.content.BroadcastReceiver
-import android.util.Log
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -18,10 +16,10 @@ import com.gdalamin.bcs_pro.model.SubjectName
 import com.gdalamin.bcs_pro.ui.SharedViewModel
 import com.gdalamin.bcs_pro.ui.base.BaseFragment
 import com.gdalamin.bcs_pro.ui.fragment.SubjectsFragment.SubjectViewModel
-import com.gdalamin.bcs_pro.util.GeneralUtils
+import com.gdalamin.bcs_pro.util.GeneralUtils.hideShimmerLayout
+import com.gdalamin.bcs_pro.util.GeneralUtils.showShimmerLayout
 import com.gdalamin.bcs_pro.util.Resource
 import com.gdalamin.bcs_pro.util.network.NetworkReceiverManager
-import com.gdalamin.bcs_pro.util.network.NetworkUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -36,12 +34,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     private val subjectAdapter = SubjectAdapterHomeScreen(this)
     private val liveExamAdapter = LiveExamAdapter(this)
 
-    //    private var questionAmount = 0
-//    private var time = 0
-//    private var examType = ""
-    private var isConnected: Boolean = false
-    lateinit var networkUtil: NetworkUtils
-    private lateinit var networkReceiver: BroadcastReceiver
 
     private lateinit var networkReceiverManager: NetworkReceiverManager
 
@@ -52,57 +44,18 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
         observeLiveExamInfo()
         observeSubjectName()
-        // Setting up RecyclerViews
+
         setupRecyclerView(binding.rvSubjects, subjectAdapter)
         setupRecyclerView(binding.rvLiveExam, liveExamAdapter)
         setListeners()
 
-
-//        networkUtil = NetworkUtils(requireContext())
-//
-//        // Check connectivity status
-//        if (networkUtil.isConnected()) {
-//            // Internet is connected
-//            observeSubjectName()
-//            observeLiveExamInfo()
-//            Toast.makeText(requireContext(), "Internet is connected", Toast.LENGTH_SHORT).show()
-//        } else {
-//            // Internet is not connected
-//
-//
-//            Toast.makeText(requireContext(), "Internet is not connected", Toast.LENGTH_SHORT).show()
-//        }
-
-        // Register a BroadcastReceiver to listen for network connectivity changes
-//        val intentFilter = IntentFilter()
-//        intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION)
-//
-//        networkReceiver = object : BroadcastReceiver() {
-//            override fun onReceive(context: Context, intent: Intent) {
-//                val newIsConnected: Boolean = isConnected()
-//                if (!isConnected && newIsConnected) {
-//                    // Internet connection is restored
-//                    observeLiveExamInfo()
-//                    observeSubjectName()
-//                } else if (isConnected && !newIsConnected) {
-//                    // Internet connection is gone
-////                    Toast.makeText(context, "Internet connection is gone", Toast.LENGTH_SHORT).show();
-//                }
-//                isConnected = newIsConnected
-//            }
-//        }
-//        requireContext().registerReceiver(networkReceiver, intentFilter)
-//        isConnected = isConnected()
-
         networkReceiverManager = NetworkReceiverManager(requireContext(), this)
-        networkReceiverManager.register()
 
     }
 
 
     override fun onDestroyView() {
         super.onDestroyView()
-        // Unregister the network receiver manager
         networkReceiverManager.unregister()
     }
 
@@ -110,7 +63,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         observeSubjectName()
         observeLiveExamInfo()
     }
-
 
     override fun onDisconnected() {
     }
@@ -122,18 +74,16 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         liveExamViewModel.liveExamInfo.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is Resource.Error -> {
-                    Log.d("HomeFragment", response.message.toString())
-
+                    showShimmerLayout(binding.shimmerLiveExam, binding.rvLiveExam)
                 }
 
                 is Resource.Loading -> {
-                    GeneralUtils.showShimmerLayout(binding.shimmerLiveExam, binding.rvLiveExam)
+                    showShimmerLayout(binding.shimmerLiveExam, binding.rvLiveExam)
                 }
 
                 is Resource.Success -> {
-                    GeneralUtils.hideShimmerLayout(binding.shimmerLiveExam, binding.rvLiveExam)
+                    hideShimmerLayout(binding.shimmerLiveExam, binding.rvLiveExam)
                     swipeRefreshLayout.isRefreshing = false
-
                     response.data?.let {
                         liveExamAdapter.submitList(it)
                     }
@@ -153,35 +103,19 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
 
     private fun observeSubjectName() = binding.apply {
-        networkCallForSubject()
         // Observe data from Room database
-        subjectViewModel.getSubjectNameDatabase().observe(viewLifecycleOwner) { exams ->
-            subjectAdapter.submitList(exams)
-        }
-        // Check for data and decide to fetch from network or not
-        viewLifecycleOwner.lifecycleScope.launch {
-            subjectViewModel.getSubjectNameN(apiNumber = 3)
-        }
-
-    }
-
-    fun networkCallForSubject() = binding.apply {
         subjectViewModel.subjectName.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is Resource.Error -> {
-                    GeneralUtils.showShimmerLayout(shimmerSubject, rvSubjects)
-
-                    Log.d("HomeFragment", response.message.toString())
-                    // Check connectivity status
-
+                    showShimmerLayout(shimmerSubject, rvSubjects)
                 }
 
                 is Resource.Loading -> {
-                    GeneralUtils.showShimmerLayout(shimmerSubject, rvSubjects)
+                    showShimmerLayout(shimmerSubject, rvSubjects)
                 }
 
                 is Resource.Success -> {
-                    GeneralUtils.hideShimmerLayout(shimmerSubject, rvSubjects)
+                    hideShimmerLayout(shimmerSubject, rvSubjects)
                     swipeRefreshLayout.isRefreshing = false
                     response.data?.let {
                         subjectAdapter.submitList(it)
@@ -189,8 +123,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                 }
             }
         }
+        subjectViewModel.getSubjectNameDatabase().observe(viewLifecycleOwner) { exams ->
+            subjectAdapter.submitList(exams)
+        }
+        // Check for data and decide to fetch from network or not
+        viewLifecycleOwner.lifecycleScope.launch {
+            subjectViewModel.getSubjectNameN(apiNumber = 3)
+        }
     }
-
 
     private fun setupRecyclerView(recyclerView: RecyclerView, adapter: RecyclerView.Adapter<*>) {
         recyclerView.apply {
@@ -209,6 +149,19 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
             sharedViewModel.setStringData("subjectBasedPractise")
             findNavController().navigate(R.id.action_homeFragment_to_subjectsFragment)
         }
+        CvImportantQuestion.setOnClickListener {
+            val data = SharedData(
+                title = getString(R.string.importantQuestion),
+                action = "importantQuestion",
+                totalQuestion = 200,
+                questionType = "",
+                batchOrSubjectName = "",
+                time = 0
+            )
+            sharedViewModel.setSharedData(data)
+            findNavController().navigate(R.id.action_homeFragment_to_questionFragment)
+        }
+
 
         btnShowAllSubject.setOnClickListener {
             sharedViewModel.setStringData("subjectBasedPractise")

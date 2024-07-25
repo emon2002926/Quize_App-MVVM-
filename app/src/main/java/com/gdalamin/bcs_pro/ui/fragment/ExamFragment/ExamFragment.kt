@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.CountDownTimer
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
@@ -27,7 +26,7 @@ import com.gdalamin.bcs_pro.ui.SharedViewModel
 import com.gdalamin.bcs_pro.ui.base.BaseFragment
 import com.gdalamin.bcs_pro.ui.fragment.QuestionFragment.QuestionViewModel
 import com.gdalamin.bcs_pro.util.GeneralUtils
-import com.gdalamin.bcs_pro.util.GeneralUtils.DataManager
+import com.gdalamin.bcs_pro.util.GeneralUtils.convertEnglishToBangla
 import com.gdalamin.bcs_pro.util.GeneralUtils.logger
 import com.gdalamin.bcs_pro.util.Resource
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -67,9 +66,6 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
             }
             backButton.setOnClickListener { findNavController().navigateUp() }
         }
-
-        context?.let { DataManager(it) }
-
         observeSharedData()
         observeQuestions()
         setupRecyclerView()
@@ -174,7 +170,6 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
             "liveModelTest" -> {
                 tvTitle.text = data.title
                 totalQuestion = data.totalQuestion
-                Log.d("bklbjhghds", "this one")
                 questionAdapter.changeUiForExam("examQuestion")
                 viewModel.getExamQuestions(data.totalQuestion)
                 timeObserver(data.time)
@@ -242,9 +237,9 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
         val bindingResult = SubmitAnswerOptionBinding.inflate(LayoutInflater.from(context))
 
         bindingResult.tvDis.text =
-            "আপনি ${GeneralUtils.convertEnglishToBengaliNumber(totalQuestion.toString())}" +
+            "আপনি ${convertEnglishToBangla(totalQuestion.toString())}" +
                     " প্রশ্নের মধ্যে ${
-                        GeneralUtils.convertEnglishToBengaliNumber(
+                        convertEnglishToBangla(
                             answeredQuestions.toString()
                         )
                     } টি প্রশ্নের উত্তর দিয়েছেন"

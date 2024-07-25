@@ -5,7 +5,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.gdalamin.bcs_pro.databinding.FragmentRecordBinding
 import com.gdalamin.bcs_pro.ui.base.BaseFragment
-import com.gdalamin.bcs_pro.util.GeneralUtils.convertEnglishToBengaliNumber
+import com.gdalamin.bcs_pro.util.GeneralUtils.convertEnglishToBangla
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -43,24 +43,24 @@ class RecordFragment : BaseFragment<FragmentRecordBinding>(FragmentRecordBinding
     @SuppressLint("DefaultLocale")
     private fun setUpProgressBar() = binding.apply {
 
-        tvTotalExam.text = convertEnglishToBengaliNumber(totalExam.toString())
-        tvTotalQuestion.text = convertEnglishToBengaliNumber(totalQuestion.toString())
+        tvTotalExam.text = convertEnglishToBangla(totalExam.toString())
+        tvTotalQuestion.text = convertEnglishToBangla(totalQuestion.toString())
 
         correctAnswerTv.text = String.format(
             "%s (%s%%)",
-            convertEnglishToBengaliNumber(overAllCorrectAnswer.toString()),
-            convertEnglishToBengaliNumber(String.format("%.2f", totalPercentageCorrect))
+            convertEnglishToBangla(overAllCorrectAnswer.toString()),
+            convertEnglishToBangla(String.format("%.2f", totalPercentageCorrect))
         )
         wrongAnswerTv.text =
             String.format(
-                "%s (%s%%)", convertEnglishToBengaliNumber(overAllWrongAnswer.toString()),
-                convertEnglishToBengaliNumber(String.format("%.2f", totalPercentageWrong))
+                "%s (%s%%)", convertEnglishToBangla(overAllWrongAnswer.toString()),
+                convertEnglishToBangla(String.format("%.2f", totalPercentageWrong))
             )
 
         notAnswered.text = String.format(
             "%s (%s%%)",
-            convertEnglishToBengaliNumber(overAllNotAnswered.toString()),
-            convertEnglishToBengaliNumber(String.format("%.2f", totalPercentageNotAnswered))
+            convertEnglishToBangla(overAllNotAnswered.toString()),
+            convertEnglishToBangla(String.format("%.2f", totalPercentageNotAnswered))
         )
 
 

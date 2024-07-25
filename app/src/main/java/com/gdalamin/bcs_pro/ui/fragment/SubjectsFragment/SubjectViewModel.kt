@@ -10,7 +10,6 @@ import com.gdalamin.bcs_pro.repository.Repository
 import com.gdalamin.bcs_pro.repository.SubjectNameRepository
 import com.gdalamin.bcs_pro.util.Constants
 import com.gdalamin.bcs_pro.util.Resource
-import com.gdalamin.bcs_pro.util.network.NetworkUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
@@ -30,7 +29,7 @@ class SubjectViewModel @Inject constructor(
     private val _subjects: MutableLiveData<Resource<MutableList<SubjectName>>> = MutableLiveData()
     val subjectName: LiveData<Resource<MutableList<SubjectName>>> = _subjects
 
-    private val networkUtil = NetworkUtils(context)
+//    private val networkUtil = NetworkUtils(context)
 
 
     fun getSubjectNameN(apiNumber: Int) {
@@ -38,20 +37,17 @@ class SubjectViewModel @Inject constructor(
             if (subjectRepository.isDatabaseEmpty()) {
                 _subjects.postValue(Resource.Loading())
                 try {
-                    if (networkUtil.isConnected()) {
-                        val response = repository.getSubjects(
-                            apiNumber, pageNumber,
-                            Constants.PAGE_SIZE
-                        )
-                        val result = handleResponseApi(response)
-                        _subjects.postValue(handleResponseApi(response))
+                    val response = repository.getSubjects(
+                        apiNumber, pageNumber,
+                        Constants.PAGE_SIZE
+                    )
+                    val result = handleResponseApi(response)
+                    _subjects.postValue(handleResponseApi(response))
 
-                        if (result is Resource.Success) {
-                            saveExamsToDatabase(result.data)
-                        }
-                    } else {
-                        _subjects.postValue(Resource.Error("No internet connection"))
+                    if (result is Resource.Success) {
+                        saveExamsToDatabase(result.data)
                     }
+
                 } catch (t: Throwable) {
                     when (t) {
                         is IOException -> _subjects.postValue(Resource.Error("Network Failure"))

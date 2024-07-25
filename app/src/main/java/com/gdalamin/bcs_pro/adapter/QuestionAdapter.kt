@@ -12,6 +12,7 @@ import com.gdalamin.bcs_pro.databinding.McqLayoutBinding
 import com.gdalamin.bcs_pro.model.Question
 import com.gdalamin.bcs_pro.util.Animations
 import com.gdalamin.bcs_pro.util.GeneralUtils
+import com.gdalamin.bcs_pro.util.GeneralUtils.convertEnglishToBangla
 
 class QuestionAdapter(
     private val listener: OnItemSelectedListener
@@ -44,7 +45,7 @@ class QuestionAdapter(
             explainIv.visibility = View.GONE
             Animations.setAnimationFadeIn(binding.root.context, binding.root, position)
 
-            tvQuestionPosition.text = GeneralUtils.convertEnglishToBengaliNumber("${position + 1})")
+            tvQuestionPosition.text = convertEnglishToBangla("${position + 1})")
             // Set question and options
             bindQuestionAndOptions(item, this)
             // Reset options to default state
