@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import com.gdalamin.bcs_pro.R
+import com.gdalamin.bcs_pro.adapter.base.BaseAdapter
 import com.gdalamin.bcs_pro.databinding.LiveModelTestLayoutBinding
 import com.gdalamin.bcs_pro.model.LiveExam
 

@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -10,7 +9,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
 
         <androidx.cardview.widget.CardView
             android:id="@+id/card"
@@ -31,7 +29,6 @@
                     android:layout_height="match_parent"
                     android:padding="10dp"
                     android:src="@drawable/baseline_arrow_back_24" />
-
 
                 <TextView
                     android:id="@+id/tvTitle"
@@ -57,26 +54,31 @@
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:visibility="invisible" />
-
             </LinearLayout>
-
-
         </androidx.cardview.widget.CardView>
 
         <com.facebook.shimmer.ShimmerFrameLayout
             android:id="@+id/shimmerLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:visibility="gone">
 
             <include layout="@layout/shimer_mcq_baground" />
         </com.facebook.shimmer.ShimmerFrameLayout>
 
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvQuestion"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:visibility="visible" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone" />
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -92,5 +94,4 @@
         android:visibility="visible"
         app:backgroundTint="#FFFFFF"
         app:fabSize="auto" />
-
 </RelativeLayout>

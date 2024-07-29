@@ -3,6 +3,7 @@ package com.gdalamin.bcs_pro.adapter
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import com.gdalamin.bcs_pro.adapter.base.BaseAdapter
 import com.gdalamin.bcs_pro.databinding.ItemQuestionBankBinding
 import com.gdalamin.bcs_pro.model.BcsYearName
 import com.gdalamin.bcs_pro.util.Animations.setAnimationFadeIn

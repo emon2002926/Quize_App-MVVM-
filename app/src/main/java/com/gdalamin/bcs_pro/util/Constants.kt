@@ -4,7 +4,9 @@ class Constants {
     companion object {
         const val API_KEY = "abc123"
         const val BASE_URL = "https://bcs.bdstar.xyz"
-        const val PAGE_SIZE = 4
+        const val PAGE_SIZE = 50
+        const val QUESTION_PAGE_SIZE = 1
+
         const val NORMAL_EXAM = "normal"
         const val SUBJECT_BASED_EXAM = "subjectBased"
         const val SEARCH_NEWS_TIME_DELAY = 500L

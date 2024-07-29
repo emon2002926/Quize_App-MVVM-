@@ -13,18 +13,6 @@ import javax.inject.Inject
 
 class Repository @Inject constructor(private val apiService: ApiService) {
 
-    suspend fun getBcsYearName(
-        apiNumber: Int, pageNumber: Int, limit: Int
-    ): Response<MutableList<BcsYearName>> {
-        return apiService.getBcsYearName(API_KEY, apiNumber, pageNumber, limit)
-    }
-
-    suspend fun getSubjects(
-        apiNumber: Int, pageNumber: Int, limit: Int
-    ): Response<MutableList<SubjectName>> {
-        return apiService.getSubjects(API_KEY, apiNumber, pageNumber, limit)
-    }
-
     suspend fun getQuestion(
         apiNumber: Int,
         pageNumber: Int,
@@ -32,7 +20,6 @@ class Repository @Inject constructor(private val apiService: ApiService) {
     ): Response<MutableList<Question>> {
         return apiService.getQuestions(API_KEY, apiNumber, pageNumber, limit)
     }
-
 
     suspend fun getPreviousYearQuestion(
         apiNumber: Int,
@@ -72,6 +59,19 @@ class Repository @Inject constructor(private val apiService: ApiService) {
             subjectName,
             totalQuestion
         )
+    }
+
+
+    suspend fun getBcsYearName(
+        apiNumber: Int, pageNumber: Int, limit: Int
+    ): Response<MutableList<BcsYearName>> {
+        return apiService.getBcsYearName(API_KEY, apiNumber, pageNumber, limit)
+    }
+
+    suspend fun getSubjects(
+        apiNumber: Int, pageNumber: Int, limit: Int
+    ): Response<MutableList<SubjectName>> {
+        return apiService.getSubjects(API_KEY, apiNumber, pageNumber, limit)
     }
 
 

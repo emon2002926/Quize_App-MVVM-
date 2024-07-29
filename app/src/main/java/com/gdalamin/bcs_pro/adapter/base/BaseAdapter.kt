@@ -1,4 +1,4 @@
-package com.gdalamin.bcs_pro.adapter
+package com.gdalamin.bcs_pro.adapter.base
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer

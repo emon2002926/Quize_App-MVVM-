@@ -2,6 +2,7 @@ package com.gdalamin.bcs_pro.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import com.gdalamin.bcs_pro.adapter.base.BaseAdapter
 import com.gdalamin.bcs_pro.databinding.ItemResultBinding
 import com.gdalamin.bcs_pro.model.ExamResult
 import com.gdalamin.bcs_pro.util.GeneralUtils.convertEnglishToBangla

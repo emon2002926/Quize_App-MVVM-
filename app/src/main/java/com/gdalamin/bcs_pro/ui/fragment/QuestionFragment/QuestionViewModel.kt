@@ -22,12 +22,12 @@ class QuestionViewModel @Inject constructor(private val repository: Repository) 
     private val _questions: MutableLiveData<Resource<MutableList<Question>>> = MutableLiveData()
     val questions: LiveData<Resource<MutableList<Question>>> = _questions
     private val apiNumber = 1
-    val pageNumber = 1
+    var pageNumber = 1
 
     // Track if data is already loaded
     private var isDataLoaded = false
 
-    suspend fun getQuestion() {
+    suspend fun getQuestion(pageNumber: Int) {
         if (!isDataLoaded) {
             _questions.postValue(Resource.Loading())
             try {
@@ -47,6 +47,21 @@ class QuestionViewModel @Inject constructor(private val repository: Repository) 
             }
         }
     }
+
+    private fun handleQuestionResponse(response: Response<MutableList<Question>>): Resource<MutableList<Question>> {
+        return if (response.isSuccessful) {
+
+            response.body()?.let {
+                pageNumber++
+                
+                Resource.Success(it)
+
+            } ?: Resource.Error("No data")
+        } else {
+            Resource.Error(response.message())
+        }
+    }
+
 
     // Similar logic for other methods...
     suspend fun getPreviousYearQuestions(totalQuestion: Int, batchName: String) {
@@ -114,14 +129,6 @@ class QuestionViewModel @Inject constructor(private val repository: Repository) 
                 else -> Resource.Error("Conversion Error")
             }
         )
-    }
-
-    private fun handleQuestionResponse(response: Response<MutableList<Question>>): Resource<MutableList<Question>> {
-        return if (response.isSuccessful) {
-            response.body()?.let { Resource.Success(it) } ?: Resource.Error("No data")
-        } else {
-            Resource.Error(response.message())
-        }
     }
 
 

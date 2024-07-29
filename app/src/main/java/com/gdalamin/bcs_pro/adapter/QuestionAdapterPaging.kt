@@ -7,24 +7,32 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DiffUtil
 import com.gdalamin.bcs_pro.R
-import com.gdalamin.bcs_pro.adapter.base.BaseAdapter
+import com.gdalamin.bcs_pro.adapter.base.BaseAdapterPaging
 import com.gdalamin.bcs_pro.databinding.McqLayoutBinding
 import com.gdalamin.bcs_pro.model.Question
+import com.gdalamin.bcs_pro.ui.fragment.QuestionFragment.QuestionFragment
 import com.gdalamin.bcs_pro.util.Animations
 import com.gdalamin.bcs_pro.util.GeneralUtils
 import com.gdalamin.bcs_pro.util.GeneralUtils.convertEnglishToBangla
 
-class QuestionAdapter(
-    private val listener: OnItemSelectedListener
-) :
-    BaseAdapter<Question, McqLayoutBinding>(
-        areItemsTheSame = { oldItem, newItem -> oldItem.id == newItem.id },
-        areContentsTheSame = { oldItem, newItem -> oldItem == newItem }
-    ) {
+class QuestionAdapterPaging(
+    private val listener: QuestionFragment
+) : BaseAdapterPaging<Question, McqLayoutBinding>(
+    diffCallback = object : DiffUtil.ItemCallback<Question>() {
+        override fun areItemsTheSame(oldItem: Question, newItem: Question): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: Question, newItem: Question): Boolean {
+            return oldItem == newItem
+        }
+    }
+) {
 
     private var showAnswers: Boolean = false
-    val questionLists = mutableListOf<Question>()
+
     fun showAnswer(show: Boolean) {
         showAnswers = show
         notifyDataSetChanged()
@@ -51,140 +59,27 @@ class QuestionAdapter(
             bindQuestionAndOptions(item, this)
             // Reset options to default state
             resetOptions(this)
-            when (showExamUi) {
-                "examQuestion" -> {
-                    showExplanation(showAnswers, item, this)
-                    if (item.userSelectedAnswer > 0) {
-                        disableOptions(binding)
-                        when (item.userSelectedAnswer) {
-                            1 -> {
-                                highLightClickedOptionForExam(option1Layout, option1Icon)
-                                makeGrayText(option2Layout, option2Tv, option2Layout.context)
-                                makeGrayText(option3Layout, option3Tv, option3Layout.context)
-                                makeGrayText(option4Layout, option4Tv, option4Layout.context)
-                            }
 
-                            2 -> {
-                                highLightClickedOptionForExam(option2Layout, option2Icon)
-                                makeGrayText(option1Layout, option1Tv, option1Layout.context)
-                                makeGrayText(option3Layout, option3Tv, option3Layout.context)
-                                makeGrayText(option4Layout, option4Tv, option4Layout.context)
-                            }
+            showExplanation(showAnswers, item, this)
 
-                            3 -> {
-                                highLightClickedOptionForExam(option3Layout, option3Icon)
-                                makeGrayText(option1Layout, option1Tv, option1Layout.context)
-                                makeGrayText(option2Layout, option2Tv, option2Layout.context)
-                                makeGrayText(option4Layout, option4Tv, option4Layout.context)
-                            }
-
-                            4 -> {
-                                highLightClickedOptionForExam(option4Layout, option4Icon)
-                                makeGrayText(option1Layout, option1Tv, option1Layout.context)
-                                makeGrayText(option2Layout, option2Tv, option2Layout.context)
-                                makeGrayText(option3Layout, option3Tv, option3Layout.context)
-                            }
-                        }
-                    }
-
-                    val context = fullLayout.context
-
-                    val optionClickListener = View.OnClickListener { view: View ->
-                        var selectedOption = 0
-                        var img: ImageView? = null
-                        // Determine which option was clicked based on the view that was clicked
-                        if (view === option1Layout) {
-                            selectedOption = 1
-                            img = option1Icon
-                        } else if (view === option2Layout) {
-                            selectedOption = 2
-                            img = option2Icon
-                        } else if (view === option3Layout) {
-                            selectedOption = 3
-                            img = option3Icon
-                        } else if (view === option4Layout) {
-                            selectedOption = 4
-                            img = optionIcon4
-                        }
-                        // Change text color of all options to default
-                        makeGrayText(option1Layout, option1Tv, context)
-                        makeGrayText(option2Layout, option2Tv, context)
-                        makeGrayText(option3Layout, option3Tv, context)
-                        makeGrayText(option4Layout, option4Tv, context)
-
-                        when (selectedOption) {
-                            1 -> option1Tv.setTextColor(
-                                ContextCompat.getColor(
-                                    context,
-                                    R.color.black
-                                )
-                            )
-
-                            2 -> option2Tv.setTextColor(
-                                ContextCompat.getColor(
-                                    context,
-                                    R.color.black
-                                )
-                            )
-
-                            3 -> option3Tv.setTextColor(
-                                ContextCompat.getColor(
-                                    context,
-                                    R.color.black
-                                )
-                            )
-
-                            4 -> option4Tv.setTextColor(
-                                ContextCompat.getColor(
-                                    context,
-                                    R.color.black
-                                )
-                            )
-                        }
-
-                        item.userSelectedAnswer = selectedOption
-                        listener.onItemSelected(item)
-
-                        questionLists.addAll(listOf(item))
-
-                        if (img != null) {
-                            highLightClickedOptionForExam(view, img)
-                        }
-                        option1Layout.setEnabled(false)
-                        option2Layout.setEnabled(false)
-                        option3Layout.setEnabled(false)
-                        option4Layout.setEnabled(false)
-                    }
-                    option1Layout.setOnClickListener(optionClickListener)
-                    option2Layout.setOnClickListener(optionClickListener)
-                    option3Layout.setOnClickListener(optionClickListener)
-                    option4Layout.setOnClickListener(optionClickListener)
-
-                }
-
-                "normalQuestion" -> {
-                    showExplanation(showAnswers, item, this)
-
-                    if (item.userSelectedAnswer != 0) {
-                        disableOptions(this)
-                        highlightUserSelection(this, item)
-                    }
-
-                    val onClickListener = View.OnClickListener { view ->
-                        showImgOrTextView(
-                            item.explanation,
-                            item.explanationImage,
-                            explainIv,
-                            explainTv
-                        )
-                        item.userSelectedAnswer = getOptionIndex(view, this)
-                        highlightUserSelection(this, item)
-                        disableOptions(this)
-                    }
-                    // Set click listeners for all option layouts
-                    setOptionClickListeners(this, onClickListener)
-                }
+            if (item.userSelectedAnswer != 0) {
+                disableOptions(this)
+                highlightUserSelection(this, item)
             }
+
+            val onClickListener = View.OnClickListener { view ->
+                showImgOrTextView(
+                    item.explanation,
+                    item.explanationImage,
+                    explainIv,
+                    explainTv
+                )
+                item.userSelectedAnswer = getOptionIndex(view, this)
+                highlightUserSelection(this, item)
+                disableOptions(this)
+            }
+            // Set click listeners for all option layouts
+            setOptionClickListeners(this, onClickListener)
         }
     }
 
