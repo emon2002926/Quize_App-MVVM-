@@ -16,7 +16,6 @@ import javax.inject.Inject
 @HiltViewModel
 class QuestionBankViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
 
-
     private val pageNumber = 1
 
     private val _bcsYearName: MutableLiveData<Resource<MutableList<BcsYearName>>> =

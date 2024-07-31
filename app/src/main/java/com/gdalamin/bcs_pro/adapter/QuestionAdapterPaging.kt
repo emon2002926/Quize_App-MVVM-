@@ -12,24 +12,24 @@ import com.gdalamin.bcs_pro.R
 import com.gdalamin.bcs_pro.adapter.base.BaseAdapterPaging
 import com.gdalamin.bcs_pro.databinding.McqLayoutBinding
 import com.gdalamin.bcs_pro.model.Question
-import com.gdalamin.bcs_pro.ui.fragment.QuestionFragment.QuestionFragment
 import com.gdalamin.bcs_pro.util.Animations
 import com.gdalamin.bcs_pro.util.GeneralUtils
 import com.gdalamin.bcs_pro.util.GeneralUtils.convertEnglishToBangla
 
-class QuestionAdapterPaging(
-    private val listener: QuestionFragment
-) : BaseAdapterPaging<Question, McqLayoutBinding>(
-    diffCallback = object : DiffUtil.ItemCallback<Question>() {
-        override fun areItemsTheSame(oldItem: Question, newItem: Question): Boolean {
-            return oldItem.id == newItem.id
-        }
+class QuestionAdapterPaging : BaseAdapterPaging<Question, McqLayoutBinding>(DIFF_CALLBACK) {
 
-        override fun areContentsTheSame(oldItem: Question, newItem: Question): Boolean {
-            return oldItem == newItem
+    companion object {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Question>() {
+            override fun areItemsTheSame(oldItem: Question, newItem: Question): Boolean {
+                return oldItem.id == newItem.id
+            }
+
+            override fun areContentsTheSame(oldItem: Question, newItem: Question): Boolean {
+                return oldItem == newItem
+            }
         }
     }
-) {
+
 
     private var showAnswers: Boolean = false
 
@@ -83,8 +83,8 @@ class QuestionAdapterPaging(
         }
     }
 
-    interface OnItemSelectedListener {
-        fun onItemSelected(item: Question)
+    interface OnItemSelectedListener2 {
+        fun onItemSelected2(item: Question)
     }
 
     private fun showExplanation(show: Boolean, item: Question, binding: McqLayoutBinding) {

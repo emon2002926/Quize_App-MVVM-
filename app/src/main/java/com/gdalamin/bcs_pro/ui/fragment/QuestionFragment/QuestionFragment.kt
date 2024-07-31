@@ -2,7 +2,6 @@ package com.gdalamin.bcs_pro.ui.fragment.QuestionFragment
 
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -15,7 +14,6 @@ import com.gdalamin.bcs_pro.adapter.QuestionAdapter
 import com.gdalamin.bcs_pro.adapter.QuestionAdapterPaging
 import com.gdalamin.bcs_pro.databinding.FragmentQuestionBinding
 import com.gdalamin.bcs_pro.model.Question
-import com.gdalamin.bcs_pro.model.SharedData
 import com.gdalamin.bcs_pro.ui.SharedViewModel
 import com.gdalamin.bcs_pro.ui.base.BaseFragment
 import com.gdalamin.bcs_pro.util.GeneralUtils
@@ -31,7 +29,7 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionB
     QuestionAdapter.OnItemSelectedListener, NetworkReceiverManager.ConnectivityChangeListener {
 
     private val questionAdapter by lazy { QuestionAdapter(this) }
-    private val questionAdapterPaging by lazy { QuestionAdapterPaging(this) }
+    private val questionAdapterPaging by lazy { QuestionAdapterPaging() }
     private val sharedViewModel: SharedViewModel by activityViewModels()
     private val viewModel: QuestionViewModel by viewModels()
     private var mBooleanValue = false
@@ -48,111 +46,99 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionB
         setupRecyclerView()
         networkReceiverManager = NetworkReceiverManager(requireContext(), this)
 
-        // Set up the RecyclerView
-//        binding.rvQuestion.apply {
-//            layoutManager = LinearLayoutManager(context)
-//            adapter = questionAdapterPaging
-//        }
-
-        // Observe the data and submit it to the adapter
-//        lifecycleScope.launchWhenStarted {
-//            testViewModel.questions.collectLatest { pagingData ->
-//                questionAdapterPaging.submitData(pagingData)
-//            }
-//        }
-
     }
 
-
-    private fun observeSharedData() {
+    private fun observeSharedData() = binding.apply {
         sharedViewModel.sharedData.observe(viewLifecycleOwner) { data ->
             viewModel.viewModelScope.launch {
-                handleAction(data)
-            }
-        }
-    }
-
-    private suspend fun handleAction(data: SharedData) = binding.apply {
-        when (data.action) {
-            "questionBank" -> {
-                tvTitle.text = data.title
-                setupFab()
+//                handleAction(data)
+                when (data.action) {
+                    "questionBank" -> {
+                        tvTitle.text = data.title
+                        setupFab()
 //                questionAdapter.changeUiForExam("normalQuestion")
 //                viewModel.getPreviousYearQuestions(200, data.batchOrSubjectName)
-                testViewModel.getQuestions(9, data.batchOrSubjectName)
-                observePagingQuestions()
-            }
+                        testViewModel.getQuestions(9, data.batchOrSubjectName)
+                        observePagingQuestions()
+                    }
 
-            "subjectBasedQuestions" -> {
-                tvTitle.text = data.title
-                setupFab()
-                questionAdapter.changeUiForExam("normalQuestion")
-                viewModel.getSubjectExamQuestions(
-                    data.batchOrSubjectName,
-                    data.totalQuestion
-                )
-            }
+                    "subjectBasedQuestions" -> {
+                        tvTitle.text = data.title
+                        setupFab()
+                        questionAdapter.changeUiForExam("normalQuestion")
+                        viewModel.getSubjectExamQuestions(
+                            data.batchOrSubjectName,
+                            data.totalQuestion
+                        )
+                    }
 
-            "importantQuestion" -> {
-//                old
-                tvTitle.text = data.title
-                setupFab()
-//                questionAdapter.changeUiForExam("normalQuestion")
-//                viewModel.getQuestion(1)
-
-                testViewModel.getQuestions(1)
-                observePagingQuestions()
+                    "importantQuestion" -> {
+                        tvTitle.text = data.title
+                        setupFab()
+                        testViewModel.getQuestions(1)
+                        observePagingQuestions()
+                    }
+                }
             }
         }
     }
 
-    private fun observePagingQuestions() = binding.apply {
 
+    private fun observePagingQuestions() {
         setupRecyclerViewPaging()
 
-        lifecycleScope.launchWhenStarted {
+        lifecycleScope.launch {
             testViewModel.questions.collectLatest { pagingData ->
                 questionAdapterPaging.submitData(pagingData)
             }
         }
 
-//      Add LoadStateListener to handle loading states
         questionAdapterPaging.addLoadStateListener { loadState ->
             when (loadState.source.refresh) {
                 is LoadState.Loading -> {
-                    // Initial load - show shimmer
-                    shimmerLayout.startShimmer()
-                    shimmerLayout.visibility = View.VISIBLE
-                    rvQuestion.visibility = View.GONE
-                    progressBar.visibility = View.GONE
+                    binding.shimmerLayout.startShimmer()
+                    binding.shimmerLayout.visibility = View.VISIBLE
+                    binding.rvQuestion.visibility = View.GONE
+                    binding.progressBar.visibility = View.GONE
                 }
 
                 is LoadState.NotLoading -> {
-                    // Data loaded - hide shimmer
-                    shimmerLayout.stopShimmer()
-                    shimmerLayout.visibility = View.GONE
-                    rvQuestion.visibility = View.VISIBLE
-                    progressBar.visibility = View.GONE
+                    binding.shimmerLayout.stopShimmer()
+                    binding.shimmerLayout.visibility = View.GONE
+                    binding.rvQuestion.visibility = View.VISIBLE
+                    binding.progressBar.visibility = View.GONE
                 }
 
                 is LoadState.Error -> {
-                    // Error loading data - hide shimmer and show retry button
-                    shimmerLayout.stopShimmer()
-                    shimmerLayout.visibility = View.GONE
-                    rvQuestion.visibility = View.GONE
-                    progressBar.visibility = View.GONE
-                    Toast.makeText(context, "Error loading data", Toast.LENGTH_LONG).show()
+                    binding.progressBar.visibility = View.GONE
                 }
             }
 
-            // Handle the loading state for paginated data
             if (loadState.append is LoadState.Loading) {
-                progressBar.visibility = View.VISIBLE
+                binding.progressBar.visibility = View.VISIBLE
             } else {
-                progressBar.visibility = View.GONE
+                binding.progressBar.visibility = View.GONE
             }
         }
+    }
 
+    private fun setupRecyclerViewPaging() {
+        binding.rvQuestion.adapter = questionAdapterPaging.withLoadStateFooter(
+            footer = LoadingStateAdapter { questionAdapterPaging.retry() }
+        )
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        networkReceiverManager.unregister()
+    }
+
+    override fun onConnected() {
+        questionAdapterPaging.retry()
+
+    }
+
+    override fun onDisconnected() {
 
     }
 
@@ -193,11 +179,6 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionB
         layoutManager = LinearLayoutManager(context)
     }
 
-    private fun setupRecyclerViewPaging() = binding.rvQuestion.apply {
-        adapter = questionAdapterPaging
-        layoutManager = LinearLayoutManager(context)
-    }
-
 
     private fun setupFab() = binding.apply {
 
@@ -217,18 +198,9 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionB
 
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        networkReceiverManager.unregister()
-    }
 
-    override fun onConnected() {
-        observeSharedData()
-//        observeQuestions()
-    }
-
-    override fun onDisconnected() {
-    }
-
+//    override fun onItemSelected2(item: Question) {
+//    }
+//
 
 }

@@ -17,19 +17,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class QuestionViewModelTest @Inject constructor(private val repository: Repository) : ViewModel() {
-
-
-//    val questions: Flow<PagingData<Question>> = Pager(PagingConfig(pageSize = PAGE_SIZE)) {
-//        QuestionPagingSource(repository)
-//    }.flow.cachedIn(viewModelScope)
-
-
     private var _questions: Flow<PagingData<Question>> = flowOf()
     val questions: Flow<PagingData<Question>> get() = _questions
 
     private var isDataLoaded = false
-    fun getQuestions(apiNumber: Int, batch: String? = null) {
 
+    fun getQuestions(apiNumber: Int, batch: String? = null) {
         if (!isDataLoaded) {
             when (apiNumber) {
                 1 -> {
@@ -48,10 +41,71 @@ class QuestionViewModelTest @Inject constructor(private val repository: Reposito
 
                 else -> {}
             }
-
-
         }
     }
+
+
+//    private var _questions: Flow<PagingData<Question>> = flowOf()
+//    val questions: Flow<PagingData<Question>> get() = _questions
+//
+//    private var isDataLoaded = false
+//    private var apiNumber = 0
+//    private var batch: String? = null
+//
+//    fun getQuestions(apiNumber: Int, batch: String? = null) {
+//        this.apiNumber = apiNumber
+//        this.batch = batch
+//
+//        if (!isDataLoaded) {
+//            loadQuestions()
+//            isDataLoaded = true
+//        }
+//    }
+//
+//    fun refreshQuestions() {
+//        loadQuestions()
+//    }
+//
+//    private fun loadQuestions() {
+//        _questions = Pager(PagingConfig(pageSize = QUESTION_PAGE_SIZE)) {
+//            QuestionPagingSource(repository, apiNumber, batch)
+//        }.flow.cachedIn(viewModelScope)
+//    }
+
+
+    ///Old one
+//    val questions: Flow<PagingData<Question>> = Pager(PagingConfig(pageSize = PAGE_SIZE)) {
+//        QuestionPagingSource(repository)
+//    }.flow.cachedIn(viewModelScope)
+
+//    private var _questions: Flow<PagingData<Question>> = flowOf()
+//    val questions: Flow<PagingData<Question>> get() = _questions
+//
+//    private var isDataLoaded = false
+//    fun getQuestions(apiNumber: Int, batch: String? = null) {
+//
+//        if (!isDataLoaded) {
+//            when (apiNumber) {
+//                1 -> {
+//                    _questions = Pager(PagingConfig(pageSize = QUESTION_PAGE_SIZE)) {
+//                        QuestionPagingSource(repository, apiNumber)
+//                    }.flow.cachedIn(viewModelScope)
+//                    isDataLoaded = true
+//                }
+//
+//                9 -> {
+//                    _questions = Pager(PagingConfig(pageSize = QUESTION_PAGE_SIZE)) {
+//                        QuestionPagingSource(repository, apiNumber, batch)
+//                    }.flow.cachedIn(viewModelScope)
+//                    isDataLoaded = true
+//                }
+//
+//                else -> {}
+//            }
+//
+//
+//        }
+//    }
 
 
 }
