@@ -1,6 +1,5 @@
 package com.gdalamin.bcs_pro.ui.fragment.QuestionFragment
 
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -10,15 +9,16 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gdalamin.bcs_pro.R
-import com.gdalamin.bcs_pro.adapter.QuestionAdapter
-import com.gdalamin.bcs_pro.adapter.QuestionAdapterPaging
+import com.gdalamin.bcs_pro.data.model.Question
 import com.gdalamin.bcs_pro.databinding.FragmentQuestionBinding
-import com.gdalamin.bcs_pro.model.Question
 import com.gdalamin.bcs_pro.ui.SharedViewModel
+import com.gdalamin.bcs_pro.ui.adapter.specificadapters.QuestionAdapter
+import com.gdalamin.bcs_pro.ui.adapter.specificadapters.QuestionAdapterPaging
 import com.gdalamin.bcs_pro.ui.base.BaseFragment
-import com.gdalamin.bcs_pro.util.GeneralUtils
-import com.gdalamin.bcs_pro.util.Resource
-import com.gdalamin.bcs_pro.util.network.NetworkReceiverManager
+import com.gdalamin.bcs_pro.ui.common.LoadingStateAdapter
+import com.gdalamin.bcs_pro.ui.network.NetworkReceiverManager
+import com.gdalamin.bcs_pro.ui.utilities.GeneralUtils
+import com.gdalamin.bcs_pro.ui.utilities.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -51,13 +51,10 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionB
     private fun observeSharedData() = binding.apply {
         sharedViewModel.sharedData.observe(viewLifecycleOwner) { data ->
             viewModel.viewModelScope.launch {
-//                handleAction(data)
                 when (data.action) {
                     "questionBank" -> {
                         tvTitle.text = data.title
                         setupFab()
-//                questionAdapter.changeUiForExam("normalQuestion")
-//                viewModel.getPreviousYearQuestions(200, data.batchOrSubjectName)
                         testViewModel.getQuestions(9, data.batchOrSubjectName)
                         observePagingQuestions()
                     }
@@ -83,7 +80,6 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionB
         }
     }
 
-
     private fun observePagingQuestions() {
         setupRecyclerViewPaging()
 
@@ -99,25 +95,16 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionB
                     binding.shimmerLayout.startShimmer()
                     binding.shimmerLayout.visibility = View.VISIBLE
                     binding.rvQuestion.visibility = View.GONE
-                    binding.progressBar.visibility = View.GONE
                 }
 
                 is LoadState.NotLoading -> {
                     binding.shimmerLayout.stopShimmer()
                     binding.shimmerLayout.visibility = View.GONE
                     binding.rvQuestion.visibility = View.VISIBLE
-                    binding.progressBar.visibility = View.GONE
                 }
 
                 is LoadState.Error -> {
-                    binding.progressBar.visibility = View.GONE
                 }
-            }
-
-            if (loadState.append is LoadState.Loading) {
-                binding.progressBar.visibility = View.VISIBLE
-            } else {
-                binding.progressBar.visibility = View.GONE
             }
         }
     }
@@ -160,7 +147,6 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionB
                 }
 
                 is Resource.Error -> {
-                    Log.d("bhkjhdfg", response.message.toString())
                 }
             }
         }
@@ -186,6 +172,7 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionB
         btnShowAnswer.setOnClickListener {
             mBooleanValue = !mBooleanValue
             questionAdapter.showAnswer(mBooleanValue)
+            questionAdapterPaging.showAnswer(mBooleanValue)
             if (mBooleanValue) {
                 btnShowAnswer.setImageResource(R.drawable.show_answer)
             } else {
@@ -199,8 +186,6 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionB
     }
 
 
-//    override fun onItemSelected2(item: Question) {
-//    }
 //
 
 }

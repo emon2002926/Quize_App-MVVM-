@@ -4,11 +4,11 @@ import android.os.CountDownTimer
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.gdalamin.bcs_pro.model.Question
-import com.gdalamin.bcs_pro.repository.Repository
-import com.gdalamin.bcs_pro.util.Constants.Companion.PAGE_SIZE
-import com.gdalamin.bcs_pro.util.GeneralUtils
-import com.gdalamin.bcs_pro.util.Resource
+import com.gdalamin.bcs_pro.data.model.Question
+import com.gdalamin.bcs_pro.data.repository.Repository
+import com.gdalamin.bcs_pro.ui.utilities.Constants.Companion.PAGE_SIZE
+import com.gdalamin.bcs_pro.ui.utilities.GeneralUtils
+import com.gdalamin.bcs_pro.ui.utilities.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import okio.IOException
 import retrofit2.Response
@@ -53,7 +53,7 @@ class QuestionViewModel @Inject constructor(private val repository: Repository) 
 
             response.body()?.let {
                 pageNumber++
-                
+
                 Resource.Success(it)
 
             } ?: Resource.Error("No data")

@@ -5,16 +5,16 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gdalamin.bcs_pro.R
-import com.gdalamin.bcs_pro.adapter.QuestionBankAdapter
+import com.gdalamin.bcs_pro.data.model.BcsYearName
+import com.gdalamin.bcs_pro.data.model.SharedData
 import com.gdalamin.bcs_pro.databinding.FragmentQuestionBankBinding
-import com.gdalamin.bcs_pro.model.BcsYearName
-import com.gdalamin.bcs_pro.model.SharedData
 import com.gdalamin.bcs_pro.ui.SharedViewModel
+import com.gdalamin.bcs_pro.ui.adapter.specificadapters.QuestionBankAdapter
 import com.gdalamin.bcs_pro.ui.base.BaseFragment
-import com.gdalamin.bcs_pro.util.GeneralUtils.hideShimmerLayout
-import com.gdalamin.bcs_pro.util.GeneralUtils.showShimmerLayout
-import com.gdalamin.bcs_pro.util.Resource
-import com.gdalamin.bcs_pro.util.network.NetworkReceiverManager
+import com.gdalamin.bcs_pro.ui.network.NetworkReceiverManager
+import com.gdalamin.bcs_pro.ui.utilities.GeneralUtils.hideShimmerLayout
+import com.gdalamin.bcs_pro.ui.utilities.GeneralUtils.showShimmerLayout
+import com.gdalamin.bcs_pro.ui.utilities.Resource
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

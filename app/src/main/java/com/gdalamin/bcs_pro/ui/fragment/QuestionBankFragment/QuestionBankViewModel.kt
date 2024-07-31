@@ -3,10 +3,10 @@ package com.gdalamin.bcs_pro.ui.fragment.QuestionBankFragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gdalamin.bcs_pro.model.BcsYearName
-import com.gdalamin.bcs_pro.repository.Repository
-import com.gdalamin.bcs_pro.util.Constants.Companion.PAGE_SIZE
-import com.gdalamin.bcs_pro.util.Resource
+import com.gdalamin.bcs_pro.data.model.BcsYearName
+import com.gdalamin.bcs_pro.data.repository.Repository
+import com.gdalamin.bcs_pro.ui.utilities.Constants.Companion.PAGE_SIZE
+import com.gdalamin.bcs_pro.ui.utilities.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import retrofit2.Response

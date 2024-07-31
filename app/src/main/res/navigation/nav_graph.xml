@@ -38,7 +38,7 @@
     </fragment>
     <fragment
         android:id="@+id/moreFragment"
-        android:name="com.gdalamin.bcs_pro.ui.fragment.MoreFragment"
+        android:name="com.gdalamin.bcs_pro.ui.fragment.MoreFragment.MoreFragment"
         android:label="fragment_more"
         tools:layout="@layout/fragment_more" />
     <fragment
@@ -48,7 +48,7 @@
         tools:layout="@layout/fragment_question" />
     <fragment
         android:id="@+id/recordFragment"
-        android:name="com.gdalamin.bcs_pro.ui.fragment.RecordFragment"
+        android:name="com.gdalamin.bcs_pro.ui.fragment.RecordFragment.RecordFragment"
         android:label="fragment_record"
         tools:layout="@layout/fragment_record" />
     <fragment

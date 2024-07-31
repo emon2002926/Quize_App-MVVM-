@@ -5,11 +5,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gdalamin.bcs_pro.model.SubjectName
-import com.gdalamin.bcs_pro.repository.Repository
-import com.gdalamin.bcs_pro.repository.SubjectNameRepository
-import com.gdalamin.bcs_pro.util.Constants
-import com.gdalamin.bcs_pro.util.Resource
+import com.gdalamin.bcs_pro.data.model.SubjectName
+import com.gdalamin.bcs_pro.data.repository.Repository
+import com.gdalamin.bcs_pro.data.repository.SubjectNameRepository
+import com.gdalamin.bcs_pro.ui.utilities.Constants
+import com.gdalamin.bcs_pro.ui.utilities.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch

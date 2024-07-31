@@ -3,7 +3,7 @@ package com.gdalamin.bcs_pro.ui
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.gdalamin.bcs_pro.model.SharedData
+import com.gdalamin.bcs_pro.data.model.SharedData
 
 class SharedViewModel : ViewModel() {
     private val _sharedData = MutableLiveData<SharedData>()

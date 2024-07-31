@@ -1,15 +1,15 @@
 package com.gdalamin.bcs_pro.ui.fragment.QuestionFragment
 
-import QuestionPagingSource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.gdalamin.bcs_pro.model.Question
-import com.gdalamin.bcs_pro.repository.Repository
-import com.gdalamin.bcs_pro.util.Constants.Companion.QUESTION_PAGE_SIZE
+import com.gdalamin.bcs_pro.data.model.Question
+import com.gdalamin.bcs_pro.data.paging.QuestionPagingSource
+import com.gdalamin.bcs_pro.data.repository.Repository
+import com.gdalamin.bcs_pro.ui.utilities.Constants.Companion.QUESTION_PAGE_SIZE
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -68,14 +68,14 @@ class QuestionViewModelTest @Inject constructor(private val repository: Reposito
 //
 //    private fun loadQuestions() {
 //        _questions = Pager(PagingConfig(pageSize = QUESTION_PAGE_SIZE)) {
-//            QuestionPagingSource(repository, apiNumber, batch)
+//            com.gdalamin.bcs_pro.data.paging.QuestionPagingSource(repository, apiNumber, batch)
 //        }.flow.cachedIn(viewModelScope)
 //    }
 
 
     ///Old one
 //    val questions: Flow<PagingData<Question>> = Pager(PagingConfig(pageSize = PAGE_SIZE)) {
-//        QuestionPagingSource(repository)
+//        com.gdalamin.bcs_pro.data.paging.QuestionPagingSource(repository)
 //    }.flow.cachedIn(viewModelScope)
 
 //    private var _questions: Flow<PagingData<Question>> = flowOf()
@@ -88,14 +88,14 @@ class QuestionViewModelTest @Inject constructor(private val repository: Reposito
 //            when (apiNumber) {
 //                1 -> {
 //                    _questions = Pager(PagingConfig(pageSize = QUESTION_PAGE_SIZE)) {
-//                        QuestionPagingSource(repository, apiNumber)
+//                        com.gdalamin.bcs_pro.data.paging.QuestionPagingSource(repository, apiNumber)
 //                    }.flow.cachedIn(viewModelScope)
 //                    isDataLoaded = true
 //                }
 //
 //                9 -> {
 //                    _questions = Pager(PagingConfig(pageSize = QUESTION_PAGE_SIZE)) {
-//                        QuestionPagingSource(repository, apiNumber, batch)
+//                        com.gdalamin.bcs_pro.data.paging.QuestionPagingSource(repository, apiNumber, batch)
 //                    }.flow.cachedIn(viewModelScope)
 //                    isDataLoaded = true
 //                }

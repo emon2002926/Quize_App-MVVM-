@@ -3,10 +3,10 @@ package com.gdalamin.bcs_pro.ui.fragment.ExamFragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.gdalamin.bcs_pro.model.ExamResult
-import com.gdalamin.bcs_pro.model.OverallResult
-import com.gdalamin.bcs_pro.model.Question
-import com.gdalamin.bcs_pro.util.Constants
+import com.gdalamin.bcs_pro.data.model.ExamResult
+import com.gdalamin.bcs_pro.data.model.OverallResult
+import com.gdalamin.bcs_pro.data.model.Question
+import com.gdalamin.bcs_pro.ui.utilities.Constants
 
 class ResultViewModel : ViewModel() {
     private val _questionLists = MutableLiveData<MutableList<Question>>(mutableListOf())

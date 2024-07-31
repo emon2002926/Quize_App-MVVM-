@@ -6,8 +6,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.gdalamin.bcs_pro.R
+import com.gdalamin.bcs_pro.data.model.SharedData
 import com.gdalamin.bcs_pro.databinding.LayoutShowExamOptionBinding
-import com.gdalamin.bcs_pro.model.SharedData
 import com.gdalamin.bcs_pro.ui.SharedViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
