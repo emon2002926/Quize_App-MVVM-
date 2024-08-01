@@ -24,7 +24,6 @@ import com.gdalamin.bcs_pro.ui.SharedViewModel
 import com.gdalamin.bcs_pro.ui.adapter.specificadapters.QuestionAdapter
 import com.gdalamin.bcs_pro.ui.adapter.specificadapters.ResultAdapter
 import com.gdalamin.bcs_pro.ui.base.BaseFragment
-import com.gdalamin.bcs_pro.ui.fragment.QuestionFragment.QuestionViewModel
 import com.gdalamin.bcs_pro.ui.utilities.GeneralUtils
 import com.gdalamin.bcs_pro.ui.utilities.GeneralUtils.convertEnglishToBangla
 import com.gdalamin.bcs_pro.ui.utilities.GeneralUtils.logger
@@ -39,7 +38,7 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
 
     private val questionAdapter by lazy { QuestionAdapter(this) }
     private val sharedViewModel: SharedViewModel by activityViewModels()
-    private val viewModel: QuestionViewModel by viewModels()
+    private val viewModel: ExamViewModel by viewModels()
     private val resultViewmodel: ResultViewModel by viewModels()
 
     private var examType = ""

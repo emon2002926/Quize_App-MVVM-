@@ -1,14 +1,15 @@
-package com.gdalamin.bcs_pro.data.paging
+package com.gdalamin.bcs_pro.data.remote.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.gdalamin.bcs_pro.data.model.Question
-import com.gdalamin.bcs_pro.data.repository.Repository
+import com.gdalamin.bcs_pro.data.remote.repositories.QuestionRepository
 
 class QuestionPagingSource(
-    private val repository: Repository,
+    private val questionRepository: QuestionRepository,
     private val apiNumber: Int,
-    private val batch: String? = null // Optional parameter for batch if needed
+//    private val batch: String? = null, // Optional parameter for batch if needed
+    private val batchOrSubjectName: String? = null // Optional parameter for batch if needed
 ) : PagingSource<Int, Question>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Question> {
@@ -16,10 +17,22 @@ class QuestionPagingSource(
         val limit = params.loadSize
 
         return try {
-            val response = if (apiNumber == 1) {
-                repository.getQuestion(apiNumber, pageNumber, limit)
-            } else {
-                repository.getPreviousYearQuestion(apiNumber, pageNumber, limit, batch ?: "")
+            val response = when (apiNumber) {
+                1 -> questionRepository.getQuestion(apiNumber, pageNumber, limit)
+
+                10 -> questionRepository.getSubjectBasedQuestions(
+                    apiNumber,
+                    pageNumber,
+                    limit,
+                    batchOrSubjectName ?: ""
+                )
+
+                else -> questionRepository.getPreviousYearQuestion(
+                    apiNumber,
+                    pageNumber,
+                    limit,
+                    batchOrSubjectName ?: ""
+                )
             }
 
             val questions = response.body() ?: mutableListOf()

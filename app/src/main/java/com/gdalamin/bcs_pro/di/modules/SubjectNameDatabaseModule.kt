@@ -1,4 +1,4 @@
-package com.gdalamin.bcs_pro.di
+package com.gdalamin.bcs_pro.di.modules
 
 import android.content.Context
 import androidx.room.Room

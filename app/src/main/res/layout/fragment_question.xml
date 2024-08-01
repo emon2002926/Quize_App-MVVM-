@@ -44,16 +44,7 @@
                     android:textSize="23sp"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/tvTimer"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:text="00:00:00"
-                    android:textColor="@color/tangerine"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:visibility="invisible" />
+
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 

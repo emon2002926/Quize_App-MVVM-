@@ -5,9 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gdalamin.bcs_pro.data.local.repositories.SubjectNameRepository
 import com.gdalamin.bcs_pro.data.model.SubjectName
 import com.gdalamin.bcs_pro.data.repository.Repository
-import com.gdalamin.bcs_pro.data.repository.SubjectNameRepository
 import com.gdalamin.bcs_pro.ui.utilities.Constants
 import com.gdalamin.bcs_pro.ui.utilities.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel

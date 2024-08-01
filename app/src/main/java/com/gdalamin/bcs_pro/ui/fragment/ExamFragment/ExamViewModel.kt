@@ -1,12 +1,11 @@
-package com.gdalamin.bcs_pro.ui.fragment.QuestionFragment
+package com.gdalamin.bcs_pro.ui.fragment.ExamFragment
 
 import android.os.CountDownTimer
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.gdalamin.bcs_pro.data.model.Question
-import com.gdalamin.bcs_pro.data.repository.Repository
-import com.gdalamin.bcs_pro.ui.utilities.Constants.Companion.PAGE_SIZE
+import com.gdalamin.bcs_pro.data.remote.repositories.ExamRepository
 import com.gdalamin.bcs_pro.ui.utilities.GeneralUtils
 import com.gdalamin.bcs_pro.ui.utilities.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,75 +16,13 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltViewModel
-class QuestionViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
+class ExamViewModel @Inject constructor(private val repository: ExamRepository) : ViewModel() {
 
     private val _questions: MutableLiveData<Resource<MutableList<Question>>> = MutableLiveData()
     val questions: LiveData<Resource<MutableList<Question>>> = _questions
-    private val apiNumber = 1
     var pageNumber = 1
 
-    // Track if data is already loaded
     private var isDataLoaded = false
-
-    suspend fun getQuestion(pageNumber: Int) {
-        if (!isDataLoaded) {
-            _questions.postValue(Resource.Loading())
-            try {
-                if (hasInternetConnection()) {
-                    val questionResponse = repository.getQuestion(
-                        apiNumber = apiNumber,
-                        pageNumber = pageNumber,
-                        limit = PAGE_SIZE
-                    )
-                    _questions.postValue(handleQuestionResponse(questionResponse))
-                    isDataLoaded = true
-                } else {
-                    _questions.postValue(Resource.Error("No internet connection"))
-                }
-            } catch (t: Throwable) {
-                handleThrowable(t)
-            }
-        }
-    }
-
-    private fun handleQuestionResponse(response: Response<MutableList<Question>>): Resource<MutableList<Question>> {
-        return if (response.isSuccessful) {
-
-            response.body()?.let {
-                pageNumber++
-
-                Resource.Success(it)
-
-            } ?: Resource.Error("No data")
-        } else {
-            Resource.Error(response.message())
-        }
-    }
-
-
-    // Similar logic for other methods...
-    suspend fun getPreviousYearQuestions(totalQuestion: Int, batchName: String) {
-        if (!isDataLoaded) {
-            _questions.postValue(Resource.Loading())
-            try {
-                if (hasInternetConnection()) {
-                    val questionResponse =
-                        repository.getPreviousYearQuestion(
-                            apiNumber = 9,
-                            pageNumber = pageNumber,
-                            limit = totalQuestion,
-                            batch = batchName
-                        )
-                    _questions.postValue(handleQuestionResponse(questionResponse))
-                    isDataLoaded = true
-                } else {
-                    _questions.postValue(Resource.Error("No internet connection"))
-                }
-            } catch (t: Throwable) {
-                handleThrowable(t)
-            }
-        }
-    }
 
     suspend fun getExamQuestions(totalQuestion: Int) {
         if (!isDataLoaded) {
@@ -122,6 +59,21 @@ class QuestionViewModel @Inject constructor(private val repository: Repository) 
         }
     }
 
+    private fun handleQuestionResponse(response: Response<MutableList<Question>>): Resource<MutableList<Question>> {
+        return if (response.isSuccessful) {
+
+            response.body()?.let {
+                pageNumber++
+
+                Resource.Success(it)
+
+            } ?: Resource.Error("No data")
+        } else {
+            Resource.Error(response.message())
+        }
+    }
+
+
     private fun handleThrowable(t: Throwable) {
         _questions.postValue(
             when (t) {
@@ -133,30 +85,6 @@ class QuestionViewModel @Inject constructor(private val repository: Repository) 
 
 
     private fun hasInternetConnection(): Boolean {
-//        val connectivityManager = getApplication<BcsApplication>().getSystemService(
-//            Context.CONNECTIVITY_SERVICE
-//        ) as ConnectivityManager
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-//            val activeNetwork = connectivityManager.activeNetwork?:return false
-//            val capabilities = connectivityManager.getNetworkCapabilities(activeNetwork)?:return false
-//
-//            return when{
-//                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ->true
-//                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ->true
-//                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) ->true
-//                else->false
-//            }
-//        }else{
-//            connectivityManager.activeNetworkInfo?.run {
-//                return when(type){
-//                    ConnectivityManager.TYPE_WIFI ->true
-//                    ConnectivityManager.TYPE_MOBILE ->true
-//                    ConnectivityManager.TYPE_ETHERNET ->true
-//                    else->false
-//                }
-//
-//            }
-//        }
         return true
     }
 
@@ -193,5 +121,56 @@ class QuestionViewModel @Inject constructor(private val repository: Repository) 
         }
         countDownTimer?.start()
     }
+
+
+    /*
+suspend fun getQuestion(pageNumber: Int) {
+    if (!isDataLoaded) {
+        _questions.postValue(Resource.Loading())
+        try {
+            if (hasInternetConnection()) {
+                val questionResponse = repository.getQuestion(
+                    apiNumber = apiNumber,
+                    pageNumber = pageNumber,
+                    limit = PAGE_SIZE
+                )
+                _questions.postValue(handleQuestionResponse(questionResponse))
+                isDataLoaded = true
+            } else {
+                _questions.postValue(Resource.Error("No internet connection"))
+            }
+        } catch (t: Throwable) {
+            handleThrowable(t)
+        }
+    }
+}
+
+// Similar logic for other methods...
+suspend fun getPreviousYearQuestions(totalQuestion: Int, batchName: String) {
+    if (!isDataLoaded) {
+        _questions.postValue(Resource.Loading())
+        try {
+            if (hasInternetConnection()) {
+                val questionResponse =
+                    repository.getPreviousYearQuestion(
+                        apiNumber = 9,
+                        pageNumber = pageNumber,
+                        limit = totalQuestion,
+                        batch = batchName
+                    )
+                _questions.postValue(handleQuestionResponse(questionResponse))
+                isDataLoaded = true
+            } else {
+                _questions.postValue(Resource.Error("No internet connection"))
+            }
+        } catch (t: Throwable) {
+            handleThrowable(t)
+        }
+    }
+}
+
+
+ */
+
 
 }

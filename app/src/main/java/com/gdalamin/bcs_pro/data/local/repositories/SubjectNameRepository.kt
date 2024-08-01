@@ -1,4 +1,4 @@
-package com.gdalamin.bcs_pro.data.repository
+package com.gdalamin.bcs_pro.data.local.repositories
 
 import androidx.lifecycle.LiveData
 import com.gdalamin.bcs_pro.data.local.dao.SubjectDao
@@ -8,7 +8,6 @@ import javax.inject.Inject
 class SubjectNameRepository @Inject constructor(
     private val subjectDao: SubjectDao
 ) {
-    val allSubjectsName: LiveData<List<SubjectName>> = subjectDao.getSubjectName()
 
     suspend fun insertAll(subjectsName: List<SubjectName>) {
         subjectDao.insertAllSubjectName(subjectsName)

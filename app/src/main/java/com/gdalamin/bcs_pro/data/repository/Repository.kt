@@ -2,17 +2,36 @@ package com.gdalamin.bcs_pro.data.repository
 
 import com.gdalamin.bcs_pro.data.model.BcsYearName
 import com.gdalamin.bcs_pro.data.model.LiveExam
-import com.gdalamin.bcs_pro.data.model.Question
 import com.gdalamin.bcs_pro.data.model.SubjectName
 import com.gdalamin.bcs_pro.data.remote.api.ApiService
 import com.gdalamin.bcs_pro.ui.utilities.Constants.Companion.API_KEY
-import com.gdalamin.bcs_pro.ui.utilities.Constants.Companion.NORMAL_EXAM
-import com.gdalamin.bcs_pro.ui.utilities.Constants.Companion.SUBJECT_BASED_EXAM
 import retrofit2.Response
 import javax.inject.Inject
 
 class Repository @Inject constructor(private val apiService: ApiService) {
 
+    suspend fun getExamInfo(
+        apiNumber: Int,
+        pageNumber: Int,
+        limit: Int
+    ): Response<MutableList<LiveExam>> {
+        return apiService.getExamInfo(API_KEY, apiNumber, pageNumber, limit)
+    }
+
+    suspend fun getBcsYearName(
+        apiNumber: Int, pageNumber: Int, limit: Int
+    ): Response<MutableList<BcsYearName>> {
+        return apiService.getBcsYearName(API_KEY, apiNumber, pageNumber, limit)
+    }
+
+    suspend fun getSubjects(
+        apiNumber: Int, pageNumber: Int, limit: Int
+    ): Response<MutableList<SubjectName>> {
+        return apiService.getSubjects(API_KEY, apiNumber, pageNumber, limit)
+    }
+
+    /*
+    older question api
     suspend fun getQuestion(
         apiNumber: Int,
         pageNumber: Int,
@@ -30,17 +49,25 @@ class Repository @Inject constructor(private val apiService: ApiService) {
         return apiService.getPreviousYearQuestions(API_KEY, apiNumber, pageNumber, limit, batch)
     }
 
-    suspend fun getExamInfo(
+    suspend fun getSubjectBasedQuestions(
         apiNumber: Int,
         pageNumber: Int,
-        limit: Int
-    ): Response<MutableList<LiveExam>> {
-        return apiService.getExamInfo(API_KEY, apiNumber, pageNumber, limit)
+        limit: Int,
+        subjectName: String
+    ): Response<MutableList<Question>> {
+        return apiService.getPreviousYearQuestions(
+            API_KEY,
+            apiNumber,
+            pageNumber,
+            limit,
+            subjectName
+        )
     }
+
+
 
     suspend fun getExamQuestion(
         totalQuestions: Int
-
     ): Response<MutableList<Question>> {
         return apiService.getExamQuestions(
             API_KEY,
@@ -62,17 +89,6 @@ class Repository @Inject constructor(private val apiService: ApiService) {
     }
 
 
-    suspend fun getBcsYearName(
-        apiNumber: Int, pageNumber: Int, limit: Int
-    ): Response<MutableList<BcsYearName>> {
-        return apiService.getBcsYearName(API_KEY, apiNumber, pageNumber, limit)
-    }
-
-    suspend fun getSubjects(
-        apiNumber: Int, pageNumber: Int, limit: Int
-    ): Response<MutableList<SubjectName>> {
-        return apiService.getSubjects(API_KEY, apiNumber, pageNumber, limit)
-    }
-
+     */
 
 }

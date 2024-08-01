@@ -1,4 +1,4 @@
-package com.gdalamin.bcs_pro.data.repository
+package com.gdalamin.bcs_pro.data.local.repositories
 
 import androidx.lifecycle.LiveData
 import com.gdalamin.bcs_pro.data.local.dao.ExamInfoDao
@@ -8,7 +8,6 @@ import javax.inject.Inject
 class ExamInfoRepository @Inject constructor(
     private val examInfoDao: ExamInfoDao
 ) {
-    val allExamInfo: LiveData<List<LiveExam>> = examInfoDao.getExamInfo()
 
     suspend fun insertAll(exams: List<LiveExam>) {
         examInfoDao.insertAll(exams)

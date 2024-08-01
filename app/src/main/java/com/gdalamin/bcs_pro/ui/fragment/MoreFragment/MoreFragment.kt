@@ -37,7 +37,7 @@ class MoreFragment : BaseFragment<FragmentMoreBinding>(FragmentMoreBinding::infl
             }
         }
         appRating.setOnClickListener {
-
+            openPlayStoreForRating()
         }
         shareBtn.setOnClickListener {
             val shareIntent = Intent(Intent.ACTION_SEND)
@@ -83,6 +83,22 @@ class MoreFragment : BaseFragment<FragmentMoreBinding>(FragmentMoreBinding::infl
             startActivity(intent)
         } catch (e: ActivityNotFoundException) {
             // Messenger is not installed, handle the error here
+        }
+    }
+
+
+    private fun openPlayStoreForRating() {
+        val packageName = requireContext().packageName
+        try {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$packageName"))
+            startActivity(intent)
+        } catch (e: Exception) {
+            // In case the Play Store app is not installed on the user's device
+            val intent = Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("https://play.google.com/store/apps/details?id=$packageName")
+            )
+            startActivity(intent)
         }
     }
 }

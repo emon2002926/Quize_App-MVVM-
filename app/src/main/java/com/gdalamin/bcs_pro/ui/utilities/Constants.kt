@@ -5,7 +5,7 @@ class Constants {
         const val API_KEY = "abc123"
         const val BASE_URL = "https://bcs.bdstar.xyz"
         const val PAGE_SIZE = 50
-        const val QUESTION_PAGE_SIZE = 10
+        const val QUESTION_PAGE_SIZE = 2
 
         const val NORMAL_EXAM = "normal"
         const val SUBJECT_BASED_EXAM = "subjectBased"

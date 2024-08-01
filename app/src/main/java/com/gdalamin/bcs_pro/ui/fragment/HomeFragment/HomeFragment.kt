@@ -43,6 +43,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         binding.horizontalScrollView.isHorizontalScrollBarEnabled = false
 
         observeLiveExamInfo()
+
         observeSubjectName()
 
         setupRecyclerView(binding.rvSubjects, subjectAdapter)

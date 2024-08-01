@@ -9,16 +9,13 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gdalamin.bcs_pro.R
-import com.gdalamin.bcs_pro.data.model.Question
 import com.gdalamin.bcs_pro.databinding.FragmentQuestionBinding
 import com.gdalamin.bcs_pro.ui.SharedViewModel
-import com.gdalamin.bcs_pro.ui.adapter.specificadapters.QuestionAdapter
 import com.gdalamin.bcs_pro.ui.adapter.specificadapters.QuestionAdapterPaging
 import com.gdalamin.bcs_pro.ui.base.BaseFragment
 import com.gdalamin.bcs_pro.ui.common.LoadingStateAdapter
+import com.gdalamin.bcs_pro.ui.fragment.ExamFragment.ExamViewModel
 import com.gdalamin.bcs_pro.ui.network.NetworkReceiverManager
-import com.gdalamin.bcs_pro.ui.utilities.GeneralUtils
-import com.gdalamin.bcs_pro.ui.utilities.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -26,26 +23,23 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionBinding::inflate),
-    QuestionAdapter.OnItemSelectedListener, NetworkReceiverManager.ConnectivityChangeListener {
+    NetworkReceiverManager.ConnectivityChangeListener {
 
-    private val questionAdapter by lazy { QuestionAdapter(this) }
     private val questionAdapterPaging by lazy { QuestionAdapterPaging() }
     private val sharedViewModel: SharedViewModel by activityViewModels()
-    private val viewModel: QuestionViewModel by viewModels()
+    private val viewModel: ExamViewModel by viewModels()
     private var mBooleanValue = false
 
     private lateinit var networkReceiverManager: NetworkReceiverManager
 
-    private val testViewModel: QuestionViewModelTest by viewModels()
+    private val testViewModel: QuestionViewMode by viewModels()
 
     override fun loadUi() {
         binding.backButton.setOnClickListener { findNavController().navigateUp() }
 
         observeSharedData()
-        observeQuestions()
         setupRecyclerView()
         networkReceiverManager = NetworkReceiverManager(requireContext(), this)
-
     }
 
     private fun observeSharedData() = binding.apply {
@@ -62,11 +56,8 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionB
                     "subjectBasedQuestions" -> {
                         tvTitle.text = data.title
                         setupFab()
-                        questionAdapter.changeUiForExam("normalQuestion")
-                        viewModel.getSubjectExamQuestions(
-                            data.batchOrSubjectName,
-                            data.totalQuestion
-                        )
+                        testViewModel.getQuestions(10, data.batchOrSubjectName)
+                        observePagingQuestions()
                     }
 
                     "importantQuestion" -> {
@@ -81,14 +72,11 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionB
     }
 
     private fun observePagingQuestions() {
-        setupRecyclerViewPaging()
-
         lifecycleScope.launch {
             testViewModel.questions.collectLatest { pagingData ->
                 questionAdapterPaging.submitData(pagingData)
             }
         }
-
         questionAdapterPaging.addLoadStateListener { loadState ->
             when (loadState.source.refresh) {
                 is LoadState.Loading -> {
@@ -109,69 +97,16 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionB
         }
     }
 
-    private fun setupRecyclerViewPaging() {
-        binding.rvQuestion.adapter = questionAdapterPaging.withLoadStateFooter(
+    private fun setupRecyclerView() = binding.rvQuestion.apply {
+        adapter = questionAdapterPaging.withLoadStateFooter(
             footer = LoadingStateAdapter { questionAdapterPaging.retry() }
         )
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        networkReceiverManager.unregister()
-    }
-
-    override fun onConnected() {
-        questionAdapterPaging.retry()
-
-    }
-
-    override fun onDisconnected() {
-
-    }
-
-    private fun observeQuestions() {
-
-        viewModel.questions.observe(viewLifecycleOwner) { response ->
-            when (response) {
-                is Resource.Loading -> {
-                    GeneralUtils.showShimmerLayout(
-                        binding.shimmerLayout,
-                        binding.rvQuestion
-                    )
-                    binding.btnShowAnswer.visibility = View.GONE
-                }
-
-                is Resource.Success -> {
-                    handleSuccess(response.data)
-                    binding.btnShowAnswer.visibility = View.VISIBLE
-                }
-
-                is Resource.Error -> {
-                }
-            }
-        }
-    }
-
-    private fun handleSuccess(questionList: List<Question>?) {
-        GeneralUtils.hideShimmerLayout(binding.shimmerLayout, binding.rvQuestion)
-        questionList?.let {
-            questionAdapter.submitList(it)
-        }
-    }
-
-
-    private fun setupRecyclerView() = binding.rvQuestion.apply {
-        adapter = questionAdapter
         layoutManager = LinearLayoutManager(context)
     }
 
-
     private fun setupFab() = binding.apply {
-
-        tvTimer.visibility = View.GONE
         btnShowAnswer.setOnClickListener {
             mBooleanValue = !mBooleanValue
-            questionAdapter.showAnswer(mBooleanValue)
             questionAdapterPaging.showAnswer(mBooleanValue)
             if (mBooleanValue) {
                 btnShowAnswer.setImageResource(R.drawable.show_answer)
@@ -181,11 +116,14 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionB
         }
     }
 
-    override fun onItemSelected(item: Question) {
-
+    override fun onConnected() {
+        questionAdapterPaging.retry()
     }
 
+    override fun onDisconnected() {}
 
-//
-
+    override fun onDestroyView() {
+        super.onDestroyView()
+        networkReceiverManager.unregister()
+    }
 }

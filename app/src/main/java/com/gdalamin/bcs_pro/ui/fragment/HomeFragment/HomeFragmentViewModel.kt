@@ -4,8 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gdalamin.bcs_pro.data.local.repositories.ExamInfoRepository
 import com.gdalamin.bcs_pro.data.model.LiveExam
-import com.gdalamin.bcs_pro.data.repository.ExamInfoRepository
+import com.gdalamin.bcs_pro.data.remote.repositories.ExamRepository
 import com.gdalamin.bcs_pro.data.repository.Repository
 import com.gdalamin.bcs_pro.ui.utilities.Constants.Companion.PAGE_SIZE
 import com.gdalamin.bcs_pro.ui.utilities.Resource
@@ -18,6 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeFragmentViewModel @Inject constructor(
     private val repository: Repository,
+    private val examRepository: ExamRepository,
     private val examInfoRepository: ExamInfoRepository
 ) : ViewModel() {
 
@@ -31,7 +33,7 @@ class HomeFragmentViewModel @Inject constructor(
                 _liveExamInfo.postValue(Resource.Loading())
                 try {
                     if (hasInternetConnection()) {
-                        val response = repository.getExamInfo(apiNumber, pageNumber, PAGE_SIZE)
+                        val response = examRepository.getExamInfo(apiNumber, pageNumber, PAGE_SIZE)
                         val result = handleLiveExamResponse(response)
                         _liveExamInfo.postValue(result)
 
