@@ -1,7 +1,5 @@
 package com.gdalamin.bcs_pro.data.remote.api
 
-import com.gdalamin.bcs_pro.data.model.BcsYearName
-import com.gdalamin.bcs_pro.data.model.LiveExam
 import com.gdalamin.bcs_pro.data.model.SubjectName
 import retrofit2.Response
 import retrofit2.http.GET
@@ -20,24 +18,24 @@ interface ApiService {
 
         ): Response<MutableList<SubjectName>>
 
-    @GET("/api/appUtil.php")
-    suspend fun getBcsYearName(
-        @Query("apiKey")
-        apiKey: String = "abc123",
-        @Query("apiNum") apiNum: Int,
-        @Query("page") pageNumber: Int,
-        @Query("limit") limit: Int,
-    ): Response<MutableList<BcsYearName>>
-
-
-    @GET("/api/appUtil.php")
-    suspend fun getExamInfo(
-        @Query("apiKey")
-        apiKey: String = "abc123",
-        @Query("apiNum") apiNum: Int,
-        @Query("page") pageNumber: Int,
-        @Query("limit") limit: Int,
-    ): Response<MutableList<LiveExam>>
+//    @GET("/api/appUtil.php")
+//    suspend fun getBcsYearName(
+//        @Query("apiKey")
+//        apiKey: String = "abc123",
+//        @Query("apiNum") apiNum: Int,
+//        @Query("page") pageNumber: Int,
+//        @Query("limit") limit: Int,
+//    ): Response<MutableList<BcsYearName>>
+//
+//
+//    @GET("/api/appUtil.php")
+//    suspend fun getExamInfo(
+//        @Query("apiKey")
+//        apiKey: String = "abc123",
+//        @Query("apiNum") apiNum: Int,
+//        @Query("page") pageNumber: Int,
+//        @Query("limit") limit: Int,
+//    ): Response<MutableList<LiveExam>>
 
 
     /*

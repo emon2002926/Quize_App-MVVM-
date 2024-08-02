@@ -129,7 +129,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         }
         // Check for data and decide to fetch from network or not
         viewLifecycleOwner.lifecycleScope.launch {
-            subjectViewModel.getSubjectNameN(apiNumber = 3)
+            subjectViewModel.getSubjectsName(apiNumber = 3)
         }
     }
 

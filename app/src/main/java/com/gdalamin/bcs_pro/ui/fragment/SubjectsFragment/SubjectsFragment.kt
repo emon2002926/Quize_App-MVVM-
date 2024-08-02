@@ -68,7 +68,7 @@ class SubjectsFragment : BaseFragment<FragmentSubjectsBinding>(FragmentSubjectsB
         }
         // Check for data and decide to fetch from network or not
         viewLifecycleOwner.lifecycleScope.launch {
-            subjectViewModel.getSubjectNameN(apiNumber = 3)
+            subjectViewModel.getSubjectsName(apiNumber = 3)
         }
 
     }

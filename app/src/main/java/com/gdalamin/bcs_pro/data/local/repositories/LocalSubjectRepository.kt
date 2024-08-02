@@ -5,7 +5,7 @@ import com.gdalamin.bcs_pro.data.local.dao.SubjectDao
 import com.gdalamin.bcs_pro.data.model.SubjectName
 import javax.inject.Inject
 
-class SubjectNameRepository @Inject constructor(
+class LocalSubjectRepository @Inject constructor(
     private val subjectDao: SubjectDao
 ) {
 

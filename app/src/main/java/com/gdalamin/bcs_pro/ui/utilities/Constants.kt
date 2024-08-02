@@ -5,12 +5,10 @@ class Constants {
         const val API_KEY = "abc123"
         const val BASE_URL = "https://bcs.bdstar.xyz"
         const val PAGE_SIZE = 50
-        const val QUESTION_PAGE_SIZE = 2
+        const val QUESTION_PAGE_SIZE = 5
 
         const val NORMAL_EXAM = "normal"
         const val SUBJECT_BASED_EXAM = "subjectBased"
-        const val SEARCH_NEWS_TIME_DELAY = 500L
-        const val QUERY_PAGE_SIZE = 20
         val subjectsName = listOf(
             "আন্তর্জাতিক বিষয়াবলি",
             "বাংলাদেশ বিষয়াবলি",

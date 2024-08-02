@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.gdalamin.bcs_pro.data.local.repositories.ExamInfoRepository
 import com.gdalamin.bcs_pro.data.model.LiveExam
 import com.gdalamin.bcs_pro.data.remote.repositories.ExamRepository
-import com.gdalamin.bcs_pro.data.repository.Repository
 import com.gdalamin.bcs_pro.ui.utilities.Constants.Companion.PAGE_SIZE
 import com.gdalamin.bcs_pro.ui.utilities.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,7 +17,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeFragmentViewModel @Inject constructor(
-    private val repository: Repository,
     private val examRepository: ExamRepository,
     private val examInfoRepository: ExamInfoRepository
 ) : ViewModel() {

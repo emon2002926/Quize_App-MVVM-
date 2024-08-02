@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gdalamin.bcs_pro.data.model.BcsYearName
-import com.gdalamin.bcs_pro.data.repository.Repository
+import com.gdalamin.bcs_pro.data.remote.repositories.QuestionBankRepository
 import com.gdalamin.bcs_pro.ui.utilities.Constants.Companion.PAGE_SIZE
 import com.gdalamin.bcs_pro.ui.utilities.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,7 +14,8 @@ import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
-class QuestionBankViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
+class QuestionBankViewModel @Inject constructor(private val questionBankRepository: QuestionBankRepository) :
+    ViewModel() {
 
     private val pageNumber = 1
 
@@ -31,7 +32,8 @@ class QuestionBankViewModel @Inject constructor(private val repository: Reposito
         _bcsYearName.postValue(Resource.Loading())
         try {
             if (hasInternetConnection()) {
-                val response = repository.getBcsYearName(apiNumber, pageNumber, PAGE_SIZE)
+                val response =
+                    questionBankRepository.getBcsYearName(apiNumber, pageNumber, PAGE_SIZE)
                 _bcsYearName.postValue(handleSubjectNameResponse(response))
                 bcsYearName = _bcsYearName
 
@@ -59,30 +61,6 @@ class QuestionBankViewModel @Inject constructor(private val repository: Reposito
 
 
     private fun hasInternetConnection(): Boolean {
-//        val connectivityManager = getApplication<BcsApplication>().getSystemService(
-//            Context.CONNECTIVITY_SERVICE
-//        ) as ConnectivityManager
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-//            val activeNetwork = connectivityManager.activeNetwork?:return false
-//            val capabilities = connectivityManager.getNetworkCapabilities(activeNetwork)?:return false
-//
-//            return when{
-//                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ->true
-//                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ->true
-//                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) ->true
-//                else->false
-//            }
-//        }else{
-//            connectivityManager.activeNetworkInfo?.run {
-//                return when(type){
-//                    ConnectivityManager.TYPE_WIFI ->true
-//                    ConnectivityManager.TYPE_MOBILE ->true
-//                    ConnectivityManager.TYPE_ETHERNET ->true
-//                    else->false
-//                }
-//
-//            }
-//        }
 
         return true
     }

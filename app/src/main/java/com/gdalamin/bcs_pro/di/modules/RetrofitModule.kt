@@ -3,10 +3,13 @@ package com.gdalamin.bcs_pro.di.modules
 import com.gdalamin.bcs_pro.data.remote.api.ApiService
 import com.gdalamin.bcs_pro.data.remote.api.ExamApi
 import com.gdalamin.bcs_pro.data.remote.api.QuestionApi
+import com.gdalamin.bcs_pro.data.remote.api.QuestionBankApi
 import com.gdalamin.bcs_pro.data.remote.api.RetrofitInstance
+import com.gdalamin.bcs_pro.data.remote.api.SubjectsApi
 import com.gdalamin.bcs_pro.data.remote.repositories.ExamRepository
+import com.gdalamin.bcs_pro.data.remote.repositories.QuestionBankRepository
 import com.gdalamin.bcs_pro.data.remote.repositories.QuestionRepository
-import com.gdalamin.bcs_pro.data.repository.Repository
+import com.gdalamin.bcs_pro.data.remote.repositories.SubjectRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,11 +20,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 class RetrofitModule {
 
-    @Provides
-    @Singleton
-    fun provideRepository(apiService: ApiService): Repository {
-        return Repository(apiService)
-    }
 
     @Provides
     @Singleton
@@ -54,5 +52,32 @@ class RetrofitModule {
     fun provideExamApi(): ExamApi {
         return RetrofitInstance.examApi
     }
+
+
+    @Provides
+    @Singleton
+    fun provideQuestionBankRepository(questionBankApi: QuestionBankApi): QuestionBankRepository {
+        return QuestionBankRepository(questionBankApi)
+    }
+
+    @Provides
+    @Singleton
+    fun provideQuestionBankApi(): QuestionBankApi {
+        return RetrofitInstance.questionBankApi
+    }
+
+
+    @Provides
+    @Singleton
+    fun provideSubjectsRepository(subjectsApi: SubjectsApi): SubjectRepository {
+        return SubjectRepository(subjectsApi)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSubjectsApi(): SubjectsApi {
+        return RetrofitInstance.subjectsApi
+    }
+
 
 }
