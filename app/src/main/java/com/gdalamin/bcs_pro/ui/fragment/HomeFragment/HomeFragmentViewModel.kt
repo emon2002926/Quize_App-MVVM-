@@ -1,10 +1,12 @@
 package com.gdalamin.bcs_pro.ui.fragment.HomeFragment
 
+import android.content.SharedPreferences
+import android.icu.util.Calendar
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gdalamin.bcs_pro.data.local.repositories.ExamInfoRepository
+import com.gdalamin.bcs_pro.data.local.repositories.LocalExamInfoRepository
 import com.gdalamin.bcs_pro.data.model.LiveExam
 import com.gdalamin.bcs_pro.data.remote.repositories.ExamRepository
 import com.gdalamin.bcs_pro.ui.utilities.Constants.Companion.PAGE_SIZE
@@ -18,29 +20,31 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeFragmentViewModel @Inject constructor(
     private val examRepository: ExamRepository,
-    private val examInfoRepository: ExamInfoRepository
+    private val examInfoRepository: LocalExamInfoRepository,
+    private val sharedPreferences: SharedPreferences
 ) : ViewModel() {
 
     private val _liveExamInfo: MutableLiveData<Resource<MutableList<LiveExam>>> = MutableLiveData()
     val liveExamInfo: LiveData<Resource<MutableList<LiveExam>>> = _liveExamInfo
     private val pageNumber = 1
 
+    init {
+        clearDatabaseIfNeeded()
+    }
+
     fun getExamInfo(apiNumber: Int) {
         viewModelScope.launch {
             if (examInfoRepository.isDatabaseEmpty()) {
                 _liveExamInfo.postValue(Resource.Loading())
                 try {
-                    if (hasInternetConnection()) {
-                        val response = examRepository.getExamInfo(apiNumber, pageNumber, PAGE_SIZE)
-                        val result = handleLiveExamResponse(response)
-                        _liveExamInfo.postValue(result)
+                    val response = examRepository.getExamInfo(apiNumber, pageNumber, PAGE_SIZE)
+                    val result = handleLiveExamResponse(response)
+                    _liveExamInfo.postValue(result)
 
-                        if (result is Resource.Success) {
-                            saveExamsToDatabase(result.data)
-                        }
-                    } else {
-                        _liveExamInfo.postValue(Resource.Error("No internet connection"))
+                    if (result is Resource.Success) {
+                        saveExamsToDatabase(result.data)
                     }
+
                 } catch (t: Throwable) {
                     when (t) {
                         is IOException -> _liveExamInfo.postValue(Resource.Error("Network Failure"))
@@ -76,7 +80,28 @@ class HomeFragmentViewModel @Inject constructor(
         return examInfoRepository.getAllExams()
     }
 
-    private fun hasInternetConnection(): Boolean {
-        return true
+    fun deleteAllExamInfo() {
+        viewModelScope.launch {
+            examInfoRepository.deleteAllExamInfo()
+        }
     }
+
+
+    private fun clearDatabaseIfNeeded() {
+        val lastClearedDate = sharedPreferences.getLong("last_cleared_date", 0)
+        val calendar = Calendar.getInstance()
+        calendar.timeInMillis = lastClearedDate
+
+        val lastClearedDay = calendar.get(Calendar.DAY_OF_YEAR)
+        val currentDay = Calendar.getInstance().get(Calendar.DAY_OF_YEAR)
+
+        if (currentDay != lastClearedDay) {
+            deleteAllExamInfo()
+            sharedPreferences.edit().putLong("last_cleared_date", System.currentTimeMillis())
+                .apply()
+        } else {
+        }
+    }
+
+
 }

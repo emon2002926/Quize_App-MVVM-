@@ -161,7 +161,11 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
                 tvTitle.text = data.title
                 totalQuestion = data.totalQuestion
                 questionAdapter.changeUiForExam("examQuestion")
-                viewModel.getExamQuestions(data.totalQuestion)
+//                viewModel.getExamQuestions(data.totalQuestion)
+                viewModel.getExamQuestionsTest(
+                    5, 5, 5, 5,
+                    5, 5, 5, 5, 5, 5
+                )
                 examType = data.questionType
                 timeObserver(data.time)
             }

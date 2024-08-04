@@ -2,6 +2,7 @@ package com.gdalamin.bcs_pro.ui.fragment.QuestionBankFragment
 
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gdalamin.bcs_pro.R
@@ -16,13 +17,15 @@ import com.gdalamin.bcs_pro.ui.utilities.GeneralUtils.hideShimmerLayout
 import com.gdalamin.bcs_pro.ui.utilities.GeneralUtils.showShimmerLayout
 import com.gdalamin.bcs_pro.ui.utilities.Resource
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class QuestionBankFragment :
     BaseFragment<FragmentQuestionBankBinding>(FragmentQuestionBankBinding::inflate),
     QuestionBankAdapter.HandleClickListener, NetworkReceiverManager.ConnectivityChangeListener {
 
-    private val viewModel: QuestionBankViewModel by viewModels()
+    //    private val viewModel: QuestionBankViewModel by viewModels()
+    private val viewModelTest: QuestionBankViewModelTest by viewModels()
     private val sharedViewModel: SharedViewModel by activityViewModels()
 
     private val questionBankAdapter = QuestionBankAdapter(this)
@@ -31,43 +34,54 @@ class QuestionBankFragment :
     override fun loadUi() {
         binding.backButton.setOnClickListener { findNavController().navigateUp() }
 
-        observeQuestionYearName()
+//        observeQuestionYearName()
+        observeBcsYearName()
         setupRecyclerView()
         networkReceiverManager = NetworkReceiverManager(requireContext(), this)
     }
 
-    private fun observeQuestionYearName() {
-        viewModel.bcsYearName.observe(viewLifecycleOwner) { response ->
+
+    private fun observeBcsYearName() = binding.apply {
+        // Observe data from Room database
+        viewModelTest.bcsYearName.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is Resource.Error -> {
-                    showShimmerLayout(binding.shimmerLayout, binding.rvQuestionBank)
+                    showShimmerLayout(shimmerLayout, rvQuestionBank)
                 }
 
                 is Resource.Loading -> {
-                    showShimmerLayout(binding.shimmerLayout, binding.rvQuestionBank)
+                    showShimmerLayout(shimmerLayout, rvQuestionBank)
                 }
 
                 is Resource.Success -> {
-                    hideShimmerLayout(binding.shimmerLayout, binding.rvQuestionBank)
+                    hideShimmerLayout(shimmerLayout, rvQuestionBank)
                     response.data?.let {
                         questionBankAdapter.submitList(it)
                     }
                 }
             }
         }
+        viewModelTest.getBcsYearNameDatabase().observe(viewLifecycleOwner) { exams ->
+            questionBankAdapter.submitList(exams)
+        }
+        // Check for data and decide to fetch from network or not
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModelTest.getBcsYearName(apiNumber = 5)
+        }
     }
+
 
     private fun setupRecyclerView() = binding.rvQuestionBank.apply {
         adapter = questionBankAdapter
         layoutManager = LinearLayoutManager(context)
     }
 
-    override fun onClick(bcsYearName: BcsYearName) {
+    override fun onClick(bscYearName: BcsYearName) {
         val data = SharedData(
-            title = bcsYearName.bcsYearName,
+            title = bscYearName.bcsYearName,
             action = "questionBank",
             totalQuestion = 50, questionType = "",
-            batchOrSubjectName = bcsYearName.bcsYearName,
+            batchOrSubjectName = bscYearName.bcsYearName,
             time = 0
         )
         sharedViewModel.setSharedData(data)
@@ -80,7 +94,7 @@ class QuestionBankFragment :
     }
 
     override fun onConnected() {
-        observeQuestionYearName()
+//        observeQuestionYearName()
     }
 
     override fun onDisconnected() {

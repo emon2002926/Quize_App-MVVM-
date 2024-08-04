@@ -38,7 +38,7 @@ class SubjectViewModel @Inject constructor(
                     _subjects.postValue(handleResponseApi(response))
 
                     if (result is Resource.Success) {
-                        saveExamsToDatabase(result.data)
+                        saveSubjectNameToDatabase(result.data)
                     }
 
                 } catch (t: Throwable) {
@@ -67,7 +67,7 @@ class SubjectViewModel @Inject constructor(
     }
 
 
-    private suspend fun saveExamsToDatabase(exams: MutableList<SubjectName>?) {
+    private suspend fun saveSubjectNameToDatabase(exams: MutableList<SubjectName>?) {
         exams?.let {
             localSubjectRepository.insertAll(it)
         }

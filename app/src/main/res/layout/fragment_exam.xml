@@ -65,7 +65,8 @@
         <com.facebook.shimmer.ShimmerFrameLayout
             android:id="@+id/shimmerLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:visibility="visible">
 
             <include layout="@layout/shimer_mcq_baground" />
         </com.facebook.shimmer.ShimmerFrameLayout>

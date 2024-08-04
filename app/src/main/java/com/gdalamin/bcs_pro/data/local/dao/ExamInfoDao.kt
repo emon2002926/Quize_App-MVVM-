@@ -24,4 +24,7 @@ interface ExamInfoDao {
 
     @Query("SELECT * FROM LiveExam")
     suspend fun getAllExamsNonLive(): List<LiveExam>
+
+    @Query("DELETE FROM LiveExam")
+    suspend fun deleteAll()
 }

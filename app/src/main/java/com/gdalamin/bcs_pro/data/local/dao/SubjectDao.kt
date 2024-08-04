@@ -10,7 +10,6 @@ import com.gdalamin.bcs_pro.data.model.SubjectName
 
 @Dao
 interface SubjectDao {
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addSubjectName(subject: SubjectName)
 

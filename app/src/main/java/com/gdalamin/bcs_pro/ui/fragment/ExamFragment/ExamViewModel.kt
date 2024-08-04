@@ -41,6 +41,46 @@ class ExamViewModel @Inject constructor(private val repository: ExamRepository) 
         }
     }
 
+    suspend fun getExamQuestionsTest(
+        numIA: Int,
+        numBA: Int,
+        numBLL: Int,
+        numMVG: Int,
+        numGEDM: Int,
+        numML: Int,
+        numELL: Int,
+        numMA: Int,
+        numGS: Int,
+        numICT: Int
+    ) {
+        if (!isDataLoaded) {
+            _questions.postValue(Resource.Loading())
+            try {
+                if (hasInternetConnection()) {
+                    val questionResponse = repository.getExamQuestionsTest(
+                        numIA,
+                        numBA,
+                        numBLL,
+                        numMVG,
+                        numGEDM,
+                        numML,
+                        numELL,
+                        numMA,
+                        numGS,
+                        numICT,
+                    )
+                    _questions.postValue(handleQuestionResponse(questionResponse))
+                    isDataLoaded = true
+                } else {
+                    _questions.postValue(Resource.Error("No internet connection"))
+                }
+            } catch (t: Throwable) {
+                handleThrowable(t)
+            }
+        }
+    }
+
+
     suspend fun getSubjectExamQuestions(subjectName: String, totalQuestion: Int) {
         if (!isDataLoaded) {
             _questions.postValue(Resource.Loading())

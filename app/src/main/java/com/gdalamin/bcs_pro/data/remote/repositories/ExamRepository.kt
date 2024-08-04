@@ -41,4 +41,33 @@ class ExamRepository @Inject constructor(private val examApi: ExamApi) {
     ): Response<MutableList<LiveExam>> {
         return examApi.getExamInfo(API_KEY, apiNumber, pageNumber, limit)
     }
+
+
+    suspend fun getExamQuestionsTest(
+        numIA: Int,
+        numBA: Int,
+        numBLL: Int,
+        numMVG: Int,
+        numGEDM: Int,
+        numML: Int,
+        numELL: Int,
+        numMA: Int,
+        numGS: Int,
+        numICT: Int
+    ): Response<MutableList<Question>> {
+        return examApi.getExamQuestionsTest(
+            API_KEY,
+            1,
+            numIA,
+            numBA,
+            numBLL,
+            numMVG,
+            numGEDM,
+            numML,
+            numELL,
+            numMA,
+            numGS,
+            numICT,
+        )
+    }
 }

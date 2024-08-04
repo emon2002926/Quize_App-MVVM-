@@ -16,25 +16,26 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:background="@color/white">
+
 
             <ImageView
                 android:id="@+id/backButton"
                 android:layout_width="50dp"
                 android:layout_height="match_parent"
-                android:padding="10dp"
+                android:padding="12dp"
                 android:src="@drawable/baseline_arrow_back_24" />
 
 
             <TextView
-                android:id="@+id/titleTv"
+                android:id="@+id/tvTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
                 android:layout_marginTop="7dp"
                 android:layout_marginBottom="4dp"
-                android:text="@string/practice"
+                android:paddingStart="@dimen/_8sdp"
+                android:text="@string/questionBank"
                 android:textColor="@color/DeepGrey"
                 android:textSize="25sp"
                 android:textStyle="bold" />

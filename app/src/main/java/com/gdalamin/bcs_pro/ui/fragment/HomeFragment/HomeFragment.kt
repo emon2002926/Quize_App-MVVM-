@@ -46,6 +46,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
         observeSubjectName()
 
+//        liveExamViewModel.deleteAllExamInfo()
+
+
         setupRecyclerView(binding.rvSubjects, subjectAdapter)
         setupRecyclerView(binding.rvLiveExam, liveExamAdapter)
         setListeners()
@@ -70,7 +73,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
 
     private fun observeLiveExamInfo() = binding.apply {
-
         // Observe network call results
         liveExamViewModel.liveExamInfo.observe(viewLifecycleOwner) { response ->
             when (response) {

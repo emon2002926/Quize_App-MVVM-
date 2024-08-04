@@ -5,7 +5,7 @@ import com.gdalamin.bcs_pro.data.local.dao.ExamInfoDao
 import com.gdalamin.bcs_pro.data.model.LiveExam
 import javax.inject.Inject
 
-class ExamInfoRepository @Inject constructor(
+class LocalExamInfoRepository @Inject constructor(
     private val examInfoDao: ExamInfoDao
 ) {
 
@@ -23,5 +23,9 @@ class ExamInfoRepository @Inject constructor(
 
     suspend fun isDatabaseEmpty(): Boolean {
         return examInfoDao.getAllExamsNonLive().isEmpty()
+    }
+
+    suspend fun deleteAllExamInfo() {
+        return examInfoDao.deleteAll()
     }
 }

@@ -300,7 +300,7 @@
                                     android:background="@drawable/lite_round_baground"
                                     android:gravity="center"
                                     android:padding="13dp"
-                                    android:text="@string/marked_question"
+                                    android:text="@string/importantQuestion"
                                     android:textColor="@color/LiteBlack2"
                                     android:textSize="15sp" />
 

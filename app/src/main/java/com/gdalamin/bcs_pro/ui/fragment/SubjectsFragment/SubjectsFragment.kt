@@ -1,6 +1,5 @@
 package com.gdalamin.bcs_pro.ui.fragment.SubjectsFragment
 
-import android.util.Log
 import android.view.LayoutInflater
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -27,18 +26,15 @@ class SubjectsFragment : BaseFragment<FragmentSubjectsBinding>(FragmentSubjectsB
 
     private val subjectViewModel: SubjectViewModel by viewModels()
     private val sharedViewModel: SharedViewModel by activityViewModels()
-
     private lateinit var subjectAdapter: SubjectAdapter
-
+    private var sharedString = ""
 
     override fun loadUi() {
-
         subjectAdapter = SubjectAdapter(this)
-
         setupRecyclerView()
         setupListeners()
         observeSubjectName()
-
+        observeSharedData()
     }
 
 
@@ -47,7 +43,7 @@ class SubjectsFragment : BaseFragment<FragmentSubjectsBinding>(FragmentSubjectsB
         subjectViewModel.subjectName.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is Resource.Error -> {
-                    Log.d("HomeFragment", response.message.toString())
+//                    Log.d("HomeFragment", response.message.toString())
                 }
 
                 is Resource.Loading -> {
@@ -73,13 +69,11 @@ class SubjectsFragment : BaseFragment<FragmentSubjectsBinding>(FragmentSubjectsB
 
     }
 
-
     private fun setupRecyclerView() {
         binding.rvSubjects.apply {
             adapter = subjectAdapter
         }
     }
-
 
     private fun setupListeners() {
         binding.backButton.setOnClickListener {
@@ -88,18 +82,26 @@ class SubjectsFragment : BaseFragment<FragmentSubjectsBinding>(FragmentSubjectsB
     }
 
 
-    override fun onClick(subjectName: SubjectName) {
-
-        sharedViewModel.sharedString.observe(viewLifecycleOwner, { data ->
-            when (data) {
-                "subjectBasedPractise" -> showSubjectBasedQuestion(subjectName)
-
-                "subjectBasedExam" -> subjectBasedExamSubmission(
-                    subjectName.subject_name,
-                    subjectName.subject_code
-                )
+    private fun observeSharedData() {
+        sharedViewModel.sharedString.observe(viewLifecycleOwner) {
+            sharedString = it
+            when (sharedString) {
+                "subjectBasedPractise" -> binding.tvTitle.text = "অনুশীলন"
+                "subjectBasedExam" -> binding.tvTitle.text = "বিষয়ভিত্তিক পরীক্ষা"
             }
-        })
+        }
+    }
+
+
+    override fun onClick(subjectName: SubjectName) {
+        when (sharedString) {
+            "subjectBasedPractise" -> showSubjectBasedQuestion(subjectName)
+            "subjectBasedExam" -> subjectBasedExamSubmission(
+                subjectName.subject_name,
+                subjectName.subject_code
+            )
+        }
+
     }
 
 

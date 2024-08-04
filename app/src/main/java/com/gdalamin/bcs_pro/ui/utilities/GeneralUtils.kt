@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.EditText
 import androidx.recyclerview.widget.RecyclerView
 import com.facebook.shimmer.ShimmerFrameLayout
+import java.nio.charset.StandardCharsets
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -55,6 +56,10 @@ object GeneralUtils {
         }
     }
 
+
+    fun convertToUTF8(inputString: String): String {
+        return String(inputString.toByteArray(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8)
+    }
 
     fun logger(message: String) = Log.d("lodkvgcvg", message)
 

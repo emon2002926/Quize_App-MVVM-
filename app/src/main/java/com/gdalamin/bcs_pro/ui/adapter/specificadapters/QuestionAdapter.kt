@@ -14,6 +14,7 @@ import com.gdalamin.bcs_pro.ui.adapter.base.BaseAdapter
 import com.gdalamin.bcs_pro.ui.utilities.Animations
 import com.gdalamin.bcs_pro.ui.utilities.GeneralUtils
 import com.gdalamin.bcs_pro.ui.utilities.GeneralUtils.convertEnglishToBangla
+import com.gdalamin.bcs_pro.ui.utilities.GeneralUtils.convertToUTF8
 
 class QuestionAdapter(
     private val listener: OnItemSelectedListener
@@ -104,7 +105,7 @@ class QuestionAdapter(
                             img = option3Icon
                         } else if (view === option4Layout) {
                             selectedOption = 4
-                            img = optionIcon4
+                            img = option4Icon
                         }
                         // Change text color of all options to default
                         makeGrayText(option1Layout, option1Tv, context)
@@ -162,28 +163,28 @@ class QuestionAdapter(
 
                 }
 
-                "normalQuestion" -> {
-                    showExplanation(showAnswers, item, this)
-
-                    if (item.userSelectedAnswer != 0) {
-                        disableOptions(this)
-                        highlightUserSelection(this, item)
-                    }
-
-                    val onClickListener = View.OnClickListener { view ->
-                        showImgOrTextView(
-                            item.explanation,
-                            item.explanationImage,
-                            explainIv,
-                            explainTv
-                        )
-                        item.userSelectedAnswer = getOptionIndex(view, this)
-                        highlightUserSelection(this, item)
-                        disableOptions(this)
-                    }
-                    // Set click listeners for all option layouts
-                    setOptionClickListeners(this, onClickListener)
-                }
+//                "normalQuestion" -> {
+//                    showExplanation(showAnswers, item, this)
+//
+//                    if (item.userSelectedAnswer != 0) {
+//                        disableOptions(this)
+//                        highlightUserSelection(this, item)
+//                    }
+//
+//                    val onClickListener = View.OnClickListener { view ->
+//                        showImgOrTextView(
+//                            item.explanation,
+//                            item.explanationImage,
+//                            explainIv,
+//                            explainTv
+//                        )
+//                        item.userSelectedAnswer = getOptionIndex(view, this)
+//                        highlightUserSelection(this, item)
+//                        disableOptions(this)
+//                    }
+//                    // Set click listeners for all option layouts
+//                    setOptionClickListeners(this, onClickListener)
+//                }
             }
         }
     }
@@ -333,7 +334,7 @@ class QuestionAdapter(
     ) {
         if (text.isNotEmpty()) {
             imageView.visibility = View.GONE
-            textView.text = text
+            textView.text = convertToUTF8(text)
             textView.visibility = View.VISIBLE
         } else if (base64ImageString.isNotEmpty()) {
             imageView.visibility = View.VISIBLE
