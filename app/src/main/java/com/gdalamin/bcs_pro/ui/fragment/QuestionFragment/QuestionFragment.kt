@@ -32,7 +32,7 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionB
 
     private lateinit var networkReceiverManager: NetworkReceiverManager
 
-    private val testViewModel: QuestionViewMode by viewModels()
+    private val testViewModel: QuestionViewModel by viewModels()
 
     override fun loadUi() {
         binding.backButton.setOnClickListener { findNavController().navigateUp() }

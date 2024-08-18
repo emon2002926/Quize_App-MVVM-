@@ -3,98 +3,114 @@ package com.gdalamin.bcs_pro.ui.fragment.ExamFragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.gdalamin.bcs_pro.data.model.ExamResult
-import com.gdalamin.bcs_pro.data.model.OverallResult
+import androidx.lifecycle.viewModelScope
+import com.gdalamin.bcs_pro.data.model.ExamInfoTest
 import com.gdalamin.bcs_pro.data.model.Question
-import com.gdalamin.bcs_pro.ui.utilities.Constants
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class ResultViewModel : ViewModel() {
-    private val _questionLists = MutableLiveData<MutableList<Question>>(mutableListOf())
 
     private val _isResultSubmitted = MutableLiveData<Boolean>()
     val resultSubmission: LiveData<Boolean> get() = _isResultSubmitted
 
 
-    private val _overallResult = MutableLiveData<OverallResult>()
-    val overallResult: LiveData<OverallResult> = _overallResult
-
-    private val _individualSubResult = MutableLiveData<List<ExamResult>>()
-    val individualSubResultVm: LiveData<List<ExamResult>> = _individualSubResult
+    private val _overallResult = MutableLiveData<ExamInfoTest>()
+    var overallResult: LiveData<ExamInfoTest> = _overallResult
 
     fun setBooleanValue(value: Boolean) {
         _isResultSubmitted.value = value
     }
 
-    fun addQuestion(item: Question) {
-        _questionLists.value?.add(item)
-        _questionLists.value = _questionLists.value // Trigger observer
-    }
+    // LiveData to hold the list of ExamResults
+    private val _liveDataExamResults = MutableLiveData<List<ExamInfoTest>>()
+    val liveDataExamResults: LiveData<List<ExamInfoTest>> get() = _liveDataExamResults
 
-    fun calculateResults(examType: String) {
-        val questionLists = _questionLists.value ?: return
-        val sectionSizes = sectionSizeSelector(examType) ?: return
+    private val subjectsName = mapOf(
+        "IA" to "আন্তর্জাতিক বিষয়াবলি",
+        "BA" to "বাংলাদেশ বিষয়াবলি",
+        "GEDM" to "নৈতিকতা মুল্যবোধ ও সুশাসন",
+        "BLL" to "বাংলা",
+        "ELL" to "ইংরেজি",
+        "ML" to "মানসিক দক্ষতা",
+        "MVG" to "ভূগোল",
+        "GS" to "সাধারণ বিজ্ঞান",
+        "MA" to "গণিত",
+        "ICT" to "কম্পিউটার ও তথ্য প্রযুক্তি"
+    )
 
-        var currentIndex = 0
-        val results = mutableListOf<ExamResult>()
-        var totalCorrectAnswers = 0
-        var totalWrongAnswers = 0
-        var totalAnsweredQuestions = 0
-        var totalMark = 0.0
+    private val examResultsMap = mutableMapOf<String, ExamInfoTest>()
 
-        sectionSizes.forEachIndexed { index, sectionSize ->
-            var correctAnswers = 0
-            var wrongAnswers = 0
-            var answeredQuestions = 0
+    init {
+        // Initialize the map with default ExamResult for each subject
+        subjectsName.forEach { (subjectCode, subjectName) ->
+            examResultsMap[subjectCode] = ExamInfoTest(
+                subjectName = subjectName,
+                totalSelectedAnswer = 0,
+                totalCorrectAnswer = 0,
+                totalWrongAnswer = 0,
+                totalMark = 0.0
 
-            for (i in 0 until sectionSize) {
-                val question = questionLists.getOrNull(currentIndex)
-                if (question != null) {
-                    if (question.userSelectedAnswer != 0) {
-                        answeredQuestions++
-                        if (question.userSelectedAnswer == question.answer.toInt()) {
-                            correctAnswers++
-                        } else {
-                            wrongAnswers++
-                        }
-                    }
-                    currentIndex++
-                }
-            }
-
-            totalCorrectAnswers += correctAnswers
-            totalWrongAnswers += wrongAnswers
-            totalAnsweredQuestions += answeredQuestions
-
-            val mark = (correctAnswers - ((wrongAnswers / 2).toDouble()))
-
-            results.add(
-                ExamResult(
-                    subjectName = Constants.subjectsName.getOrNull(index) ?: "Unknown",
-                    mark = mark,
-                    correctAnswer = correctAnswers,
-                    wrongAnswer = wrongAnswers,
-                    answeredQuestions = answeredQuestions
-                )
             )
         }
-
-        totalMark = (totalCorrectAnswers - ((totalWrongAnswers / 2).toDouble()))
-
-        _overallResult.value = OverallResult(
-            answeredQuestions = totalAnsweredQuestions,
-            correctAnswers = totalCorrectAnswers,
-            wrongAnswers = totalWrongAnswers,
-            mark = totalMark
-        )
-        _individualSubResult.value = results
+        _liveDataExamResults.value = examResultsMap.values.toList()
     }
 
-    private fun sectionSizeSelector(examType: String): IntArray? {
-        return when (examType) {
-            "200QuestionExam" -> intArrayOf(20, 30, 35, 10, 10, 15, 35, 15, 15, 15)
-            "100QuestionExam" -> intArrayOf(10, 15, 18, 5, 5, 7, 17, 8, 7, 8)
-            "50QuestionExam" -> intArrayOf(5, 7, 9, 3, 3, 4, 8, 4, 3, 4)
-            else -> null
+    // Function to process each question and update the results
+
+    var totalAnsweredQuestion = 0
+    var totalCorrectAnswer = 0
+    var totalWrongAnswer = 0
+    var totalMark = 0.0
+
+    fun processQuestion(question: Question) {
+        var answerQuestion = 0
+        var correctAnswer = 0
+        var wrongAnswer = 0
+        if (question.userSelectedAnswer != 0) {
+            answerQuestion++
+            if (question.userSelectedAnswer == question.answer.toInt()) {
+                correctAnswer++
+            } else {
+                wrongAnswer++
+            }
+            totalAnsweredQuestion += answerQuestion
+            totalCorrectAnswer += correctAnswer
+            totalWrongAnswer += wrongAnswer
+            totalMark = (totalCorrectAnswer - ((totalWrongAnswer / 2).toDouble()))
+
+            _overallResult.value = ExamInfoTest(
+                subjectName = "",
+                totalSelectedAnswer = totalAnsweredQuestion,
+                totalCorrectAnswer = totalCorrectAnswer,
+                totalWrongAnswer = totalWrongAnswer,
+                totalMark = totalMark
+            )
+
+        }
+
+        viewModelScope.launch(Dispatchers.Default) {
+            val subjectCode = question.subjects
+            val examResult = examResultsMap[subjectCode] ?: return@launch
+
+            if (question.userSelectedAnswer != 0) {
+                examResult.totalSelectedAnswer++
+
+                if (question.userSelectedAnswer == question.answer.toInt()) {
+                    examResult.totalCorrectAnswer++
+                } else {
+                    examResult.totalWrongAnswer++
+                }
+
+                // Calculate the mark using the provided logic
+                examResult.totalMark =
+                    (examResult.totalCorrectAnswer - ((examResult.totalWrongAnswer / 2).toDouble()))
+            }
+
+            // Update LiveData with the latest results
+            _liveDataExamResults.postValue(examResultsMap.values.toList())
         }
     }
+
+
 }

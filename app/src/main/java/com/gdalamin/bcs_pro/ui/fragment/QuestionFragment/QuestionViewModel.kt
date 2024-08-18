@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
 @HiltViewModel
-class QuestionViewMode @Inject constructor(
+class QuestionViewModel @Inject constructor(
     private val questionRepository: QuestionRepository
 ) : ViewModel() {
     private var _questions: Flow<PagingData<Question>> = flowOf()
@@ -36,5 +36,6 @@ class QuestionViewMode @Inject constructor(
             isDataLoaded = true
         }
     }
+
 
 }

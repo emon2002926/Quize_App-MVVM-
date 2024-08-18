@@ -16,7 +16,7 @@ import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
-class QuestionBankViewModelTest @Inject constructor(
+class QuestionBankViewModel @Inject constructor(
     private val questionBankRepository: QuestionBankRepository,
     private val localQuestionBankRepository: LocalQuestionBankRepository
 ) : ViewModel() {

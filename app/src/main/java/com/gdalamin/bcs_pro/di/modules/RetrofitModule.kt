@@ -1,6 +1,5 @@
 package com.gdalamin.bcs_pro.di.modules
 
-import com.gdalamin.bcs_pro.data.remote.api.ApiService
 import com.gdalamin.bcs_pro.data.remote.api.ExamApi
 import com.gdalamin.bcs_pro.data.remote.api.QuestionApi
 import com.gdalamin.bcs_pro.data.remote.api.QuestionBankApi
@@ -27,12 +26,6 @@ class RetrofitModule {
         return QuestionRepository(questionApi)
     }
 
-
-    @Provides
-    @Singleton
-    fun provideApiService(): ApiService {
-        return RetrofitInstance.api
-    }
 
     @Provides
     @Singleton

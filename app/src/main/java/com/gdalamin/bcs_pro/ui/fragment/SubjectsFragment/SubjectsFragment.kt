@@ -105,7 +105,7 @@ class SubjectsFragment : BaseFragment<FragmentSubjectsBinding>(FragmentSubjectsB
     }
 
 
-    fun showSubjectBasedQuestion(subjectName: SubjectName) {
+    private fun showSubjectBasedQuestion(subjectName: SubjectName) {
         val data = SharedData(
             subjectName.subject_name,
             "subjectBasedQuestions",
@@ -122,9 +122,7 @@ class SubjectsFragment : BaseFragment<FragmentSubjectsBinding>(FragmentSubjectsB
         val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDailogTheme)
         val bindingExamOption =
             SubjectBasedExamSubmitionBinding.inflate(LayoutInflater.from(context))
-
         with(bindingExamOption) {
-
             tvSubjectName.text = subjectName
 
             btnSubmit.setOnClickListener {

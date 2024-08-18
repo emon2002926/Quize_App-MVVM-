@@ -186,65 +186,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         }
     }
 
-//    private fun showExamOptions() {
-//        val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDailogTheme)
-//        val bindingExamOption = LayoutShowExamOptionBinding.inflate(LayoutInflater.from(context))
-//
-//        bindingExamOption.apply {
-//            layout25Min.setOnClickListener {
-//                questionAmount = 50
-//                time = 1500
-//                selectIcon(option25Icon)
-//                eraseIcon(option50Icon, option100Icon)
-//                examType = "50QuestionExam"
-//            }
-//            layout50Min.setOnClickListener {
-//                questionAmount = 100
-//                time = 3000
-//                selectIcon(option50Icon)
-//                eraseIcon(option25Icon, option100Icon)
-//                examType = "100QuestionExam"
-//            }
-//            layout100Min.setOnClickListener {
-//                questionAmount = 200
-//                time = 6000
-//                selectIcon(option100Icon)
-//                eraseIcon(option25Icon, option50Icon)
-//                examType = "200QuestionExam"
-//            }
-//            btnExamStart.setOnClickListener {
-//                if (questionAmount != 0) {
-//                    val data = SharedData(
-//                        "সামগ্রিক পরীক্ষা", "normalExam", questionAmount, examType, "", time
-//                    )
-//                    sharedViewModel.setSharedData(data)
-//                    findNavController().navigate(R.id.action_homeFragment_to_examFragment)
-//                    bottomSheetDialog.dismiss()
-//                } else {
-//                    Toast.makeText(context, "Please select an option", Toast.LENGTH_SHORT).show()
-//
-//                }
-//            }
-//            btnCancel.setOnClickListener { bottomSheetDialog.dismiss() }
-//
-//        }
-//        bottomSheetDialog.setContentView(bindingExamOption.root)
-//        bottomSheetDialog.show()
-//    }
-
-//    private fun selectIcon(imageView: ImageView) {
-//        imageView.setImageResource(R.drawable.black_dot)
-//    }
-//
-//    fun eraseIcon(imageView: ImageView, imageView2: ImageView) {
-//        imageView.setImageResource(R.drawable.round_back_white50_100)
-//        imageView2.setImageResource(R.drawable.round_back_white50_100)
-//    }
-
     override fun onClickLiveExam(item: LiveExam) {
         val data = SharedData(
             title = "ডেইলি মডেল টেস্ট",
-            action = "liveModelTest",
+            action = "normalExam",
             totalQuestion = item.totalQc,
             questionType = "normal",
             batchOrSubjectName = "",

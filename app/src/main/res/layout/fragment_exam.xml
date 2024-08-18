@@ -89,7 +89,7 @@
         android:layout_marginBottom="100dp"
         android:scaleType="fitXY"
         android:src="@drawable/baseline_check_24"
-        android:visibility="visible"
+        android:visibility="gone"
         app:backgroundTint="#FFFFFF"
         app:fabSize="auto" />
 </RelativeLayout>

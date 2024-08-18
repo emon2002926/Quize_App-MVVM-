@@ -18,8 +18,8 @@ android {
         applicationId = "com.gdalamin.bcs_pro"
         minSdk = 24
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 63
+        versionName = "2.3.03"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

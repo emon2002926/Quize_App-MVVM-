@@ -25,7 +25,7 @@ class QuestionBankFragment :
     QuestionBankAdapter.HandleClickListener, NetworkReceiverManager.ConnectivityChangeListener {
 
     //    private val viewModel: QuestionBankViewModel by viewModels()
-    private val viewModelTest: QuestionBankViewModelTest by viewModels()
+    private val viewModelTest: QuestionBankViewModel by viewModels()
     private val sharedViewModel: SharedViewModel by activityViewModels()
 
     private val questionBankAdapter = QuestionBankAdapter(this)

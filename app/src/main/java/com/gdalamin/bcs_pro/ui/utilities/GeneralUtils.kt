@@ -26,6 +26,7 @@ object GeneralUtils {
             e.printStackTrace()
             return numberStr
         }
+
     }
 
     fun convertBase64ToBitmap(base64Image: String?): Bitmap {

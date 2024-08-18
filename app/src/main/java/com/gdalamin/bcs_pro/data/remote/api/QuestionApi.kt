@@ -28,7 +28,6 @@ interface QuestionApi {
     ): Response<MutableList<Question>>
 
     @GET("/api/appUtil.php")
-
     suspend fun getSubjectBasedQuestions(
         @Query("apiKey")
         apiKey: String = API_KEY,

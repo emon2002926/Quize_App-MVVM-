@@ -4,7 +4,6 @@ import com.gdalamin.bcs_pro.data.model.LiveExam
 import com.gdalamin.bcs_pro.data.model.Question
 import com.gdalamin.bcs_pro.data.remote.api.ExamApi
 import com.gdalamin.bcs_pro.ui.utilities.Constants.Companion.API_KEY
-import com.gdalamin.bcs_pro.ui.utilities.Constants.Companion.NORMAL_EXAM
 import com.gdalamin.bcs_pro.ui.utilities.Constants.Companion.SUBJECT_BASED_EXAM
 import retrofit2.Response
 import javax.inject.Inject
@@ -12,18 +11,18 @@ import javax.inject.Inject
 
 class ExamRepository @Inject constructor(private val examApi: ExamApi) {
 
-    suspend fun getExamQuestion(
-        totalQuestions: Int
-    ): Response<MutableList<Question>> {
-        return examApi.getExamQuestions(
-            API_KEY,
-            NORMAL_EXAM,
-            totalQuestions
-        )
-    }
+//    suspend fun getExamQuestion(
+//        totalQuestions: Int
+//    ): Response<MutableList<Question>> {
+//        return examApi.getExamQuestions(
+//            API_KEY,
+//            NORMAL_EXAM,
+//            totalQuestions
+//        )
+//    }
 
     suspend fun getSubjectBasedExamQuestion(
-        subjectName: String,
+        subjectName: String? = null,
         totalQuestion: Int
     ): Response<MutableList<Question>> {
         return examApi.getSubjectBasedExamQuestions(
@@ -43,31 +42,16 @@ class ExamRepository @Inject constructor(private val examApi: ExamApi) {
     }
 
 
-    suspend fun getExamQuestionsTest(
-        numIA: Int,
-        numBA: Int,
-        numBLL: Int,
-        numMVG: Int,
-        numGEDM: Int,
-        numML: Int,
-        numELL: Int,
-        numMA: Int,
-        numGS: Int,
-        numICT: Int
+    suspend fun getExamQuestions(
+        amount: Int,
+        page: Int
     ): Response<MutableList<Question>> {
-        return examApi.getExamQuestionsTest(
-            API_KEY,
-            1,
-            numIA,
-            numBA,
-            numBLL,
-            numMVG,
-            numGEDM,
-            numML,
-            numELL,
-            numMA,
-            numGS,
-            numICT,
+        return examApi.getExamQuestions(
+            "abc123",
+            amount,
+            page
         )
     }
+
+
 }

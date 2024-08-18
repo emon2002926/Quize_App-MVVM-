@@ -6,23 +6,20 @@ class Constants {
         const val API_KEY = "abc123"
         const val BASE_URL = "https://bcs.bdstar.xyz"
         const val PAGE_SIZE = 50
-        const val QUESTION_PAGE_SIZE = 4
-
+        const val QUESTION_PAGE_SIZE = 15
         const val NORMAL_EXAM = "normal"
         const val SUBJECT_BASED_EXAM = "subjectBased"
         val subjectsName = listOf(
             "আন্তর্জাতিক বিষয়াবলি",
             "বাংলাদেশ বিষয়াবলি",
-            "বাংলা",
-            "নৈতিকতা মুল্যবোধ ও সুশাসন",
             "ভূগোল",
-            "গণিত",
+            "বাংলা",
             "ইংরেজি",
-            "মানসিক দক্ষতা",
+            "গণিত",
+            "নৈতিকতা মুল্যবোধ ও সুশাসন",
             "সাধারণ বিজ্ঞান",
+            "মানসিক দক্ষতা",
             "কম্পিউটার ও তথ্য প্রযুক্তি"
         )
-
-
     }
 }

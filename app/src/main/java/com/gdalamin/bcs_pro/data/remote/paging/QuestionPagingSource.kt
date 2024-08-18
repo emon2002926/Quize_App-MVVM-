@@ -8,7 +8,6 @@ import com.gdalamin.bcs_pro.data.remote.repositories.QuestionRepository
 class QuestionPagingSource(
     private val questionRepository: QuestionRepository,
     private val apiNumber: Int,
-//    private val batch: String? = null, // Optional parameter for batch if needed
     private val batchOrSubjectName: String? = null // Optional parameter for batch if needed
 ) : PagingSource<Int, Question>() {
 
@@ -19,7 +18,6 @@ class QuestionPagingSource(
         return try {
             val response = when (apiNumber) {
                 1 -> questionRepository.getQuestion(apiNumber, pageNumber, limit)
-
                 10 -> questionRepository.getSubjectBasedQuestions(
                     apiNumber,
                     pageNumber,

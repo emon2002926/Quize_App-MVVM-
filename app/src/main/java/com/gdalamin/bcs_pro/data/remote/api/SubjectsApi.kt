@@ -14,8 +14,7 @@ interface SubjectsApi {
         apiKey: String = API_KEY,
         @Query("apiNum") apiNum: Int,
         @Query("page") pageNumber: Int,
-        @Query("limit") limit: Int,
-
-        ): Response<MutableList<SubjectName>>
+        @Query("limit") limit: Int
+    ): Response<MutableList<SubjectName>>
 
 }

@@ -46,4 +46,12 @@ abstract class BaseAdapter<T, VB : ViewBinding>(
         differ.submitList(list)
     }
 
+
+    // New method to append items
+    fun appendList(newItems: List<T>) {
+        val updatedList = differ.currentList.toMutableList().apply {
+            addAll(newItems)
+        }
+        differ.submitList(updatedList)
+    }
 }
