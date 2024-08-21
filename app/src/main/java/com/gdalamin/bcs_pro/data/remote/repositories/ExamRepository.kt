@@ -47,7 +47,7 @@ class ExamRepository @Inject constructor(private val examApi: ExamApi) {
         page: Int
     ): Response<MutableList<Question>> {
         return examApi.getExamQuestions(
-            "abc123",
+            API_KEY,
             amount,
             page
         )

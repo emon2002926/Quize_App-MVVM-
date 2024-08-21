@@ -3,10 +3,11 @@ package com.gdalamin.bcs_pro.ui.utilities
 class Constants {
     companion object {
 
-        const val API_KEY = "abc123"
+        //        const val API_KEY = "abc123"
+        const val API_KEY = "VX3#5%fj9&!KS*BL##bdu*Lks153"
         const val BASE_URL = "https://bcs.bdstar.xyz"
         const val PAGE_SIZE = 50
-        const val QUESTION_PAGE_SIZE = 15
+        const val QUESTION_PAGE_SIZE = 5
         const val NORMAL_EXAM = "normal"
         const val SUBJECT_BASED_EXAM = "subjectBased"
         val subjectsName = listOf(

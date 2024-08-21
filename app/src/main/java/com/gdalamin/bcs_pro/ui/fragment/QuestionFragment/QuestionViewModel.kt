@@ -7,6 +7,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.gdalamin.bcs_pro.data.model.Question
+import com.gdalamin.bcs_pro.data.remote.paging.PreviousQuestionPagingSource
 import com.gdalamin.bcs_pro.data.remote.paging.QuestionPagingSource
 import com.gdalamin.bcs_pro.data.remote.repositories.QuestionRepository
 import com.gdalamin.bcs_pro.ui.utilities.Constants.Companion.QUESTION_PAGE_SIZE
@@ -31,6 +32,18 @@ class QuestionViewModel @Inject constructor(
                     questionRepository,
                     apiNumber,
                     batchOrSubjectName
+                )
+            }.flow.cachedIn(viewModelScope)
+            isDataLoaded = true
+        }
+    }
+
+    fun getPreviousQuestions(batchName: String) {
+        if (!isDataLoaded) {
+            _questions = Pager(PagingConfig(pageSize = QUESTION_PAGE_SIZE)) {
+                PreviousQuestionPagingSource(
+                    questionRepository,
+                    batchName
                 )
             }.flow.cachedIn(viewModelScope)
             isDataLoaded = true

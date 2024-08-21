@@ -46,8 +46,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
         observeSubjectName()
 
-//        liveExamViewModel.deleteAllExamInfo()
-
 
         setupRecyclerView(binding.rvSubjects, subjectAdapter)
         setupRecyclerView(binding.rvLiveExam, liveExamAdapter)
@@ -70,7 +68,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
     override fun onDisconnected() {
     }
-
 
     private fun observeLiveExamInfo() = binding.apply {
         // Observe network call results
@@ -103,7 +100,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         }
 
     }
-
 
     private fun observeSubjectName() = binding.apply {
         // Observe data from Room database
@@ -193,7 +189,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
             totalQuestion = item.totalQc,
             questionType = "normal",
             batchOrSubjectName = "",
-            time = item.totalQc * 60
+            time = item.time * 60
 
         )
 

@@ -8,13 +8,6 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface ExamApi {
-//    @GET("/api/exam.php")
-//    suspend fun getExamQuestions(
-//        @Query("apiKey") apiKey: String,
-//        @Query("exam_type") questionType: String,
-//        @Query("totalQuestions") totalQuestions: Int,
-//    ): Response<MutableList<Question>>
-
 
     @GET("/api/pagingExam.php")
     suspend fun getExamQuestions(
@@ -22,25 +15,6 @@ interface ExamApi {
         @Query("amount") amount: Int,
         @Query("page") page: Int
     ): Response<MutableList<Question>>
-
-
-//    @GET("/api/testExam.php")
-//    suspend fun getExamQuestionsTest2(
-//        @Query("apiKey") apiKey: String,
-//        @Query("apiNum") apiNum: Int,
-//        @Query("numIA") numIA: Int,
-//        @Query("numBA") numBA: Int,
-//        @Query("numBLL") numBLL: Int,
-//        @Query("numMVG") numMVG: Int,
-//        @Query("numGEDM") numGEDM: Int,
-//        @Query("numML") numML: Int,
-//        @Query("numELL") numELL: Int,
-//        @Query("numMA") numMA: Int,
-//        @Query("numGS") numGS: Int,
-//        @Query("numICT") numICT: Int,
-//        @Query("page") examInfo: Int,
-//        @Query("limit") limit: Int
-//    ): Response<MutableList<Question>>
 
 
     @GET("/api/exam.php")

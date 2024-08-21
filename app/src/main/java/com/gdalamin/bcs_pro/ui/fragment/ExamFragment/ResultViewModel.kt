@@ -1,5 +1,6 @@
 package com.gdalamin.bcs_pro.ui.fragment.ExamFragment
 
+import android.os.CountDownTimer
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,6 +9,8 @@ import com.gdalamin.bcs_pro.data.model.ExamInfoTest
 import com.gdalamin.bcs_pro.data.model.Question
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.Locale
+import java.util.concurrent.TimeUnit
 
 class ResultViewModel : ViewModel() {
 
@@ -110,6 +113,45 @@ class ResultViewModel : ViewModel() {
             // Update LiveData with the latest results
             _liveDataExamResults.postValue(examResultsMap.values.toList())
         }
+    }
+
+    private val _timeLeft = MutableLiveData<String>()
+    val timeLeft: LiveData<String> get() = _timeLeft
+
+    private val _isTimerFinished = MutableLiveData<Boolean>()
+    val isTimerFinished: LiveData<Boolean> get() = _isTimerFinished
+
+    private var countDownTimer: CountDownTimer? = null
+
+    private var isTimerStarted = false
+
+    fun startCountDown(maxTimerSeconds: Int) {
+        _isTimerFinished.value = false  // Reset the finish state
+        if (!isTimerStarted) {
+            countDownTimer = object : CountDownTimer(maxTimerSeconds * 1000L, 1000) {
+                override fun onTick(millisUntilFinished: Long) {
+                    val getHour = TimeUnit.MILLISECONDS.toHours(millisUntilFinished)
+                    val getMinutes = TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)
+                    val getSecond = TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished)
+
+                    val generateTime = String.format(
+                        Locale.getDefault(), "%02d:%02d:%02d", getHour,
+                        getMinutes - TimeUnit.HOURS.toMinutes(getHour),
+                        getSecond - TimeUnit.MINUTES.toSeconds(getMinutes)
+                    )
+//                _timeLeft.value = GeneralUtils.convertEnglishToBangla(generateTime)
+                    _timeLeft.value = generateTime
+                }
+
+                override fun onFinish() {
+                    _timeLeft.value = "00:00:00"
+                    _isTimerFinished.value = true  // Set the finish state to true
+                }
+            }
+            countDownTimer?.start()
+            isTimerStarted = true
+        }
+
     }
 
 

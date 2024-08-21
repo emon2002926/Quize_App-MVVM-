@@ -23,18 +23,16 @@ import kotlinx.coroutines.launch
 class QuestionBankFragment :
     BaseFragment<FragmentQuestionBankBinding>(FragmentQuestionBankBinding::inflate),
     QuestionBankAdapter.HandleClickListener, NetworkReceiverManager.ConnectivityChangeListener {
-
-    //    private val viewModel: QuestionBankViewModel by viewModels()
     private val viewModelTest: QuestionBankViewModel by viewModels()
     private val sharedViewModel: SharedViewModel by activityViewModels()
 
     private val questionBankAdapter = QuestionBankAdapter(this)
     private lateinit var networkReceiverManager: NetworkReceiverManager
 
+
     override fun loadUi() {
         binding.backButton.setOnClickListener { findNavController().navigateUp() }
 
-//        observeQuestionYearName()
         observeBcsYearName()
         setupRecyclerView()
         networkReceiverManager = NetworkReceiverManager(requireContext(), this)
@@ -94,7 +92,7 @@ class QuestionBankFragment :
     }
 
     override fun onConnected() {
-//        observeQuestionYearName()
+        observeBcsYearName()
     }
 
     override fun onDisconnected() {

@@ -18,8 +18,8 @@ android {
         applicationId = "com.gdalamin.bcs_pro"
         minSdk = 24
         targetSdk = 34
-        versionCode = 63
-        versionName = "2.3.03"
+        versionCode = 64
+        versionName = "2.3.04"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -98,7 +98,7 @@ dependencies {
 
 
     //paging library
-    implementation("androidx.paging:paging-runtime:3.3.1") // Replace with the latest version
+    implementation("androidx.paging:paging-runtime:3.3.2") // Replace with the latest version
 
 
 }

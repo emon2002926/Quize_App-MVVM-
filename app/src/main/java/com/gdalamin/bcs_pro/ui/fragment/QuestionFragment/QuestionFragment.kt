@@ -14,7 +14,6 @@ import com.gdalamin.bcs_pro.ui.SharedViewModel
 import com.gdalamin.bcs_pro.ui.adapter.specificadapters.QuestionAdapterPaging
 import com.gdalamin.bcs_pro.ui.base.BaseFragment
 import com.gdalamin.bcs_pro.ui.common.LoadingStateAdapter
-import com.gdalamin.bcs_pro.ui.fragment.ExamFragment.ExamViewModel
 import com.gdalamin.bcs_pro.ui.network.NetworkReceiverManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -27,12 +26,10 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionB
 
     private val questionAdapterPaging by lazy { QuestionAdapterPaging() }
     private val sharedViewModel: SharedViewModel by activityViewModels()
-    private val viewModel: ExamViewModel by viewModels()
     private var mBooleanValue = false
 
     private lateinit var networkReceiverManager: NetworkReceiverManager
-
-    private val testViewModel: QuestionViewModel by viewModels()
+    private val viewModel: QuestionViewModel by viewModels()
 
     override fun loadUi() {
         binding.backButton.setOnClickListener { findNavController().navigateUp() }
@@ -49,21 +46,21 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionB
                     "questionBank" -> {
                         tvTitle.text = data.title
                         setupFab()
-                        testViewModel.getQuestions(9, data.batchOrSubjectName)
+                        viewModel.getPreviousQuestions(data.batchOrSubjectName)
                         observePagingQuestions()
                     }
 
                     "subjectBasedQuestions" -> {
                         tvTitle.text = data.title
                         setupFab()
-                        testViewModel.getQuestions(10, data.batchOrSubjectName)
+                        viewModel.getQuestions(10, data.batchOrSubjectName)
                         observePagingQuestions()
                     }
 
                     "importantQuestion" -> {
                         tvTitle.text = data.title
                         setupFab()
-                        testViewModel.getQuestions(1)
+                        viewModel.getQuestions(1)
                         observePagingQuestions()
                     }
                 }
@@ -73,7 +70,7 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionB
 
     private fun observePagingQuestions() {
         lifecycleScope.launch {
-            testViewModel.questions.collectLatest { pagingData ->
+            viewModel.questions.collectLatest { pagingData ->
                 questionAdapterPaging.submitData(pagingData)
             }
         }

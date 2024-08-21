@@ -19,12 +19,18 @@ interface QuestionApi {
 
     @GET("/api/appUtil.php")
     suspend fun getPreviousYearQuestions(
-        @Query("apiKey")
-        apiKey: String = API_KEY,
+        @Query("apiKey") apiKey: String,
         @Query("apiNum") apiNum: Int,
         @Query("page") pageNumber: Int,
         @Query("limit") limit: Int,
         @Query("batch") batch: String
+    ): Response<MutableList<Question>>
+
+    @GET("/api/yearQuestion.php")
+    suspend fun getPreviousYearQuestionsTest(
+        @Query("apiKey") apiKey: String,
+        @Query("batch") batch: String,
+        @Query("page") page: Int,
     ): Response<MutableList<Question>>
 
     @GET("/api/appUtil.php")

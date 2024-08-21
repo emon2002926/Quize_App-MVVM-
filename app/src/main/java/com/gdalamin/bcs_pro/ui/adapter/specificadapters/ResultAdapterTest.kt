@@ -21,7 +21,7 @@ class ResultAdapterTest : BaseAdapter<ExamInfoTest, ItemResultBinding>(
             tvAnsweredQuestion.text = textConverter(item.totalSelectedAnswer)
             tvCorrectAnswer.text = textConverter(item.totalCorrectAnswer)
             tvWrongAnswer.text = textConverter(item.totalWrongAnswer)
-            tvMarks.text = "${item.totalMark}"
+            tvMarks.text = convertEnglishToBangla(item.totalMark.toString())
         }
 
     }

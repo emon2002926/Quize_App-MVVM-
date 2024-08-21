@@ -25,6 +25,13 @@ class QuestionRepository @Inject constructor(private val questionApi: QuestionAp
         return questionApi.getPreviousYearQuestions(API_KEY, apiNumber, pageNumber, limit, batch)
     }
 
+    suspend fun getPreviousYearQuestionTest(
+        batch: String,
+        page: Int
+    ): Response<MutableList<Question>> {
+        return questionApi.getPreviousYearQuestionsTest(API_KEY, batch, page)
+    }
+
     suspend fun getSubjectBasedQuestions(
         apiNumber: Int,
         pageNumber: Int,
