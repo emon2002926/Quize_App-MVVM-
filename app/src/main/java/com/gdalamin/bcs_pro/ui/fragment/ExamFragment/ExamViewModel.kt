@@ -11,7 +11,7 @@ import androidx.paging.cachedIn
 import com.gdalamin.bcs_pro.data.model.Question
 import com.gdalamin.bcs_pro.data.remote.paging.ExamQuestionPagingSource
 import com.gdalamin.bcs_pro.data.remote.repositories.ExamRepository
-import com.gdalamin.bcs_pro.ui.utilities.Resource
+import com.gdalamin.bcs_pro.ui.utilities.DataState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,8 +25,8 @@ class ExamViewModel @Inject constructor(
     private val examRepository: ExamRepository
 ) : ViewModel() {
 
-    private val _questions: MutableLiveData<Resource<MutableList<Question>>> = MutableLiveData()
-    val questions: LiveData<Resource<MutableList<Question>>> = _questions
+    private val _questions: MutableLiveData<DataState<MutableList<Question>>> = MutableLiveData()
+    val questions: LiveData<DataState<MutableList<Question>>> = _questions
     private var isDataLoaded = false
 
 
@@ -65,7 +65,7 @@ class ExamViewModel @Inject constructor(
 
     suspend fun getSubjectExamQuestions(subjectName: String, totalQuestion: Int) {
         if (!isDataLoaded) {
-            _questions.postValue(Resource.Loading())
+            _questions.postValue(DataState.Loading())
             try {
                 val questionResponse =
                     examRepository.getSubjectBasedExamQuestion(subjectName, totalQuestion)
@@ -77,16 +77,16 @@ class ExamViewModel @Inject constructor(
         }
     }
 
-    private fun handleQuestionResponse(response: Response<MutableList<Question>>): Resource<MutableList<Question>> {
+    private fun handleQuestionResponse(response: Response<MutableList<Question>>): DataState<MutableList<Question>> {
         return if (response.isSuccessful) {
 
             response.body()?.let {
 
-                Resource.Success(it)
+                DataState.Success(it)
 
-            } ?: Resource.Error("No data")
+            } ?: DataState.Error("No data")
         } else {
-            Resource.Error(response.message())
+            DataState.Error(response.message())
         }
     }
 
@@ -94,8 +94,8 @@ class ExamViewModel @Inject constructor(
     private fun handleThrowable(t: Throwable) {
         _questions.postValue(
             when (t) {
-                is IOException -> Resource.Error("Network Failure")
-                else -> Resource.Error("Conversion Error")
+                is IOException -> DataState.Error("Network Failure")
+                else -> DataState.Error("Conversion Error")
             }
         )
     }

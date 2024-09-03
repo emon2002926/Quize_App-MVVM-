@@ -27,10 +27,10 @@ import com.gdalamin.bcs_pro.ui.adapter.specificadapters.ResultAdapterTest
 import com.gdalamin.bcs_pro.ui.base.BaseFragment
 import com.gdalamin.bcs_pro.ui.common.LoadingStateAdapter
 import com.gdalamin.bcs_pro.ui.network.NetworkReceiverManager
+import com.gdalamin.bcs_pro.ui.utilities.DataState
 import com.gdalamin.bcs_pro.ui.utilities.GeneralUtils.convertEnglishToBangla
 import com.gdalamin.bcs_pro.ui.utilities.GeneralUtils.hideShimmerLayout
 import com.gdalamin.bcs_pro.ui.utilities.GeneralUtils.showShimmerLayout
-import com.gdalamin.bcs_pro.ui.utilities.Resource
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -160,7 +160,7 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
     private fun observeQuestions() {
         viewModelTest.questions.observe(viewLifecycleOwner) { response ->
             when (response) {
-                is Resource.Loading -> {
+                is DataState.Loading -> {
                     showShimmerLayout(
                         binding.shimmerLayout,
                         binding.rvExamQuestion
@@ -168,7 +168,7 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
                     binding.fabShowResult.visibility = View.GONE
                 }
 
-                is Resource.Success -> {
+                is DataState.Success -> {
                     hideShimmerLayout(binding.shimmerLayout, binding.rvExamQuestion)
                     response.data?.let {
                         questionAdapter.submitList(it)
@@ -177,7 +177,7 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
                     binding.tvTimer.visibility = View.VISIBLE
                 }
 
-                is Resource.Error -> {
+                is DataState.Error -> {
                     hideShimmerLayout(binding.shimmerLayout, binding.rvExamQuestion)
 //                    Toast.makeText(activity, "${response.message}", Toast.LENGTH_SHORT).show()
                 }

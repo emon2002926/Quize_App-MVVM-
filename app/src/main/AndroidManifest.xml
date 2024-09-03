@@ -29,6 +29,15 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+
+        <service
+            android:name="com.onesignal.NotificationServiceExtension"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE">
+            <intent-filter>
+                <action android:name="com.onesignal.NotificationServiceExtension" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

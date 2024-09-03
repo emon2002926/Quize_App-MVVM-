@@ -110,69 +110,76 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_8sdp"
-                        android:layout_marginBottom="@dimen/_4sdp"
-                        android:orientation="horizontal">
+                        android:orientation="vertical"
+                        android:visibility="visible">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/baloo_bhaina_2_medium"
-                            android:text="বিষয় সমূহ"
-                            android:textColor="@color/DeepGrey"
-                            android:textSize="@dimen/_15ssp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/btnShowAllSubject"
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="end|center_vertical"
-                            android:gravity="end"
-                            android:text="@string/showAll"
-                            android:textColor="@color/DeepGrey"
-                            android:textSize="@dimen/_14ssp"
-                            android:textStyle="bold" />
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:layout_marginBottom="@dimen/_4sdp"
+                            android:orientation="horizontal">
 
-                    </LinearLayout>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/baloo_bhaina_2_medium"
+                                android:text="বিষয় সমূহ"
+                                android:textColor="@color/DeepGrey"
+                                android:textSize="@dimen/_15ssp"
+                                android:textStyle="bold" />
 
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rvSubjects"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:scrollIndicators="none"
-                        android:visibility="gone" />
-
-                    <com.facebook.shimmer.ShimmerFrameLayout
-                        android:id="@+id/shimmerSubject"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <HorizontalScrollView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:scrollbars="none"
-                            android:visibility="visible">
-
-                            <LinearLayout
+                            <TextView
+                                android:id="@+id/btnShowAllSubject"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal">
+                                android:layout_gravity="end|center_vertical"
+                                android:gravity="end"
+                                android:text="@string/showAll"
+                                android:textColor="@color/DeepGrey"
+                                android:textSize="@dimen/_14ssp"
+                                android:textStyle="bold" />
 
-                                <include layout="@layout/shimmer_subject_liner" />
+                        </LinearLayout>
 
-                                <include layout="@layout/shimmer_subject_liner" />
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rvSubjects"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:scrollIndicators="none"
+                            android:visibility="gone" />
 
-                                <include layout="@layout/shimmer_subject_liner" />
+                        <com.facebook.shimmer.ShimmerFrameLayout
+                            android:id="@+id/shimmerSubject"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <HorizontalScrollView
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/_150sdp"
+                                android:scrollbars="none"
+                                android:visibility="visible">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal">
+
+                                    <include layout="@layout/shimmer_subject_liner" />
+
+                                    <include layout="@layout/shimmer_subject_liner" />
+
+                                    <include layout="@layout/shimmer_subject_liner" />
 
 
-                            </LinearLayout>
+                                </LinearLayout>
 
 
-                        </HorizontalScrollView>
+                            </HorizontalScrollView>
 
-                    </com.facebook.shimmer.ShimmerFrameLayout>
+                        </com.facebook.shimmer.ShimmerFrameLayout>
+
+                    </LinearLayout>
 
 
                     <TextView

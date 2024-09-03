@@ -24,4 +24,12 @@ class LocalQuestionBankRepository @Inject constructor(
     suspend fun isDatabaseEmpty(): Boolean {
         return questionBankDao.getAllBcsYearNameNonLive().isEmpty()
     }
+
+    suspend fun updateBcsYearName(bcsYearName: List<BcsYearName>) {
+        questionBankDao.updateBcsYearName(bcsYearName)
+    }
+
+    suspend fun deleteAllBcsYearName() {
+        return questionBankDao.deleteAll()
+    }
 }

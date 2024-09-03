@@ -8,7 +8,8 @@ import com.gdalamin.bcs_pro.data.local.repositories.LocalSubjectRepository
 import com.gdalamin.bcs_pro.data.model.SubjectName
 import com.gdalamin.bcs_pro.data.remote.repositories.SubjectRepository
 import com.gdalamin.bcs_pro.ui.utilities.Constants
-import com.gdalamin.bcs_pro.ui.utilities.Resource
+import com.gdalamin.bcs_pro.ui.utilities.Constants.Companion.CHECK_INTERNET_CONNECTION_MESSAGE
+import com.gdalamin.bcs_pro.ui.utilities.DataState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import retrofit2.Response
@@ -22,13 +23,13 @@ class SubjectViewModel @Inject constructor(
     private val localSubjectRepository: LocalSubjectRepository
 ) : ViewModel() {
     val pageNumber = 1
-    private val _subjects: MutableLiveData<Resource<MutableList<SubjectName>>> = MutableLiveData()
-    val subjectName: LiveData<Resource<MutableList<SubjectName>>> = _subjects
-
+    private val _subjects: MutableLiveData<DataState<MutableList<SubjectName>>> = MutableLiveData()
+    val subjectName: LiveData<DataState<MutableList<SubjectName>>> = _subjects
+    
     fun getSubjectsName(apiNumber: Int) {
         viewModelScope.launch {
             if (localSubjectRepository.isDatabaseEmpty()) {
-                _subjects.postValue(Resource.Loading())
+                _subjects.postValue(DataState.Loading())
                 try {
                     val response = subjectRepository.getSubjects(
                         apiNumber, pageNumber,
@@ -36,47 +37,51 @@ class SubjectViewModel @Inject constructor(
                     )
                     val result = handleResponseApi(response)
                     _subjects.postValue(handleResponseApi(response))
-
-                    if (result is Resource.Success) {
+                    
+                    if (result is DataState.Success) {
                         saveSubjectNameToDatabase(result.data)
                     }
-
+                    
                 } catch (t: Throwable) {
                     when (t) {
-                        is IOException -> _subjects.postValue(Resource.Error("Network Failure"))
-                        else -> _subjects.postValue(Resource.Error("Conversion Error"))
+                        is IOException -> _subjects.postValue(
+                            DataState.Error(
+                                CHECK_INTERNET_CONNECTION_MESSAGE
+                            )
+                        )
+                        
                     }
                 }
             } else {
                 _subjects.postValue(
-                    Resource.Success(
+                    DataState.Success(
                         localSubjectRepository.getAllExamsNonLive().toMutableList()
                     )
                 )
             }
         }
     }
-
-    private fun handleResponseApi(response: Response<MutableList<SubjectName>>): Resource<MutableList<SubjectName>> {
+    
+    private fun handleResponseApi(response: Response<MutableList<SubjectName>>): DataState<MutableList<SubjectName>> {
         if (response.isSuccessful) {
             response.body()?.let {
-                return Resource.Success(it)
+                return DataState.Success(it)
             }
         }
-        return Resource.Error(response.message())
+        return DataState.Error(response.message())
     }
-
-
+    
+    
     private suspend fun saveSubjectNameToDatabase(exams: MutableList<SubjectName>?) {
         exams?.let {
             localSubjectRepository.insertAll(it)
         }
     }
-
-
+    
+    
     fun getSubjectNameDatabase(): LiveData<List<SubjectName>> {
         return localSubjectRepository.getAllExams()
     }
-
-
+    
+    
 }

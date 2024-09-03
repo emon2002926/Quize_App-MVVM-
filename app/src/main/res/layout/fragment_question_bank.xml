@@ -53,11 +53,11 @@
         <include layout="@layout/shimmer_question_bank_background" />
     </com.facebook.shimmer.ShimmerFrameLayout>
 
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvQuestionBank"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="visible" />
+
 
 </LinearLayout>

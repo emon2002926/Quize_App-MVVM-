@@ -5,8 +5,9 @@ plugins {
 //    id ("dagger.hilt.android.plugin")
     id("com.google.dagger.hilt.android")
     id("kotlin-parcelize")
-
-
+    alias(libs.plugins.googleGmsGoogleServices)
+    
+    
 }
 
 //com.gdalamin.bcs_pro
@@ -18,8 +19,8 @@ android {
         applicationId = "com.gdalamin.bcs_pro"
         minSdk = 24
         targetSdk = 34
-        versionCode = 64
-        versionName = "2.3.04"
+        versionCode = 67
+        versionName = "2.3.07"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -55,6 +56,7 @@ dependencies {
 
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.firebase.messaging)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -99,6 +101,9 @@ dependencies {
 
     //paging library
     implementation("androidx.paging:paging-runtime:3.3.2") // Replace with the latest version
+
+    //OneSignal
+    implementation("com.onesignal:OneSignal:[5.0.0, 5.99.99]")
 
 
 }

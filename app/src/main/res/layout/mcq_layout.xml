@@ -138,7 +138,7 @@
             <ImageView
                 android:id="@+id/option1Iv"
                 android:layout_width="match_parent"
-                android:layout_height="35dp"
+                android:layout_height="40dp"
                 android:layout_alignParentEnd="true"
                 android:layout_marginStart="60dp"
                 android:layout_marginTop="5sp"
@@ -218,7 +218,7 @@
             <ImageView
                 android:id="@+id/option2Iv"
                 android:layout_width="match_parent"
-                android:layout_height="35dp"
+                android:layout_height="40dp"
                 android:layout_alignParentEnd="true"
                 android:layout_marginStart="60dp"
                 android:layout_marginTop="5sp"
@@ -300,7 +300,7 @@
             <ImageView
                 android:id="@+id/option3Iv"
                 android:layout_width="match_parent"
-                android:layout_height="35dp"
+                android:layout_height="40dp"
                 android:layout_alignParentEnd="true"
                 android:layout_marginStart="60dp"
                 android:layout_marginTop="5sp"
@@ -380,7 +380,7 @@
             <ImageView
                 android:id="@+id/option4Iv"
                 android:layout_width="match_parent"
-                android:layout_height="35dp"
+                android:layout_height="40dp"
                 android:layout_alignParentEnd="true"
                 android:layout_marginStart="60dp"
                 android:layout_marginTop="5sp"
@@ -414,7 +414,6 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
-            android:scaleType="fitXY"
             android:visibility="gone" />
 
     </LinearLayout>
