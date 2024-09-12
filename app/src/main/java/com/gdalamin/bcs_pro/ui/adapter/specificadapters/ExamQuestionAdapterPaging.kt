@@ -13,54 +13,54 @@ import com.gdalamin.bcs_pro.data.model.Question
 import com.gdalamin.bcs_pro.databinding.McqLayoutBinding
 import com.gdalamin.bcs_pro.ui.adapter.base.BaseAdapterPaging
 import com.gdalamin.bcs_pro.ui.utilities.Animations
-import com.gdalamin.bcs_pro.ui.utilities.GeneralUtils
+import com.gdalamin.bcs_pro.ui.utilities.GeneralUtils.convertBase64ToBitmap
 import com.gdalamin.bcs_pro.ui.utilities.GeneralUtils.convertEnglishToBangla
 
 class ExamQuestionAdapterPaging(private val listener: OnItemSelectedListenerPaging) :
     BaseAdapterPaging<Question, McqLayoutBinding>(
         DIFF_CALLBACK
     ) {
-
+    
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Question>() {
             override fun areItemsTheSame(oldItem: Question, newItem: Question): Boolean {
                 return oldItem.id == newItem.id
             }
-
+            
             override fun areContentsTheSame(oldItem: Question, newItem: Question): Boolean {
                 return oldItem == newItem
             }
         }
     }
-
+    
     private var showAnswers: Boolean = false
-
+    
     fun showAnswer(show: Boolean) {
         showAnswers = show
         notifyDataSetChanged()
     }
-
+    
     private val questionLists = mutableListOf<Question>()
-
-
+    
+    
     override fun createBinding(parent: ViewGroup, viewType: Int): McqLayoutBinding {
         return McqLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
     }
-
+    
     override fun bind(binding: McqLayoutBinding, item: Question, position: Int) {
-
-
+        
+        
         with(binding) {
-
+            
             explainIv.visibility = View.GONE
             Animations.setAnimationFadeIn(binding.root.context, binding.root, position)
-
+            
             tvQuestionPosition.text = convertEnglishToBangla("${position + 1})")
             // Set question and options
             bindQuestionAndOptions(item, this)
             // Reset options to default state
             resetOptions(this)
-
+            
             showExplanation(showAnswers, item, this)
             if (item.userSelectedAnswer > 0) {
                 disableOptions(binding)
@@ -71,21 +71,21 @@ class ExamQuestionAdapterPaging(private val listener: OnItemSelectedListenerPagi
                         makeGrayText(option3Layout, option3Tv, option3Layout.context)
                         makeGrayText(option4Layout, option4Tv, option4Layout.context)
                     }
-
+                    
                     2 -> {
                         highLightClickedOptionForExam(option2Layout, option2Icon)
                         makeGrayText(option1Layout, option1Tv, option1Layout.context)
                         makeGrayText(option3Layout, option3Tv, option3Layout.context)
                         makeGrayText(option4Layout, option4Tv, option4Layout.context)
                     }
-
+                    
                     3 -> {
                         highLightClickedOptionForExam(option3Layout, option3Icon)
                         makeGrayText(option1Layout, option1Tv, option1Layout.context)
                         makeGrayText(option2Layout, option2Tv, option2Layout.context)
                         makeGrayText(option4Layout, option4Tv, option4Layout.context)
                     }
-
+                    
                     4 -> {
                         highLightClickedOptionForExam(option4Layout, option4Icon)
                         makeGrayText(option1Layout, option1Tv, option1Layout.context)
@@ -94,9 +94,9 @@ class ExamQuestionAdapterPaging(private val listener: OnItemSelectedListenerPagi
                     }
                 }
             }
-
+            
             val context = fullLayout.context
-
+            
             val optionClickListener = View.OnClickListener { view: View ->
                 var selectedOption = 0
                 var img: ImageView? = null
@@ -119,7 +119,7 @@ class ExamQuestionAdapterPaging(private val listener: OnItemSelectedListenerPagi
                 makeGrayText(option2Layout, option2Tv, context)
                 makeGrayText(option3Layout, option3Tv, context)
                 makeGrayText(option4Layout, option4Tv, context)
-
+                
                 when (selectedOption) {
                     1 -> option1Tv.setTextColor(
                         ContextCompat.getColor(
@@ -127,21 +127,21 @@ class ExamQuestionAdapterPaging(private val listener: OnItemSelectedListenerPagi
                             R.color.black
                         )
                     )
-
+                    
                     2 -> option2Tv.setTextColor(
                         ContextCompat.getColor(
                             context,
                             R.color.black
                         )
                     )
-
+                    
                     3 -> option3Tv.setTextColor(
                         ContextCompat.getColor(
                             context,
                             R.color.black
                         )
                     )
-
+                    
                     4 -> option4Tv.setTextColor(
                         ContextCompat.getColor(
                             context,
@@ -149,12 +149,12 @@ class ExamQuestionAdapterPaging(private val listener: OnItemSelectedListenerPagi
                         )
                     )
                 }
-
+                
                 item.userSelectedAnswer = selectedOption
                 listener.onItemSelectedPaging(item)
-
+                
                 questionLists.addAll(listOf(item))
-
+                
                 if (img != null) {
                     highLightClickedOptionForExam(view, img)
                 }
@@ -167,7 +167,7 @@ class ExamQuestionAdapterPaging(private val listener: OnItemSelectedListenerPagi
             option2Layout.setOnClickListener(optionClickListener)
             option3Layout.setOnClickListener(optionClickListener)
             option4Layout.setOnClickListener(optionClickListener)
-
+            
         }
 
 //        with(binding) {
@@ -202,12 +202,12 @@ class ExamQuestionAdapterPaging(private val listener: OnItemSelectedListenerPagi
 //            setOptionClickListeners(this, onClickListener)
 //        }
     }
-
+    
     interface OnItemSelectedListenerPaging {
         fun onItemSelectedPaging(item: Question)
     }
-
-
+    
+    
     private fun showExplanation(show: Boolean, item: Question, binding: McqLayoutBinding) {
         if (show) {
             disableOptions(binding)
@@ -223,7 +223,7 @@ class ExamQuestionAdapterPaging(private val listener: OnItemSelectedListenerPagi
             binding.explainTv.visibility = View.GONE
         }
     }
-
+    
     private fun bindQuestionAndOptions(item: Question, binding: McqLayoutBinding) {
         with(binding) {
             showImgOrTextView(item.question, item.image, questionIv, questionTv)
@@ -233,7 +233,7 @@ class ExamQuestionAdapterPaging(private val listener: OnItemSelectedListenerPagi
             showImgOrTextView(item.option4, item.option4Image, option4Iv, option4Tv)
         }
     }
-
+    
     private fun resetOptions(binding: McqLayoutBinding) {
         with(binding) {
             resetOption(option1Layout, option1Icon, option1Tv, option1Layout.context)
@@ -242,7 +242,7 @@ class ExamQuestionAdapterPaging(private val listener: OnItemSelectedListenerPagi
             resetOption(option4Layout, option4Icon, option4Tv, option4Layout.context)
         }
     }
-
+    
     private fun highlightCorrectAnswer(binding: McqLayoutBinding, item: Question) {
         with(binding) {
             val correctAnswer = item.answer.toInt()
@@ -252,7 +252,7 @@ class ExamQuestionAdapterPaging(private val listener: OnItemSelectedListenerPagi
             highlightAnswer(option4Layout, option4Icon, option4Tv, 4, correctAnswer)
         }
     }
-
+    
     private fun highlightUserSelection(binding: McqLayoutBinding, item: Question) {
         val userAnswer = item.userSelectedAnswer
         val correctAnswer = item.answer.toInt()
@@ -263,7 +263,7 @@ class ExamQuestionAdapterPaging(private val listener: OnItemSelectedListenerPagi
             highlightAnswer(option4Layout, option4Icon, option4Tv, 4, correctAnswer, userAnswer)
         }
     }
-
+    
     private fun highlightAnswer(
         layout: View,
         icon: ImageView,
@@ -280,7 +280,7 @@ class ExamQuestionAdapterPaging(private val listener: OnItemSelectedListenerPagi
             makeGrayText(layout, text, layout.context)
         }
     }
-
+    
     private fun setOptionClickListeners(
         binding: McqLayoutBinding,
         onClickListener: View.OnClickListener
@@ -292,7 +292,7 @@ class ExamQuestionAdapterPaging(private val listener: OnItemSelectedListenerPagi
             option4Layout.setOnClickListener(onClickListener)
         }
     }
-
+    
     private fun getOptionIndex(view: View, binding: McqLayoutBinding): Int {
         return when (view) {
             binding.option1Layout -> 1
@@ -302,24 +302,24 @@ class ExamQuestionAdapterPaging(private val listener: OnItemSelectedListenerPagi
             else -> 0
         }
     }
-
+    
     private fun correctAnswer(optionLayout: View, imageView: ImageView, option: TextView) {
         optionLayout.setBackgroundResource(R.drawable.round_back_selected_option)
         imageView.setImageResource(R.drawable.baseline_check_24)
         option.setTextColor(ContextCompat.getColor(option.context, R.color.light_green))
     }
-
+    
     private fun wrongAnswer(optionLayout: View, imageView: ImageView, option: TextView) {
         optionLayout.setBackgroundResource(R.drawable.round_back_selected_option)
         imageView.setImageResource(R.drawable.baseline_close_24)
         option.setTextColor(ContextCompat.getColor(option.context, R.color.end_color_five))
     }
-
+    
     private fun makeGrayText(optionLayout: View, textView: TextView, context: Context) {
         optionLayout.setBackgroundResource(R.drawable.gray_baground)
         textView.setTextColor(ContextCompat.getColor(context, R.color.liteGray))
     }
-
+    
     private fun resetOption(
         optionLayout: View,
         optionIcon: ImageView,
@@ -331,7 +331,7 @@ class ExamQuestionAdapterPaging(private val listener: OnItemSelectedListenerPagi
         optionText.setTextColor(ContextCompat.getColor(context, R.color.LiteBlack))
         optionLayout.isEnabled = true
     }
-
+    
     private fun disableOptions(binding: McqLayoutBinding) {
         with(binding) {
             option1Layout.isEnabled = false
@@ -340,7 +340,7 @@ class ExamQuestionAdapterPaging(private val listener: OnItemSelectedListenerPagi
             option4Layout.isEnabled = false
         }
     }
-
+    
     private fun showImgOrTextView(
         text: String,
         base64ImageString: String,
@@ -354,10 +354,10 @@ class ExamQuestionAdapterPaging(private val listener: OnItemSelectedListenerPagi
         } else if (base64ImageString.isNotEmpty()) {
             imageView.visibility = View.VISIBLE
             textView.visibility = View.GONE
-            imageView.setImageBitmap(GeneralUtils.convertBase64ToBitmap(base64ImageString))
+            imageView.setImageBitmap(convertBase64ToBitmap(base64ImageString))
         }
     }
-
+    
     private fun highLightClickedOptionForExam(
         optionLayout: View,
         optionIcon: ImageView

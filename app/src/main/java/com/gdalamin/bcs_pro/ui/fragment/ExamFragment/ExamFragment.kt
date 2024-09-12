@@ -20,12 +20,12 @@ import com.gdalamin.bcs_pro.data.model.SharedData
 import com.gdalamin.bcs_pro.databinding.FragmentExamBinding
 import com.gdalamin.bcs_pro.databinding.ResultViewBinding
 import com.gdalamin.bcs_pro.databinding.SubmitAnswerOptionBinding
-import com.gdalamin.bcs_pro.ui.SharedViewModel
 import com.gdalamin.bcs_pro.ui.adapter.specificadapters.ExamQuestionAdapterPaging
 import com.gdalamin.bcs_pro.ui.adapter.specificadapters.QuestionAdapter
 import com.gdalamin.bcs_pro.ui.adapter.specificadapters.ResultAdapterTest
 import com.gdalamin.bcs_pro.ui.base.BaseFragment
 import com.gdalamin.bcs_pro.ui.common.LoadingStateAdapter
+import com.gdalamin.bcs_pro.ui.common.SharedViewModel
 import com.gdalamin.bcs_pro.ui.network.NetworkReceiverManager
 import com.gdalamin.bcs_pro.ui.utilities.DataState
 import com.gdalamin.bcs_pro.ui.utilities.GeneralUtils.convertEnglishToBangla
@@ -40,15 +40,15 @@ import kotlinx.coroutines.launch
 class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::inflate),
     ExamQuestionAdapterPaging.OnItemSelectedListenerPaging, QuestionAdapter.OnItemSelectedListener,
     NetworkReceiverManager.ConnectivityChangeListener {
-
+    
     private val questionAdapter by lazy { QuestionAdapter(this) }
     private val examQuestionAdapterPaging by lazy { ExamQuestionAdapterPaging(this) }
-
+    
     private val sharedViewModel: SharedViewModel by activityViewModels()
     private val viewModelTest: ExamViewModel by viewModels()
     private val resultViewmodel: ResultViewModel by viewModels()
     private lateinit var networkReceiverManager: NetworkReceiverManager
-
+    
     private var title = ""
     private var examType = ""
     private var subjectName = ""
@@ -59,13 +59,13 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
     private var individualSubResultTest: List<ExamInfoTest> = emptyList()
     private lateinit var sharedPreferences: SharedPreferences
     private val PREFS_NAME = "results_for_statistics"
-
-
+    
+    
     override fun loadUi() {
-
+        
         sharedPreferences = requireContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         networkReceiverManager = NetworkReceiverManager(requireContext(), this)
-
+        
         binding.apply {
             fabShowResult.setOnClickListener {
                 setUpFabIcon()
@@ -75,9 +75,9 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
         setupRecyclerViewPaging()
         localObserver()
         observeTime()
-
+        
     }
-
+    
     private fun localObserver() = with(resultViewmodel) {
         sharedViewModel.sharedData.observe(viewLifecycleOwner) { data ->
             viewModelTest.viewModelScope.launch {
@@ -90,19 +90,19 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
         }
         resultSubmission.observe(viewLifecycleOwner) {
             isResultSubmitted = it
-
+            
             if (it == true) {
                 examQuestionAdapterPaging.showAnswer(true)
                 binding.fabShowResult.setImageResource(R.drawable.baseline_keyboard_double_arrow_up_24)
             }
         }
-
+        
         liveDataExamResults.observe(viewLifecycleOwner) {
             individualSubResultTest = it
         }
-
+        
     }
-
+    
     private suspend fun handleAction(data: SharedData) = binding.apply {
         examType = data.action
         title = data.title
@@ -114,7 +114,7 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
                 viewModelTest.getExamQuestions(examType = data.totalQuestion)
                 observePagingQuestion()
             }
-
+            
             "subjectBasedExam" -> {
                 setupRecyclerView()
                 observeQuestions()
@@ -125,7 +125,7 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
             }
         }
     }
-
+    
     private fun observePagingQuestion() = with(binding) {
         lifecycleScope.launch {
             viewModelTest.questionsPaging.collectLatest { pagingData ->
@@ -142,11 +142,11 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
                     )
                     binding.fabShowResult.visibility = View.GONE
                 }
-
+                
                 is LoadState.NotLoading -> {
                     hideShimmerLayout(shimmerLayout, rvExamQuestion)
                     binding.fabShowResult.visibility = View.VISIBLE
-
+                    
                     if (!isResultSubmitted) {
                         binding.tvTimer.visibility = View.VISIBLE
                     } else {
@@ -156,7 +156,7 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
             }
         }
     }
-
+    
     private fun observeQuestions() {
         viewModelTest.questions.observe(viewLifecycleOwner) { response ->
             when (response) {
@@ -167,7 +167,7 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
                     )
                     binding.fabShowResult.visibility = View.GONE
                 }
-
+                
                 is DataState.Success -> {
                     hideShimmerLayout(binding.shimmerLayout, binding.rvExamQuestion)
                     response.data?.let {
@@ -176,7 +176,7 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
                     binding.fabShowResult.visibility = View.VISIBLE
                     binding.tvTimer.visibility = View.VISIBLE
                 }
-
+                
                 is DataState.Error -> {
                     hideShimmerLayout(binding.shimmerLayout, binding.rvExamQuestion)
 //                    Toast.makeText(activity, "${response.message}", Toast.LENGTH_SHORT).show()
@@ -184,7 +184,7 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
             }
         }
     }
-
+    
     private fun showResultView() {
         val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDailogTheme)
         val bindingResult = ResultViewBinding.inflate(LayoutInflater.from(context))
@@ -219,13 +219,13 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
         bottomSheetDialog.setContentView(bindingResult.root)
         bottomSheetDialog.show()
     }
-
-
+    
+    
     @SuppressLint("SetTextI18n")
     fun submitAnswer() {
         val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDailogTheme)
         val bindingResult = SubmitAnswerOptionBinding.inflate(LayoutInflater.from(context))
-
+        
         bindingResult.tvDis.text =
             "আপনি ${convertEnglishToBangla(totalQuestion.toString())}" +
                     " প্রশ্নের মধ্যে ${
@@ -233,7 +233,7 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
                             answeredQuestions.toString()
                         )
                     } টি প্রশ্নের উত্তর দিয়েছেন"
-
+        
         bindingResult.apply {
             btnSubmit.setOnClickListener {
                 if (answeredQuestions == 0) {
@@ -256,15 +256,15 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
         bottomSheetDialog.setContentView(bindingResult.root)
         bottomSheetDialog.show()
     }
-
+    
     private fun setUpFabIcon() = binding.apply {
         when (isResultSubmitted) {
             true -> showResultView()
             false -> submitAnswer()
         }
     }
-
-
+    
+    
     private fun observeTime() = resultViewmodel.apply {
         timeLeft.observe(viewLifecycleOwner) {
             binding.apply {
@@ -277,41 +277,41 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
             }
         }
     }
-
+    
     override fun onItemSelectedPaging(item: Question) {
         resultViewmodel.overallResult.observe(viewLifecycleOwner) {
             answeredQuestions = it.totalSelectedAnswer
         }
         resultViewmodel.processQuestion(item)
-
+        
     }
-
+    
     override fun onItemSelected(item: Question) {
         resultViewmodel.overallResult.observe(viewLifecycleOwner) {
             answeredQuestions = it.totalSelectedAnswer
         }
         resultViewmodel.processQuestion(item)
     }
-
-
+    
+    
     private fun setupRecyclerViewPaging() = binding.rvExamQuestion.apply {
         adapter = examQuestionAdapterPaging.withLoadStateFooter(
             footer = LoadingStateAdapter { examQuestionAdapterPaging.retry() }
         )
         layoutManager = LinearLayoutManager(context)
     }
-
+    
     private fun setupRecyclerView() = binding.rvExamQuestion.apply {
         adapter = questionAdapter
         layoutManager = LinearLayoutManager(context)
     }
-
-
+    
+    
     private fun saveResultForStatic(overallResult: ExamInfoTest) {
         val overallNotAnswered: Int = totalQuestion - overallResult.totalSelectedAnswer
-
+        
         if (getInt("totalQuestions", 0) > 1) {
-
+            
             val totalExam: Int = ((getInt("totalExam", 0)) + 1)
             val totalQuestion11: Int = ((getInt("totalQuestions", 0)) + totalQuestion)
             val overAllCorrectAnswer: Int =
@@ -320,13 +320,13 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
                 ((getInt("overAllWrongAnswer", 0)) + overallResult.totalWrongAnswer)
             val overAllNotAnswered: Int =
                 ((getInt("overAllNotAnswered", 0)) + overallNotAnswered)
-
+            
             saveInt("totalExam", totalExam)
             saveInt("totalQuestions", totalQuestion11)
             saveInt("overAllCorrectAnswer", overAllCorrectAnswer)
             saveInt("overAllWrongAnswer", overAllWrongAnswer)
             saveInt("overAllNotAnswered", overAllNotAnswered)
-
+            
         } else {
             saveInt("totalExam", 1)
             saveInt("totalQuestions", totalQuestion)
@@ -335,20 +335,20 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
             saveInt("overAllNotAnswered", overallNotAnswered)
         }
     }
-
+    
     private fun saveInt(key: String, value: Int) {
         sharedPreferences.edit().putInt(key, value).apply()
     }
-
+    
     private fun getInt(key: String, defaultValue: Int): Int {
         return sharedPreferences.getInt(key, defaultValue)
     }
-
+    
     override fun onConnected() {
         examQuestionAdapterPaging.retry()
     }
-
+    
     override fun onDisconnected() {
     }
-
+    
 }

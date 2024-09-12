@@ -7,9 +7,9 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitInstance {
-
+    
     private val retrofit: Retrofit by lazy {
-
+        
         val logging = HttpLoggingInterceptor()
         logging.setLevel(HttpLoggingInterceptor.Level.BODY)
         val client = OkHttpClient.Builder()
@@ -21,11 +21,11 @@ object RetrofitInstance {
             .client(client)
             .build()
     }
-
+    
     val questionApi: QuestionApi by lazy {
         retrofit.create(QuestionApi::class.java)
     }
-
+    
     val examApi: ExamApi by lazy {
         retrofit.create(ExamApi::class.java)
     }
@@ -35,6 +35,9 @@ object RetrofitInstance {
     val subjectsApi: SubjectsApi by lazy {
         retrofit.create(SubjectsApi::class.java)
     }
-
-
+    val notificationApi: UserNotificationApi by lazy {
+        retrofit.create(UserNotificationApi::class.java)
+    }
+    
+    
 }

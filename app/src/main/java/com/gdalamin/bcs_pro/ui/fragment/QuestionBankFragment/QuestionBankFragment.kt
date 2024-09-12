@@ -10,9 +10,9 @@ import com.gdalamin.bcs_pro.R
 import com.gdalamin.bcs_pro.data.model.BcsYearName
 import com.gdalamin.bcs_pro.data.model.SharedData
 import com.gdalamin.bcs_pro.databinding.FragmentQuestionBankBinding
-import com.gdalamin.bcs_pro.ui.SharedViewModel
 import com.gdalamin.bcs_pro.ui.adapter.specificadapters.QuestionBankAdapter
 import com.gdalamin.bcs_pro.ui.base.BaseFragment
+import com.gdalamin.bcs_pro.ui.common.SharedViewModel
 import com.gdalamin.bcs_pro.ui.network.NetworkReceiverManager
 import com.gdalamin.bcs_pro.ui.utilities.DataState
 import com.gdalamin.bcs_pro.ui.utilities.GeneralUtils.hideShimmerLayout

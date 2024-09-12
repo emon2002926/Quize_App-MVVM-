@@ -7,8 +7,10 @@ import androidx.lifecycle.viewModelScope
 import com.gdalamin.bcs_pro.data.local.repositories.LocalSubjectRepository
 import com.gdalamin.bcs_pro.data.model.SubjectName
 import com.gdalamin.bcs_pro.data.remote.repositories.SubjectRepository
-import com.gdalamin.bcs_pro.ui.utilities.Constants
 import com.gdalamin.bcs_pro.ui.utilities.Constants.Companion.CHECK_INTERNET_CONNECTION_MESSAGE
+import com.gdalamin.bcs_pro.ui.utilities.Constants.Companion.DEFAULT_PAGE_NUMBER
+import com.gdalamin.bcs_pro.ui.utilities.Constants.Companion.PAGE_SIZE
+import com.gdalamin.bcs_pro.ui.utilities.Constants.Companion.SUBJECT_API
 import com.gdalamin.bcs_pro.ui.utilities.DataState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -26,15 +28,13 @@ class SubjectViewModel @Inject constructor(
     private val _subjects: MutableLiveData<DataState<MutableList<SubjectName>>> = MutableLiveData()
     val subjectName: LiveData<DataState<MutableList<SubjectName>>> = _subjects
     
-    fun getSubjectsName(apiNumber: Int) {
+    fun getSubjectsName() {
         viewModelScope.launch {
             if (localSubjectRepository.isDatabaseEmpty()) {
                 _subjects.postValue(DataState.Loading())
                 try {
-                    val response = subjectRepository.getSubjects(
-                        apiNumber, pageNumber,
-                        Constants.PAGE_SIZE
-                    )
+                    val response =
+                        subjectRepository.getSubjects(SUBJECT_API, DEFAULT_PAGE_NUMBER, PAGE_SIZE)
                     val result = handleResponseApi(response)
                     _subjects.postValue(handleResponseApi(response))
                     
@@ -55,12 +55,13 @@ class SubjectViewModel @Inject constructor(
             } else {
                 _subjects.postValue(
                     DataState.Success(
-                        localSubjectRepository.getAllExamsNonLive().toMutableList()
+                        localSubjectRepository.getAllSubjectFromDB().toMutableList()
                     )
                 )
             }
         }
     }
+    
     
     private fun handleResponseApi(response: Response<MutableList<SubjectName>>): DataState<MutableList<SubjectName>> {
         if (response.isSuccessful) {
@@ -76,11 +77,6 @@ class SubjectViewModel @Inject constructor(
         exams?.let {
             localSubjectRepository.insertAll(it)
         }
-    }
-    
-    
-    fun getSubjectNameDatabase(): LiveData<List<SubjectName>> {
-        return localSubjectRepository.getAllExams()
     }
     
     

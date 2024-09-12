@@ -11,9 +11,10 @@ import com.gdalamin.bcs_pro.data.model.SharedData
 import com.gdalamin.bcs_pro.data.model.SubjectName
 import com.gdalamin.bcs_pro.databinding.FragmentSubjectsBinding
 import com.gdalamin.bcs_pro.databinding.SubjectBasedExamSubmitionBinding
-import com.gdalamin.bcs_pro.ui.SharedViewModel
 import com.gdalamin.bcs_pro.ui.adapter.specificadapters.SubjectAdapter
 import com.gdalamin.bcs_pro.ui.base.BaseFragment
+import com.gdalamin.bcs_pro.ui.common.SharedViewModel
+import com.gdalamin.bcs_pro.ui.network.NetworkReceiverManager
 import com.gdalamin.bcs_pro.ui.utilities.Constants.Companion.CHECK_INTERNET_CONNECTION_MESSAGE
 import com.gdalamin.bcs_pro.ui.utilities.DataState
 import com.gdalamin.bcs_pro.ui.utilities.GeneralUtils
@@ -25,7 +26,7 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SubjectsFragment : BaseFragment<FragmentSubjectsBinding>(FragmentSubjectsBinding::inflate),
-    SubjectAdapter.HandleClickListener {
+    SubjectAdapter.HandleClickListener, NetworkReceiverManager.ConnectivityChangeListener {
     
     private val subjectViewModel: SubjectViewModel by viewModels()
     private val sharedViewModel: SharedViewModel by activityViewModels()
@@ -36,10 +37,17 @@ class SubjectsFragment : BaseFragment<FragmentSubjectsBinding>(FragmentSubjectsB
         subjectAdapter = SubjectAdapter(this)
         setupRecyclerView()
         setupListeners()
+        observer()
         observeSubjectName()
         observeSharedData()
+        
     }
     
+    private fun observer() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            subjectViewModel.getSubjectsName()
+        }
+    }
     
     private fun observeSubjectName() = binding.apply {
         // Observe network call results
@@ -69,13 +77,11 @@ class SubjectsFragment : BaseFragment<FragmentSubjectsBinding>(FragmentSubjectsB
             }
         }
         // Observe data from Room database
-        subjectViewModel.getSubjectNameDatabase().observe(viewLifecycleOwner) { exams ->
-            subjectAdapter.submitList(exams)
-        }
+//        subjectViewModel.getSubjectNameDatabase().observe(viewLifecycleOwner) { exams ->
+//            subjectAdapter.submitList(exams)
+//        }
         // Check for data and decide to fetch from network or not
-        viewLifecycleOwner.lifecycleScope.launch {
-            subjectViewModel.getSubjectsName(apiNumber = 3)
-        }
+        
         
     }
     
@@ -165,6 +171,13 @@ class SubjectsFragment : BaseFragment<FragmentSubjectsBinding>(FragmentSubjectsB
         bottomSheetDialog.setContentView(bindingExamOption.root)
         bottomSheetDialog.show()
         
+    }
+    
+    override fun onConnected() {
+        observer()
+    }
+    
+    override fun onDisconnected() {
     }
     
 }

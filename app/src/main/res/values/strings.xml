@@ -11,6 +11,7 @@
     <string name="subjectExamDsc">যত খুশি বিষয়ভিত্তিক পরীক্ষা দিন। নিজেই সেট করুন পরীক্ষার সময় এবং নম্বর!</string>
     <string name="overAllExam">সামগ্রিক পরীক্ষা</string>
     <string name="questionBank">প্রশ্ন ব্যাংক</string>
+    <string name="notification">নোটিফিকেশন</string>
     <string name="importantQuestion">গুরুত্বপূর্ণ প্রশ্ন</string>
     <string name="corses">কোর্স সমূহ</string>
     <string name="showAll">সবগুলো</string>

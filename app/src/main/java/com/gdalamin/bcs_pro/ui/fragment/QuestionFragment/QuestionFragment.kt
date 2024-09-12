@@ -10,10 +10,10 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gdalamin.bcs_pro.R
 import com.gdalamin.bcs_pro.databinding.FragmentQuestionBinding
-import com.gdalamin.bcs_pro.ui.SharedViewModel
 import com.gdalamin.bcs_pro.ui.adapter.specificadapters.QuestionAdapterPaging
 import com.gdalamin.bcs_pro.ui.base.BaseFragment
 import com.gdalamin.bcs_pro.ui.common.LoadingStateAdapter
+import com.gdalamin.bcs_pro.ui.common.SharedViewModel
 import com.gdalamin.bcs_pro.ui.network.NetworkReceiverManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -23,22 +23,22 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionBinding::inflate),
     NetworkReceiverManager.ConnectivityChangeListener {
-
+    
     private val questionAdapterPaging by lazy { QuestionAdapterPaging() }
     private val sharedViewModel: SharedViewModel by activityViewModels()
     private var mBooleanValue = false
-
+    
     private lateinit var networkReceiverManager: NetworkReceiverManager
     private val viewModel: QuestionViewModel by viewModels()
-
+    
     override fun loadUi() {
         binding.backButton.setOnClickListener { findNavController().navigateUp() }
-
+        
         observeSharedData()
         setupRecyclerView()
         networkReceiverManager = NetworkReceiverManager(requireContext(), this)
     }
-
+    
     private fun observeSharedData() = binding.apply {
         sharedViewModel.sharedData.observe(viewLifecycleOwner) { data ->
             viewModel.viewModelScope.launch {
@@ -49,14 +49,14 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionB
                         viewModel.getPreviousQuestions(data.batchOrSubjectName)
                         observePagingQuestions()
                     }
-
+                    
                     "subjectBasedQuestions" -> {
                         tvTitle.text = data.title
                         setupFab()
                         viewModel.getQuestions(10, data.batchOrSubjectName)
                         observePagingQuestions()
                     }
-
+                    
                     "importantQuestion" -> {
                         tvTitle.text = data.title
                         setupFab()
@@ -67,7 +67,7 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionB
             }
         }
     }
-
+    
     private fun observePagingQuestions() {
         lifecycleScope.launch {
             viewModel.questions.collectLatest { pagingData ->
@@ -81,26 +81,26 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionB
                     binding.shimmerLayout.visibility = View.VISIBLE
                     binding.rvQuestion.visibility = View.GONE
                 }
-
+                
                 is LoadState.NotLoading -> {
                     binding.shimmerLayout.stopShimmer()
                     binding.shimmerLayout.visibility = View.GONE
                     binding.rvQuestion.visibility = View.VISIBLE
                 }
-
+                
                 is LoadState.Error -> {
                 }
             }
         }
     }
-
+    
     private fun setupRecyclerView() = binding.rvQuestion.apply {
         adapter = questionAdapterPaging.withLoadStateFooter(
             footer = LoadingStateAdapter { questionAdapterPaging.retry() }
         )
         layoutManager = LinearLayoutManager(context)
     }
-
+    
     private fun setupFab() = binding.apply {
         btnShowAnswer.setOnClickListener {
             mBooleanValue = !mBooleanValue
@@ -112,13 +112,13 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionB
             }
         }
     }
-
+    
     override fun onConnected() {
         questionAdapterPaging.retry()
     }
-
+    
     override fun onDisconnected() {}
-
+    
     override fun onDestroyView() {
         super.onDestroyView()
         networkReceiverManager.unregister()

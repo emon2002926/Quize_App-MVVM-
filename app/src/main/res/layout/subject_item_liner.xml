@@ -3,34 +3,139 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/parentLayout"
     android:layout_width="wrap_content"
-    android:layout_height="@dimen/_150sdp"
-    android:layout_marginEnd="@dimen/_10sdp"
-    android:background="@drawable/round_bg"
-    android:gravity="center_horizontal"
-    android:orientation="vertical">
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
 
-    <ImageView
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_marginStart="17dp"
-        android:layout_marginTop="@dimen/_8sdp"
-        android:layout_marginEnd="17dp"
-        android:padding="@dimen/_12sdp"
-        android:src="@drawable/earth_bg_white" />
-
-    <TextView
-        android:id="@+id/tvSubjectName"
-        android:layout_width="@dimen/_124sdp"
+    <HorizontalScrollView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:fontFamily="@font/baloo_bhaina_2_medium"
-        android:gravity="center"
-        android:lineSpacingMultiplier="0.6"
-        android:paddingStart="@dimen/_4sdp"
-        android:paddingEnd="@dimen/_4sdp"
-        android:paddingBottom="@dimen/_8sdp"
-        android:text="আন্তর্জাতিক বিষয়াবলি "
-        android:textColor="@color/white"
-        android:textSize="@dimen/_12ssp"
-        android:textStyle="bold" />
+        android:scrollIndicators="none"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:background="@drawable/round_bg"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_marginStart="17dp"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:layout_marginEnd="17dp"
+                    android:padding="@dimen/_12sdp"
+                    android:src="@drawable/school" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_30sdp"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    android:background="@drawable/bottom_sheet_round">
+
+                    <TextView
+                        android:id="@+id/tvSubjectName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:lineSpacingMultiplier="0.8"
+                        android:paddingStart="@dimen/_4sdp"
+                        android:paddingEnd="@dimen/_4sdp"
+                        android:text="আন্তর্জাতিক বিষয়াবলি "
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_12ssp"
+                        android:textStyle="normal" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:background="@drawable/round_bg"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_marginStart="17dp"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:layout_marginEnd="17dp"
+                    android:padding="@dimen/_12sdp"
+                    android:src="@drawable/graduation" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_30sdp"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    android:background="@drawable/bottom_sheet_round">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:lineSpacingMultiplier="0.8"
+                        android:paddingStart="@dimen/_4sdp"
+                        android:paddingEnd="@dimen/_4sdp"
+                        android:text="আন্তর্জাতিক বিষয়াবলি "
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_12ssp"
+                        android:textStyle="normal" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:background="@drawable/round_bg"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_marginStart="17dp"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:layout_marginEnd="17dp"
+                    android:padding="@dimen/_12sdp"
+                    android:src="@drawable/school" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_30sdp"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    android:background="@drawable/bottom_sheet_round">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:lineSpacingMultiplier="0.8"
+                        android:paddingStart="@dimen/_4sdp"
+                        android:paddingEnd="@dimen/_4sdp"
+                        android:text="আন্তর্জাতিক বিষয়াবলি "
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_12ssp"
+                        android:textStyle="normal" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+    </HorizontalScrollView>
+
+
 </LinearLayout>

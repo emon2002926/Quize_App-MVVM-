@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/_8sdp"
+    android:layout_marginTop="@dimen/_10sdp"
+    android:layout_marginEnd="@dimen/_8sdp"
+    android:layout_marginBottom="@dimen/_4sdp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/ivNotificationImage"
+            style="@style/roundedImageViewStyle"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_130sdp"
+            android:paddingStart="@dimen/_4sdp"
+            android:paddingEnd="@dimen/_4sdp"
+            android:scaleType="fitXY"
+            app:shapeAppearanceOverlay="@style/roundedImageViewStyle" />
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:paddingStart="@dimen/_4sdp"
+            android:paddingEnd="@dimen/_4sdp"
+            android:text="ঢাকা বিশ্ববিদ্যালয়ের ভিসি'র বিরুদ্ধে প্রথম "
+            android:textColor="@color/LiteBlack"
+            android:textSize="@dimen/_11ssp"
+            android:textStyle="bold" />
+
+
+        <TextView
+            android:id="@+id/tvDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10ssp"
+            android:layout_marginBottom="@dimen/_6sdp"
+            android:maxLines="2"
+            android:paddingStart="@dimen/_4sdp"
+            android:paddingEnd="@dimen/_4sdp"
+            android:text="কিন্তু আর্টিকেলটি সে লিখেছে নতুন ভিসি নিয়োগ পাওয়ার মাত্র এক সপ্তাহের মধ্যে। ভদ্রলোক এখনো নতুন পজিশনে থিতুই হন নি। তার সামনে এখন অনেক চ্যালেঞ্জ। এমন একটি সময়ে তাকে বাড়ি ছাড়তে হবে কেন? তিনি কোথায় যাবেন? কোথায় গিয়ে উঠবেন?
+নতুন ভিসি নিয়োগ পাওয়ার পর শিক্ষক নেটওয়ার্কের সদস্যদের মধ্যে উত্তেজনা দেখা গেছে। তাদের এক সদস্য ফেসবুকে প্রকাশ্যেই বলেছেন, তিনি এই নিয়োগে সন্তুষ্ট নন। আরেক সদস্য আইডিয়া দিয়েছেন এই বড় বাসাকে জাদুঘর বানানোর জন্য। এখন ছাপা হল একই দাবি নিয়ে আর্টিকেল। প্রথম আলোতে। সব বামপন্থীর সূত্র এক। "
+            android:textSize="@dimen/_10ssp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp"
+            android:layout_marginStart="@dimen/_4sdp"
+            android:layout_marginTop="@dimen/_16sdp"
+            android:layout_marginEnd="@dimen/_4sdp"
+            android:background="@color/DeepGrey" />
+
+    </LinearLayout>
+
+</LinearLayout>
