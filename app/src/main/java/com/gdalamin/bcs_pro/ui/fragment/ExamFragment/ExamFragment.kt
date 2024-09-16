@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -70,11 +71,11 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
             fabShowResult.setOnClickListener {
                 setUpFabIcon()
             }
-            backButton.setOnClickListener { findNavController().navigateUp() }
         }
         setupRecyclerViewPaging()
         localObserver()
         observeTime()
+        handleBackPress()
         
     }
     
@@ -157,33 +158,30 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
         }
     }
     
-    private fun observeQuestions() {
+    private fun observeQuestions() = binding.apply {
         viewModelTest.questions.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is DataState.Loading -> {
-                    showShimmerLayout(
-                        binding.shimmerLayout,
-                        binding.rvExamQuestion
-                    )
-                    binding.fabShowResult.visibility = View.GONE
+                    showShimmerLayout(shimmerLayout, rvExamQuestion)
+                    fabShowResult.visibility = View.GONE
                 }
                 
                 is DataState.Success -> {
-                    hideShimmerLayout(binding.shimmerLayout, binding.rvExamQuestion)
+                    hideShimmerLayout(shimmerLayout, rvExamQuestion)
                     response.data?.let {
                         questionAdapter.submitList(it)
                     }
-                    binding.fabShowResult.visibility = View.VISIBLE
-                    binding.tvTimer.visibility = View.VISIBLE
+                    fabShowResult.visibility = View.VISIBLE
+                    tvTimer.visibility = View.VISIBLE
                 }
                 
                 is DataState.Error -> {
-                    hideShimmerLayout(binding.shimmerLayout, binding.rvExamQuestion)
-//                    Toast.makeText(activity, "${response.message}", Toast.LENGTH_SHORT).show()
+                    hideShimmerLayout(shimmerLayout, rvExamQuestion)
                 }
             }
         }
     }
+    
     
     private fun showResultView() {
         val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDailogTheme)
@@ -264,6 +262,29 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
         }
     }
     
+    private fun handleBackPress() {
+        binding.backButton.setOnClickListener {
+            if (isResultSubmitted) {
+                findNavController().navigateUp()
+                
+            } else {
+                submitAnswer()
+            }
+        }
+        
+        val backPressCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (isResultSubmitted) {
+                    findNavController().navigateUp()
+                } else {
+                    submitAnswer()
+                }
+//                Log.d("kghfagya", "back button clicked")
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, backPressCallback)
+        
+    }
     
     private fun observeTime() = resultViewmodel.apply {
         timeLeft.observe(viewLifecycleOwner) {

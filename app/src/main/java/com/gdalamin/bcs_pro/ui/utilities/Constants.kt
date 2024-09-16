@@ -13,6 +13,7 @@ class Constants {
         const val CHECK_INTERNET_CONNECTION_MESSAGE = "Check your internet connection"
         const val NOTIFICATION_API = 11
         const val SUBJECT_API = 3
+        const val LIVE_EXAM_API = 2
         const val DEFAULT_PAGE_NUMBER = 1
     }
 }

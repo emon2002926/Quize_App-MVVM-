@@ -54,8 +54,6 @@ class NotificationViewModel @Inject constructor(
                     }
                 }
             }
-            
-            
         }
     }
     

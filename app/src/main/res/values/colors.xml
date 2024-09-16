@@ -10,6 +10,7 @@
     <color name="black_font">#121313</color>
     <color name="light_black_font">#121313</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="lavender">#eee8f4</color>
     <color name="dodger_blue">#1489ee</color>
     <color name="light_green">#73df91</color>
     <color name="green">#4BC851</color>
