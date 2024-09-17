@@ -15,5 +15,8 @@ class Constants {
         const val SUBJECT_API = 3
         const val LIVE_EXAM_API = 2
         const val DEFAULT_PAGE_NUMBER = 1
+        const val ADMOB_APP_ID = "ca-app-pub-5937040681702096~9273407369"
+        const val ADMOB_BANNER_AD_ID = "ca-app-pub-5937040681702096/6440296245"
+        const val ADMOB_INTERSTITIAL_AD_ID = "ca-app-pub-5937040681702096/7729888265"
     }
 }

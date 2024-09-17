@@ -14,10 +14,13 @@ import com.gdalamin.bcs_pro.ui.common.AdViewModel
 import com.gdalamin.bcs_pro.ui.common.SharedViewModel
 import com.gdalamin.bcs_pro.ui.fragment.HomeFragment.notificationLayout.NotificationLayout
 import com.gdalamin.bcs_pro.ui.fragment.HomeFragment.notificationLayout.NotificationViewModel
+import com.gdalamin.bcs_pro.ui.fragment.HomeFragment.observer.AdObserver
+import com.gdalamin.bcs_pro.ui.fragment.HomeFragment.observer.HomeFragmentObserver
 import com.gdalamin.bcs_pro.ui.fragment.SubjectsFragment.SubjectViewModel
 import com.gdalamin.bcs_pro.ui.network.NetworkReceiverManager
 import com.gdalamin.bcs_pro.ui.utilities.Constants.Companion.LIVE_EXAM_API
 import com.gdalamin.bcs_pro.ui.utilities.GeneralUtils.isInternetAvailable
+import com.google.android.gms.ads.AdView
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -34,7 +37,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     private val adViewModel: AdViewModel by viewModels()
     private lateinit var networkReceiverManager: NetworkReceiverManager
     private lateinit var homeFragmentObserver: HomeFragmentObserver
-    
+    private lateinit var adObserver: AdObserver
+    private var adView: AdView? = null
     
     override fun loadUi() {
         
@@ -44,7 +48,41 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         setupRecyclerView(binding.rvLiveExam, liveExamAdapter)
         networkCall()
         handleBackPress()
+
+
+//        showBannerAd()
+        
+        // Load the banner ad
+        adObserver = AdObserver(this@HomeFragment, binding, adViewModel)
+        
+        adObserver.showBannerAd()
+        
+        adViewModel.loadBannerAd(requireContext())
+        
     }
+
+//    private fun showBannerAd() = binding.apply {
+//        adViewModel.bannerAdState.observe(viewLifecycleOwner) { dataState ->
+//            when (dataState) {
+//                is DataState.Success -> {
+//                    adView = dataState.data
+//                    adView?.let {
+//                        // Remove the adView from its current parent if necessary
+//                        (it.parent as? ViewGroup)?.removeView(it)
+//                        binding.adContainer.removeAllViews() // Clear any previous ad
+//                        binding.adContainer.addView(it) // Add the new ad
+//                    }
+//                }
+//
+//                is DataState.Error -> {
+//                    // Handle the error state if needed
+////                    Log.e("ExampleFragment", "Error loading banner ad: ${dataState.message}")
+//                }
+//
+//                is DataState.Loading -> TODO()
+//            }
+//        }
+//    }
     
     private fun initializeObservers() {
         homeFragmentObserver = HomeFragmentObserver(
@@ -87,7 +125,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         
         )
         sharedViewModel.setSharedData(data)
-        homeFragmentObserver.adObserver()
+        homeFragmentObserver.observeInterstitialAd()
     }
     
     private fun setupRecyclerView(recyclerView: RecyclerView, adapter: RecyclerView.Adapter<*>) {
@@ -97,11 +135,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         }
     }
     
-    
-    override fun onDestroyView() {
-        super.onDestroyView()
-        networkReceiverManager.unregister()
-    }
     
     private fun handleBackPress() {
         val backPressCallback = object : OnBackPressedCallback(true) {
@@ -116,12 +149,17 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     override fun onConnected() {
         homeFragmentObserver.observeLiveData()
         networkCall()
-        
-        
     }
     
     override fun onDisconnected() {
     }
     
+    
+    override fun onDestroyView() {
+        super.onDestroyView()
+        networkReceiverManager.unregister()
+        adView?.destroy() // Clean up the adView
+        
+    }
     
 }

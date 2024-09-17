@@ -1,10 +1,12 @@
-package com.gdalamin.bcs_pro.ui.fragment.HomeFragment
+package com.gdalamin.bcs_pro.ui.fragment.HomeFragment.observer
 
 import androidx.navigation.fragment.findNavController
 import com.gdalamin.bcs_pro.R
 import com.gdalamin.bcs_pro.databinding.FragmentHomeBinding
 import com.gdalamin.bcs_pro.ui.adapter.specificadapters.LiveExamAdapter
 import com.gdalamin.bcs_pro.ui.common.AdViewModel
+import com.gdalamin.bcs_pro.ui.fragment.HomeFragment.HomeFragment
+import com.gdalamin.bcs_pro.ui.fragment.HomeFragment.HomeFragmentViewModel
 import com.gdalamin.bcs_pro.ui.utilities.DataState
 import com.gdalamin.bcs_pro.ui.utilities.GeneralUtils.hideShimmerLayout
 import com.gdalamin.bcs_pro.ui.utilities.GeneralUtils.showShimmerLayout
@@ -46,7 +48,7 @@ class HomeFragmentObserver(
         }
     }
     
-    fun adObserver() {
+    fun observeInterstitialAd() {
         val adListener = object : FullScreenContentCallback() {
             override fun onAdDismissedFullScreenContent() {
                 // Navigate to the new fragment after the ad is closed
@@ -84,8 +86,19 @@ class HomeFragmentObserver(
                 }
             }
         }
-        
+        // Check if an ad is already loaded
+        if (adViewModel.adState.value is DataState.Success) {
+            // If an ad is preloaded, show it immediately
+            fragment.activity?.let {
+                adViewModel.showInterstitialAd(it, adListener)
+            }
+        } else {
+            // If no ad is loaded, preload it and navigate to the next fragment
+            adViewModel.preloadInterstitialAd()
+            fragment.findNavController().navigate(R.id.action_homeFragment_to_examFragment)
+        }
         
     }
+    
     
 }

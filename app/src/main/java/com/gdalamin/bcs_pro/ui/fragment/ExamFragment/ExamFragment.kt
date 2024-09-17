@@ -250,6 +250,7 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
                     showResultView()
                 }
             }
+            btnCancel.setOnClickListener { bottomSheetDialog.dismiss() }
         }
         bottomSheetDialog.setContentView(bindingResult.root)
         bottomSheetDialog.show()

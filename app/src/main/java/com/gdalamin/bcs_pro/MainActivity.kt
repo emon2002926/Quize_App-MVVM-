@@ -7,35 +7,34 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import com.gdalamin.bcs_pro.databinding.ActivityMainBinding
+import com.google.firebase.analytics.FirebaseAnalytics
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    //    private lateinit var firebaseAnalytics: FirebaseAnalytics
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
+    
     lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        enableEdgeToEdge()
+        
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-//        firebaseAnalytics = Firebase.analytics
+        
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this)
         
         val navController = findNavController(R.id.newsNavHostFragment)
         binding.bottomNavigationView.setupWithNavController(navController)
-
-
-//         Handle item selection events
+        
+        
         binding.bottomNavigationView.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.homeFragment -> {
-                    // Navigate to homeFragment2 when "Home" item is selected
                     navController.navigate(R.id.homeFragment)
                     true
                 }
                 
                 R.id.questionFragment -> {
-                    // Navigate to questionFragment and hide the bottom navigation view
                     navController.navigate(R.id.questionFragment)
                     hideBottomNavigationView()
                     true
