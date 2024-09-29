@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import com.gdalamin.bcs_pro.data.model.UserNotification
 import com.gdalamin.bcs_pro.databinding.NotificationItemBinding
 import com.gdalamin.bcs_pro.ui.adapter.base.BaseAdapter
-import com.gdalamin.bcs_pro.ui.utilities.GeneralUtils.convertBase64ToBitmap
+import com.gdalamin.bcs_pro.utilities.GeneralUtils.convertBase64ToBitmap
 
 class NotificationAdapter() :
     BaseAdapter<UserNotification, NotificationItemBinding>(

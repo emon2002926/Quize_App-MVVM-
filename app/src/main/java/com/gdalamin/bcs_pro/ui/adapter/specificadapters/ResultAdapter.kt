@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import com.gdalamin.bcs_pro.data.model.ExamResult
 import com.gdalamin.bcs_pro.databinding.ItemResultBinding
 import com.gdalamin.bcs_pro.ui.adapter.base.BaseAdapter
-import com.gdalamin.bcs_pro.ui.utilities.GeneralUtils.convertEnglishToBangla
+import com.gdalamin.bcs_pro.utilities.GeneralUtils.convertEnglishToBangla
 
 class ResultAdapter : BaseAdapter<ExamResult, ItemResultBinding>(
     areItemsTheSame = { oldItem, newItem -> oldItem.subjectName == newItem.subjectName },
@@ -14,7 +14,7 @@ class ResultAdapter : BaseAdapter<ExamResult, ItemResultBinding>(
     override fun createBinding(parent: ViewGroup, viewType: Int): ItemResultBinding {
         return ItemResultBinding.inflate(LayoutInflater.from(parent.context), parent, false)
     }
-
+    
     override fun bind(binding: ItemResultBinding, item: ExamResult, position: Int) {
         with(binding) {
             tvSubjectName.text = convertEnglishToBangla(item.subjectName)
@@ -24,7 +24,7 @@ class ResultAdapter : BaseAdapter<ExamResult, ItemResultBinding>(
             tvMarks.text = "${item.mark}"
         }
     }
-
+    
     private fun textConverter(int: Int): String =
         convertEnglishToBangla(int.toString())
 }

@@ -11,9 +11,9 @@ import com.gdalamin.bcs_pro.R
 import com.gdalamin.bcs_pro.data.model.Question
 import com.gdalamin.bcs_pro.databinding.McqLayoutBinding
 import com.gdalamin.bcs_pro.ui.adapter.base.BaseAdapter
-import com.gdalamin.bcs_pro.ui.utilities.Animations
-import com.gdalamin.bcs_pro.ui.utilities.GeneralUtils.convertBase64ToBitmap
-import com.gdalamin.bcs_pro.ui.utilities.GeneralUtils.convertEnglishToBangla
+import com.gdalamin.bcs_pro.utilities.Animations
+import com.gdalamin.bcs_pro.utilities.GeneralUtils.convertBase64ToBitmap
+import com.gdalamin.bcs_pro.utilities.GeneralUtils.convertEnglishToBangla
 
 class QuestionAdapter(
     private val listener: OnItemSelectedListener
@@ -41,7 +41,8 @@ class QuestionAdapter(
             explainIv.visibility = View.GONE
             Animations.setAnimationFadeIn(binding.root.context, binding.root, position)
             
-            tvQuestionPosition.text = convertEnglishToBangla("${position + 1})")
+            val questionPosition = (position + 1).toString()
+            tvQuestionPosition.text = convertEnglishToBangla(questionPosition) + ")"
             // Set question and options
             bindQuestionAndOptions(item, this)
             // Reset options to default state

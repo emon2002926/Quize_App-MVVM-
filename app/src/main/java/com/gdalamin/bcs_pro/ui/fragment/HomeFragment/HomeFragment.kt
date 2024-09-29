@@ -18,8 +18,8 @@ import com.gdalamin.bcs_pro.ui.fragment.HomeFragment.observer.AdObserver
 import com.gdalamin.bcs_pro.ui.fragment.HomeFragment.observer.HomeFragmentObserver
 import com.gdalamin.bcs_pro.ui.fragment.SubjectsFragment.SubjectViewModel
 import com.gdalamin.bcs_pro.ui.network.NetworkReceiverManager
-import com.gdalamin.bcs_pro.ui.utilities.Constants.Companion.LIVE_EXAM_API
-import com.gdalamin.bcs_pro.ui.utilities.GeneralUtils.isInternetAvailable
+import com.gdalamin.bcs_pro.utilities.Constants.Companion.LIVE_EXAM_API
+import com.gdalamin.bcs_pro.utilities.GeneralUtils.isInternetAvailable
 import com.google.android.gms.ads.AdView
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -37,6 +37,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     private val adViewModel: AdViewModel by viewModels()
     private lateinit var networkReceiverManager: NetworkReceiverManager
     private lateinit var homeFragmentObserver: HomeFragmentObserver
+    
     private lateinit var adObserver: AdObserver
     private var adView: AdView? = null
     
@@ -48,11 +49,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         setupRecyclerView(binding.rvLiveExam, liveExamAdapter)
         networkCall()
         handleBackPress()
-
-
-//        showBannerAd()
         
-        // Load the banner ad
+        
         adObserver = AdObserver(this@HomeFragment, binding, adViewModel)
         
         adObserver.showBannerAd()
@@ -60,29 +58,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         adViewModel.loadBannerAd(requireContext())
         
     }
-
-//    private fun showBannerAd() = binding.apply {
-//        adViewModel.bannerAdState.observe(viewLifecycleOwner) { dataState ->
-//            when (dataState) {
-//                is DataState.Success -> {
-//                    adView = dataState.data
-//                    adView?.let {
-//                        // Remove the adView from its current parent if necessary
-//                        (it.parent as? ViewGroup)?.removeView(it)
-//                        binding.adContainer.removeAllViews() // Clear any previous ad
-//                        binding.adContainer.addView(it) // Add the new ad
-//                    }
-//                }
-//
-//                is DataState.Error -> {
-//                    // Handle the error state if needed
-////                    Log.e("ExampleFragment", "Error loading banner ad: ${dataState.message}")
-//                }
-//
-//                is DataState.Loading -> TODO()
-//            }
-//        }
-//    }
+    
     
     private fun initializeObservers() {
         homeFragmentObserver = HomeFragmentObserver(
@@ -116,15 +92,18 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     
     override fun onClickLiveExam(item: LiveExam) {
         val data = SharedData(
-            title = "ডেইলি মডেল টেস্ট",
-            action = "normalExam",
+            title = item.examTitle,
+            action = "liveExam",
             totalQuestion = item.totalQc,
-            questionType = "normal",
+            questionType = item.questionSet,
             batchOrSubjectName = "",
             time = item.time * 60
         
         )
+        
         sharedViewModel.setSharedData(data)
+//        findNavController().navigate(R.id.action_homeFragment_to_examFragment)
+        
         homeFragmentObserver.observeInterstitialAd()
     }
     

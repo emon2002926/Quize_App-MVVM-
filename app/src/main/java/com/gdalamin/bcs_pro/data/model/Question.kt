@@ -14,6 +14,8 @@ data class Question(
     val roomGeneratedId: Int,
     val answer: String,
     val batch: String,
+    val questionSet: String,
+    var isQuestionSaved: Boolean,
     val explanation: String,
     val explanationImage: String,
     val id: String,

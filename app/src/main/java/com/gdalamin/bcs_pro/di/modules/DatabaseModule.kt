@@ -19,7 +19,8 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class DatabaseModule {
-
+    
+    
     @Provides
     @Singleton
     fun provideExamInfoDatabase(@ApplicationContext appContext: Context): ExamInfoDatabase {
@@ -27,14 +28,16 @@ class DatabaseModule {
             appContext,
             ExamInfoDatabase::class.java,
             "exam_info_database"
-        ).build()
+        ).fallbackToDestructiveMigration()
+            .build()
     }
-
+    
+    
     @Provides
     fun provideExamInfoDao(database: ExamInfoDatabase): ExamInfoDao {
         return database.examInfoDao()
     }
-
+    
     //
     @Provides
     @Singleton
@@ -45,13 +48,13 @@ class DatabaseModule {
             "subject_name_database"
         ).build()
     }
-
+    
     @Provides
     fun provideSubjectDao(database: SubjectNameDatabase): SubjectDao {
         return database.subjectDao()
     }
-
-
+    
+    
     @Provides
     @Singleton
     fun provideQuestionBankDatabase(@ApplicationContext appContext: Context): QuestionBankDatabase {
@@ -61,11 +64,11 @@ class DatabaseModule {
             "bcs_year_name_database"
         ).build()
     }
-
+    
     @Provides
     fun provideQuestionDao(database: QuestionBankDatabase): QuestionBankDao {
         return database.questionBankDao()
     }
-
-
+    
+    
 }

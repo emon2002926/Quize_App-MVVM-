@@ -2,9 +2,9 @@ package com.gdalamin.bcs_pro.data.remote.repositories
 
 import com.gdalamin.bcs_pro.data.model.UserNotification
 import com.gdalamin.bcs_pro.data.remote.api.UserNotificationApi
-import com.gdalamin.bcs_pro.ui.utilities.Constants.Companion.API_KEY
-import com.gdalamin.bcs_pro.ui.utilities.Constants.Companion.NOTIFICATION_API
-import com.gdalamin.bcs_pro.ui.utilities.Constants.Companion.PAGE_SIZE
+import com.gdalamin.bcs_pro.utilities.Constants.Companion.API_KEY
+import com.gdalamin.bcs_pro.utilities.Constants.Companion.NOTIFICATION_API
+import com.gdalamin.bcs_pro.utilities.Constants.Companion.PAGE_SIZE
 import retrofit2.Response
 import javax.inject.Inject
 

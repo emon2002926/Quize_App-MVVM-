@@ -15,11 +15,11 @@ import com.gdalamin.bcs_pro.ui.adapter.specificadapters.SubjectAdapter
 import com.gdalamin.bcs_pro.ui.base.BaseFragment
 import com.gdalamin.bcs_pro.ui.common.SharedViewModel
 import com.gdalamin.bcs_pro.ui.network.NetworkReceiverManager
-import com.gdalamin.bcs_pro.ui.utilities.Constants.Companion.CHECK_INTERNET_CONNECTION_MESSAGE
-import com.gdalamin.bcs_pro.ui.utilities.DataState
-import com.gdalamin.bcs_pro.ui.utilities.GeneralUtils
-import com.gdalamin.bcs_pro.ui.utilities.GeneralUtils.isEmpty
-import com.gdalamin.bcs_pro.ui.utilities.GeneralUtils.isInternetAvailable
+import com.gdalamin.bcs_pro.utilities.Constants.Companion.CHECK_INTERNET_CONNECTION_MESSAGE
+import com.gdalamin.bcs_pro.utilities.DataState
+import com.gdalamin.bcs_pro.utilities.GeneralUtils
+import com.gdalamin.bcs_pro.utilities.GeneralUtils.isEmpty
+import com.gdalamin.bcs_pro.utilities.GeneralUtils.isInternetAvailable
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch

@@ -1,4 +1,4 @@
-package com.gdalamin.bcs_pro.ui.utilities
+package com.gdalamin.bcs_pro.utilities
 
 import android.content.Context
 import android.graphics.Bitmap

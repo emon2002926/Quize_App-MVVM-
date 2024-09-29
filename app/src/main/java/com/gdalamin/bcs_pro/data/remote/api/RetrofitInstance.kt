@@ -1,6 +1,6 @@
 package com.gdalamin.bcs_pro.data.remote.api
 
-import com.gdalamin.bcs_pro.ui.utilities.Constants.Companion.BASE_URL
+import com.gdalamin.bcs_pro.utilities.Constants.Companion.BASE_URL
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit

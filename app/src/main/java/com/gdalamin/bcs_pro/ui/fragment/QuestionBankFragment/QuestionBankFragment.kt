@@ -14,9 +14,9 @@ import com.gdalamin.bcs_pro.ui.adapter.specificadapters.QuestionBankAdapter
 import com.gdalamin.bcs_pro.ui.base.BaseFragment
 import com.gdalamin.bcs_pro.ui.common.SharedViewModel
 import com.gdalamin.bcs_pro.ui.network.NetworkReceiverManager
-import com.gdalamin.bcs_pro.ui.utilities.DataState
-import com.gdalamin.bcs_pro.ui.utilities.GeneralUtils.hideShimmerLayout
-import com.gdalamin.bcs_pro.ui.utilities.GeneralUtils.showShimmerLayout
+import com.gdalamin.bcs_pro.utilities.DataState
+import com.gdalamin.bcs_pro.utilities.GeneralUtils.hideShimmerLayout
+import com.gdalamin.bcs_pro.utilities.GeneralUtils.showShimmerLayout
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 

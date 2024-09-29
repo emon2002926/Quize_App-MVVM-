@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import com.gdalamin.bcs_pro.databinding.FragmentHomeBinding
 import com.gdalamin.bcs_pro.ui.common.AdViewModel
 import com.gdalamin.bcs_pro.ui.fragment.HomeFragment.HomeFragment
-import com.gdalamin.bcs_pro.ui.utilities.DataState
+import com.gdalamin.bcs_pro.utilities.DataState
 
 class AdObserver(
     private val fragment: HomeFragment,

@@ -7,9 +7,9 @@ import androidx.lifecycle.viewModelScope
 import com.gdalamin.bcs_pro.data.local.repositories.LocalQuestionBankRepository
 import com.gdalamin.bcs_pro.data.model.BcsYearName
 import com.gdalamin.bcs_pro.data.remote.repositories.QuestionBankRepository
-import com.gdalamin.bcs_pro.ui.utilities.Constants.Companion.CHECK_INTERNET_CONNECTION_MESSAGE
-import com.gdalamin.bcs_pro.ui.utilities.Constants.Companion.PAGE_SIZE
-import com.gdalamin.bcs_pro.ui.utilities.DataState
+import com.gdalamin.bcs_pro.utilities.Constants.Companion.CHECK_INTERNET_CONNECTION_MESSAGE
+import com.gdalamin.bcs_pro.utilities.Constants.Companion.PAGE_SIZE
+import com.gdalamin.bcs_pro.utilities.DataState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import retrofit2.Response

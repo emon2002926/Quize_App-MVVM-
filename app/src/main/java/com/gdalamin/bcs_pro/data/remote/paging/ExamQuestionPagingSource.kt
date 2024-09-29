@@ -7,23 +7,37 @@ import com.gdalamin.bcs_pro.data.remote.repositories.ExamRepository
 
 class ExamQuestionPagingSource(
     private val examRepository: ExamRepository,
-    private val questionAmounts: List<Int> // List of question amounts for each page
-) : PagingSource<Int, Question>() {
+    private val questionAmounts: List<Int>, // List of question amounts for each page
+    private val examType: String?,
+    private val questionSet: String?
 
+) : PagingSource<Int, Question>() {
+    
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Question> {
         val pageNumber = params.key ?: 1 // Current subject page
-
+        
         // Ensure the page number does not exceed the size of the questionAmounts list
         if (pageNumber > questionAmounts.size) {
             return LoadResult.Page(emptyList(), prevKey = null, nextKey = null)
         }
-
+        
         val amount = questionAmounts[pageNumber - 1] // Get the amount for this page
-
+        
         return try {
-            val response = examRepository.getExamQuestions(amount, pageNumber)
-            val questions = response.body() ?: emptyList()
-
+            val response = when (examType) {
+                "liveExam" -> questionSet?.let {
+                    examRepository.getLiveExamQuestions(
+                        it,
+                        pageNumber
+                    )
+                }
+                
+                else -> {
+                    examRepository.getExamQuestions(amount, pageNumber)
+                }
+            }
+            val questions = response?.body() ?: emptyList()
+            
             LoadResult.Page(
                 data = questions,
                 prevKey = if (pageNumber == 1) null else pageNumber - 1,
@@ -33,7 +47,7 @@ class ExamQuestionPagingSource(
             LoadResult.Error(e)
         }
     }
-
+    
     override fun getRefreshKey(state: PagingState<Int, Question>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
             state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1)

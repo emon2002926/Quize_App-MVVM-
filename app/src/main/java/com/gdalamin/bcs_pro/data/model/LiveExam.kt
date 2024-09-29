@@ -16,5 +16,7 @@ data class LiveExam(
     val details: String,
     val id: Int,
     val totalQc: Int,
-    val time: Int
+    val time: Int,
+    val questionSet: String,
+    val examTitle: String
 ) : Parcelable

@@ -6,7 +6,9 @@ import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.gdalamin.bcs_pro.ui.utilities.DataState
+import com.gdalamin.bcs_pro.utilities.Constants.Companion.ADMOB_BANNER_AD_TEST_ID
+import com.gdalamin.bcs_pro.utilities.Constants.Companion.ADMOB_INTERSTITIAL_AD_TEST_ID
+import com.gdalamin.bcs_pro.utilities.DataState
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
@@ -35,8 +37,7 @@ class AdViewModel @Inject constructor(
 // Load Banner Ad
     fun loadBannerAd(context: Context) {
         val adView = AdView(context).apply {
-            adUnitId =
-                "ca-app-pub-3940256099942544/6300978111" // Replace with your actual AdMob Banner Ad Unit ID
+            adUnitId = ADMOB_BANNER_AD_TEST_ID
             setAdSize(AdSize.BANNER) // Set AdSize properly during initialization
         }
         
@@ -60,7 +61,7 @@ class AdViewModel @Inject constructor(
         
         InterstitialAd.load(
             getApplication<Application>().applicationContext,
-            "ca-app-pub-3940256099942544/1033173712", // Replace with your actual AdMob Interstitial Ad Unit ID
+            ADMOB_INTERSTITIAL_AD_TEST_ID, // Replace with your actual AdMob Interstitial Ad Unit ID
             adRequest,
             object : InterstitialAdLoadCallback() {
                 override fun onAdLoaded(ad: InterstitialAd) {
@@ -72,6 +73,7 @@ class AdViewModel @Inject constructor(
                     _adState.postValue(DataState.Error("Failed to load interstitial ad"))
                 }
             })
+        
     }
     
     fun showInterstitialAd(activity: Activity, adListener: FullScreenContentCallback) {

@@ -19,8 +19,8 @@ android {
         applicationId = "com.gdalamin.bcs_pro"
         minSdk = 24
         targetSdk = 34
-        versionCode = 70
-        versionName = "2.4.00"
+        versionCode = 75
+        versionName = "2.4.04"
         
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -109,6 +109,9 @@ dependencies {
     
     implementation(platform("com.google.firebase:firebase-bom:33.3.0"))
     implementation("com.google.firebase:firebase-analytics")
+    
+    
+    implementation("com.facebook.android:audience-network-sdk:6.+")
     
     
 }

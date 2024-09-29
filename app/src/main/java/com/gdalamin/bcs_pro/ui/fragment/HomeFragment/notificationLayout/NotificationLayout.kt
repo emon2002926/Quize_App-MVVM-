@@ -11,9 +11,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.gdalamin.bcs_pro.databinding.FragmentHomeBinding
 import com.gdalamin.bcs_pro.databinding.NotificationLayoutBinding
 import com.gdalamin.bcs_pro.ui.adapter.specificadapters.NotificationAdapter
-import com.gdalamin.bcs_pro.ui.utilities.Constants.Companion.CHECK_INTERNET_CONNECTION_MESSAGE
-import com.gdalamin.bcs_pro.ui.utilities.DataState
-import com.gdalamin.bcs_pro.ui.utilities.GeneralUtils.showShimmerLayout
+import com.gdalamin.bcs_pro.utilities.Constants.Companion.CHECK_INTERNET_CONNECTION_MESSAGE
+import com.gdalamin.bcs_pro.utilities.DataState
+import com.gdalamin.bcs_pro.utilities.GeneralUtils.showShimmerLayout
 
 class NotificationLayout(
     private val fragment: Fragment,

@@ -10,15 +10,12 @@ class CustomConfirmationDialog(private val fragment: HomeFragment) {
     fun show() {
         val context = fragment.requireContext()
         val binding = BackpressDialogConfirmationBinding.inflate(LayoutInflater.from(context))
-//        val alertDialog = Dialog.Builder(context)
-//            .setView(binding.root)
-//            .create()
+        
         
         val alertDialog = Dialog(context)
         alertDialog.setContentView(binding.root)
         
         alertDialog.window?.setBackgroundDrawableResource(R.drawable.rounded_dialog_background)
-//        alertDialog.window?.setLayout(100, 100)
         
         binding.btnConfirm.setOnClickListener {
             alertDialog.dismiss()
@@ -27,23 +24,7 @@ class CustomConfirmationDialog(private val fragment: HomeFragment) {
         binding.btnCancel.setOnClickListener { alertDialog.dismiss() }
         
         alertDialog.show()
-
-//        // Set margin to the left and right side
-//        val layoutParams = alertDialog.window?.attributes
-//        layoutParams?.width =
-//            WindowManager.LayoutParams.WRAP_CONTENT  // Make the dialog take up full width
-//        val marginInPixels =
-//            context.resources.getDimensionPixelSize(R.dimen.dialog_margin)  // Get margin in pixels
-//        alertDialog.window?.setLayout(
-//            layoutParams?.width ?: WindowManager.LayoutParams.MATCH_PARENT,
-//            WindowManager.LayoutParams.WRAP_CONTENT
-//        )
-//        alertDialog.window?.decorView?.setPadding(
-//            marginInPixels,
-//            0,
-//            marginInPixels,
-//            0
-//        )  // Apply left and right margin
+        
     }
     
 }

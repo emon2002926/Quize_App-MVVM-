@@ -7,9 +7,9 @@ import com.gdalamin.bcs_pro.ui.adapter.specificadapters.LiveExamAdapter
 import com.gdalamin.bcs_pro.ui.common.AdViewModel
 import com.gdalamin.bcs_pro.ui.fragment.HomeFragment.HomeFragment
 import com.gdalamin.bcs_pro.ui.fragment.HomeFragment.HomeFragmentViewModel
-import com.gdalamin.bcs_pro.ui.utilities.DataState
-import com.gdalamin.bcs_pro.ui.utilities.GeneralUtils.hideShimmerLayout
-import com.gdalamin.bcs_pro.ui.utilities.GeneralUtils.showShimmerLayout
+import com.gdalamin.bcs_pro.utilities.DataState
+import com.gdalamin.bcs_pro.utilities.GeneralUtils.hideShimmerLayout
+import com.gdalamin.bcs_pro.utilities.GeneralUtils.showShimmerLayout
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.FullScreenContentCallback
 
@@ -51,27 +51,21 @@ class HomeFragmentObserver(
     fun observeInterstitialAd() {
         val adListener = object : FullScreenContentCallback() {
             override fun onAdDismissedFullScreenContent() {
-                // Navigate to the new fragment after the ad is closed
                 fragment.findNavController().navigate(R.id.action_homeFragment_to_examFragment)
                 adViewModel.reloadInterstitialAd() // Preload the next ad
             }
             
             override fun onAdFailedToShowFullScreenContent(adError: AdError) {
-                // Navigate immediately if the ad fails
                 fragment.findNavController().navigate(R.id.action_homeFragment_to_examFragment)
             }
             
             override fun onAdShowedFullScreenContent() {
-                // Ad has been shown
             }
         }
         
         adViewModel.adState.observe(fragment.viewLifecycleOwner) { adState ->
             when (adState) {
                 is DataState.Loading -> {
-                    // Optionally, show a loading indicator
-                    fragment.findNavController().navigate(R.id.action_homeFragment_to_examFragment)
-                    
                 }
                 
                 is DataState.Success -> {
@@ -82,7 +76,6 @@ class HomeFragmentObserver(
                 }
                 
                 is DataState.Error -> {
-                    fragment.findNavController().navigate(R.id.action_homeFragment_to_examFragment)
                 }
             }
         }

@@ -1,4 +1,4 @@
-package com.gdalamin.bcs_pro.ui.utilities
+package com.gdalamin.bcs_pro.utilities
 
 import android.content.Context
 import android.view.View
@@ -14,7 +14,7 @@ object Animations {
             lastPosition = position
         }
     }
-
+    
     fun setAnimationFadeIn(ctx: Context?, viewToAnimate: View, position: Int) {
         viewToAnimate.clearAnimation()
         if (position > lastPosition) {
@@ -23,6 +23,6 @@ object Animations {
             lastPosition = position
         }
     }
-
-
+    
+    
 }

@@ -11,7 +11,7 @@ import androidx.paging.cachedIn
 import com.gdalamin.bcs_pro.data.model.Question
 import com.gdalamin.bcs_pro.data.remote.paging.ExamQuestionPagingSource
 import com.gdalamin.bcs_pro.data.remote.repositories.ExamRepository
-import com.gdalamin.bcs_pro.ui.utilities.DataState
+import com.gdalamin.bcs_pro.utilities.DataState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,31 +24,34 @@ import javax.inject.Inject
 class ExamViewModel @Inject constructor(
     private val examRepository: ExamRepository
 ) : ViewModel() {
-
+    
     private val _questions: MutableLiveData<DataState<MutableList<Question>>> = MutableLiveData()
     val questions: LiveData<DataState<MutableList<Question>>> = _questions
     private var isDataLoaded = false
-
-
+    
+    
     private var _questionsPaging: Flow<PagingData<Question>> = flowOf()
     val questionsPaging: Flow<PagingData<Question>> get() = _questionsPaging
     private var _isDataLoaded2 = MutableStateFlow(false)
-
-
+    
+    
     // Map each exam type to its corresponding question amounts
     private val questionAmountMap = mapOf(
         50 to listOf(5, 7, 9, 3, 3, 4, 8, 4, 3, 4),
-//        50 to listOf(2, 2, 2, 2, 2, 2, 2, 2, 2, 2),
         100 to listOf(10, 15, 18, 5, 5, 7, 17, 8, 7, 8),
         200 to listOf(20, 30, 35, 10, 10, 15, 35, 15, 15, 15)
     )
-
-
-    fun getExamQuestions(examType: Int) {
+    
+    
+    fun getExamQuestions(
+        questionAmount: Int,
+        examType: String? = null,
+        questionSet: String? = null
+    ) {
         if (!_isDataLoaded2.value) {
             // Get the corresponding question amounts for the selected exam type
-            val questionAmounts = questionAmountMap[examType] ?: emptyList()
-
+            val questionAmounts = questionAmountMap[questionAmount] ?: emptyList()
+            
             _questionsPaging =
                 Pager(
                     PagingConfig(
@@ -57,12 +60,12 @@ class ExamViewModel @Inject constructor(
                         prefetchDistance = 1 // Fetch next page in advance
                     )
                 ) {
-                    ExamQuestionPagingSource(examRepository, questionAmounts)
+                    ExamQuestionPagingSource(examRepository, questionAmounts, examType, questionSet)
                 }.flow.cachedIn(viewModelScope)
             _isDataLoaded2.value = true
         }
     }
-
+    
     suspend fun getSubjectExamQuestions(subjectName: String, totalQuestion: Int) {
         if (!isDataLoaded) {
             _questions.postValue(DataState.Loading())
@@ -76,21 +79,21 @@ class ExamViewModel @Inject constructor(
             }
         }
     }
-
+    
     private fun handleQuestionResponse(response: Response<MutableList<Question>>): DataState<MutableList<Question>> {
         return if (response.isSuccessful) {
-
+            
             response.body()?.let {
-
+                
                 DataState.Success(it)
-
+                
             } ?: DataState.Error("No data")
         } else {
             DataState.Error(response.message())
         }
     }
-
-
+    
+    
     private fun handleThrowable(t: Throwable) {
         _questions.postValue(
             when (t) {
@@ -99,6 +102,6 @@ class ExamViewModel @Inject constructor(
             }
         )
     }
-
-
+    
+    
 }

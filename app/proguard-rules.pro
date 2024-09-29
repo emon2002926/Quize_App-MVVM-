@@ -32,6 +32,9 @@
 -dontwarn org.openjsse.net.ssl.OpenJSSE
 
 
+-dontwarn com.facebook.infer.annotation.Nullsafe$Mode
+-dontwarn com.facebook.infer.annotation.Nullsafe
+
 # Uncomment this to preserve the line number information for
 # debugging stack traces.
 #-keepattributes SourceFile,LineNumberTable

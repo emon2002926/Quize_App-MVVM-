@@ -7,7 +7,7 @@ import com.gdalamin.bcs_pro.R
 import com.gdalamin.bcs_pro.data.model.SharedData
 import com.gdalamin.bcs_pro.databinding.FragmentHomeBinding
 import com.gdalamin.bcs_pro.ui.common.SharedViewModel
-import com.gdalamin.bcs_pro.ui.utilities.GeneralUtils.isInternetAvailable
+import com.gdalamin.bcs_pro.utilities.GeneralUtils.isInternetAvailable
 
 class HomeFragmentClickListener(
     private val fragment: Fragment,

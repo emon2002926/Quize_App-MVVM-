@@ -5,7 +5,7 @@ import androidx.room.RoomDatabase
 import com.gdalamin.bcs_pro.data.local.dao.ExamInfoDao
 import com.gdalamin.bcs_pro.data.model.LiveExam
 
-@Database(entities = [LiveExam::class], version = 1)
+@Database(entities = [LiveExam::class], version = 2)
 abstract class ExamInfoDatabase : RoomDatabase() {
     abstract fun examInfoDao(): ExamInfoDao
 }

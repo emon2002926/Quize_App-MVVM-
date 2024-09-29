@@ -28,10 +28,10 @@ import com.gdalamin.bcs_pro.ui.base.BaseFragment
 import com.gdalamin.bcs_pro.ui.common.LoadingStateAdapter
 import com.gdalamin.bcs_pro.ui.common.SharedViewModel
 import com.gdalamin.bcs_pro.ui.network.NetworkReceiverManager
-import com.gdalamin.bcs_pro.ui.utilities.DataState
-import com.gdalamin.bcs_pro.ui.utilities.GeneralUtils.convertEnglishToBangla
-import com.gdalamin.bcs_pro.ui.utilities.GeneralUtils.hideShimmerLayout
-import com.gdalamin.bcs_pro.ui.utilities.GeneralUtils.showShimmerLayout
+import com.gdalamin.bcs_pro.utilities.DataState
+import com.gdalamin.bcs_pro.utilities.GeneralUtils.convertEnglishToBangla
+import com.gdalamin.bcs_pro.utilities.GeneralUtils.hideShimmerLayout
+import com.gdalamin.bcs_pro.utilities.GeneralUtils.showShimmerLayout
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -60,6 +60,8 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
     private var individualSubResultTest: List<ExamInfoTest> = emptyList()
     private lateinit var sharedPreferences: SharedPreferences
     private val PREFS_NAME = "results_for_statistics"
+    
+    private var isQuestionLoaded = false
     
     
     override fun loadUi() {
@@ -111,8 +113,18 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
         totalQuestion = data.totalQuestion
         resultViewmodel.startCountDown(data.time)
         when (data.action) {
+            "liveExam" -> {
+                viewModelTest.getExamQuestions(
+                    questionAmount = data.totalQuestion,
+                    "liveExam",
+                    data.questionType
+                )
+                observePagingQuestion()
+                
+            }
+            
             "normalExam" -> {
-                viewModelTest.getExamQuestions(examType = data.totalQuestion)
+                viewModelTest.getExamQuestions(questionAmount = data.totalQuestion)
                 observePagingQuestion()
             }
             
@@ -145,6 +157,7 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
                 }
                 
                 is LoadState.NotLoading -> {
+                    isQuestionLoaded = true
                     hideShimmerLayout(shimmerLayout, rvExamQuestion)
                     binding.fabShowResult.visibility = View.VISIBLE
                     
@@ -167,6 +180,7 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
                 }
                 
                 is DataState.Success -> {
+                    isQuestionLoaded = true
                     hideShimmerLayout(shimmerLayout, rvExamQuestion)
                     response.data?.let {
                         questionAdapter.submitList(it)
@@ -196,7 +210,7 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
                 tvWrongAnswer.text = convertEnglishToBangla(it.totalWrongAnswer.toString())
             }
             when (examType) {
-                "normalExam" -> resultAdapter.submitList(individualSubResultTest)
+                "liveExam", "normalExam" -> resultAdapter.submitList(individualSubResultTest)
                 "subjectBasedExam" -> {
                     questionAdapter.showAnswer(true)
                     resultViewmodel.overallResult.observe(viewLifecycleOwner) {
@@ -269,7 +283,11 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
                 findNavController().navigateUp()
                 
             } else {
-                submitAnswer()
+                if (isQuestionLoaded) {
+                    submitAnswer()
+                } else {
+                    findNavController().navigateUp()
+                }
             }
         }
         
@@ -278,9 +296,13 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
                 if (isResultSubmitted) {
                     findNavController().navigateUp()
                 } else {
-                    submitAnswer()
+                    if (isQuestionLoaded) {
+                        submitAnswer()
+                        
+                    } else {
+                        findNavController().navigateUp()
+                    }
                 }
-//                Log.d("kghfagya", "back button clicked")
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, backPressCallback)

@@ -9,10 +9,10 @@ import androidx.lifecycle.viewModelScope
 import com.gdalamin.bcs_pro.data.local.repositories.LocalExamInfoRepository
 import com.gdalamin.bcs_pro.data.model.LiveExam
 import com.gdalamin.bcs_pro.data.remote.repositories.ExamRepository
-import com.gdalamin.bcs_pro.ui.utilities.Constants.Companion.CHECK_INTERNET_CONNECTION_MESSAGE
-import com.gdalamin.bcs_pro.ui.utilities.Constants.Companion.LIVE_EXAM_API
-import com.gdalamin.bcs_pro.ui.utilities.Constants.Companion.PAGE_SIZE
-import com.gdalamin.bcs_pro.ui.utilities.DataState
+import com.gdalamin.bcs_pro.utilities.Constants.Companion.CHECK_INTERNET_CONNECTION_MESSAGE
+import com.gdalamin.bcs_pro.utilities.Constants.Companion.LIVE_EXAM_API
+import com.gdalamin.bcs_pro.utilities.Constants.Companion.PAGE_SIZE
+import com.gdalamin.bcs_pro.utilities.DataState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.delay
@@ -101,7 +101,7 @@ class HomeFragmentViewModel @Inject constructor(
         val lastClearedTime = sharedPreferences.getLong("last_cleared_time", 0)
         val currentTime = System.currentTimeMillis()
         
-        if (currentTime - lastClearedTime >= 30 * 60 * 1000) { // 10 minutes in milliseconds
+        if (currentTime - lastClearedTime >= 120 * 60 * 1000) { // 10 minutes in milliseconds
             updateDatabase()
             sharedPreferences.edit().putLong("last_cleared_time", currentTime).apply()
         }

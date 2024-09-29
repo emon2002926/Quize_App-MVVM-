@@ -61,6 +61,8 @@
     <string name="ICT">কম্পিউটার ও তথ্য প্রযুক্তি</string>
     <string name="submit">জমা দিন</string>
     <string name="marked_question">মার্ক করা প্রশ্ন</string>
+    <string name="admob_app_id">ca-app-pub-6150752175728569~4498080066</string>
+    <string name="test_admob_app_id">ca-app-pub-3940256099942544~3347511713</string>
 
 
 </resources>
