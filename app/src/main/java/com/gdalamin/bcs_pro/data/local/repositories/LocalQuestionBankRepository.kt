@@ -8,28 +8,24 @@ import javax.inject.Inject
 class LocalQuestionBankRepository @Inject constructor(
     private val questionBankDao: QuestionBankDao
 ) {
-
+    
     suspend fun insertAll(bcsYearName: List<BcsYearName>) {
         questionBankDao.insertAllBcsYearName(bcsYearName)
     }
-
+    
     fun getAllBcsYearName(): LiveData<List<BcsYearName>> {
         return questionBankDao.getBcsYearName()
     }
-
+    
     suspend fun getAllBcsYearNameNonLive(): List<BcsYearName> {
         return questionBankDao.getAllBcsYearNameNonLive()
     }
-
+    
     suspend fun isDatabaseEmpty(): Boolean {
         return questionBankDao.getAllBcsYearNameNonLive().isEmpty()
     }
-
-    suspend fun updateBcsYearName(bcsYearName: List<BcsYearName>) {
-        questionBankDao.updateBcsYearName(bcsYearName)
-    }
-
-    suspend fun deleteAllBcsYearName() {
-        return questionBankDao.deleteAll()
+    
+    suspend fun updateIsQuestionSaved(id: Int, isSaved: Boolean) {
+        questionBankDao.updateIsQuestionSaved(id, isSaved)
     }
 }

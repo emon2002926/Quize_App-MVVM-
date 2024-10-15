@@ -1,5 +1,7 @@
 package com.gdalamin.bcs_pro.ui.fragment.QuestionBankFragment
 
+import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -24,36 +26,32 @@ import kotlinx.coroutines.launch
 class QuestionBankFragment :
     BaseFragment<FragmentQuestionBankBinding>(FragmentQuestionBankBinding::inflate),
     QuestionBankAdapter.HandleClickListener, NetworkReceiverManager.ConnectivityChangeListener {
-    private val viewModelTest: QuestionBankViewModel by viewModels()
+
+    private val questionBankViewModel: QuestionBankViewModel by viewModels()
     private val sharedViewModel: SharedViewModel by activityViewModels()
-    
+
     private val questionBankAdapter = QuestionBankAdapter(this)
     private lateinit var networkReceiverManager: NetworkReceiverManager
-    
-    
+
     override fun loadUi() {
         binding.backButton.setOnClickListener { findNavController().navigateUp() }
-        
+
         observeBcsYearName()
         setupRecyclerView()
         networkReceiverManager = NetworkReceiverManager(requireContext(), this)
-//        networkReceiverManager.register()
     }
-    
-    
+
     private fun observeBcsYearName() = binding.apply {
-        // Observe data from Room database
-        viewModelTest.bcsYearName.observe(viewLifecycleOwner) { response ->
+        questionBankViewModel.bcsYearName.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is DataState.Error -> {
-//                    showShimmerLayout(shimmerLayout, rvQuestionBank)
                     Toast.makeText(requireContext(), response.message, Toast.LENGTH_SHORT).show()
                 }
-                
+
                 is DataState.Loading -> {
                     showShimmerLayout(shimmerLayout, rvQuestionBank)
                 }
-                
+
                 is DataState.Success -> {
                     hideShimmerLayout(shimmerLayout, rvQuestionBank)
                     response.data?.let {
@@ -62,44 +60,96 @@ class QuestionBankFragment :
                 }
             }
         }
-        viewModelTest.getBcsYearNameDatabase().observe(viewLifecycleOwner) { exams ->
+
+        questionBankViewModel.getBcsYearNameDatabase().observe(viewLifecycleOwner) { exams ->
             questionBankAdapter.submitList(exams)
         }
-        // Check for data and decide to fetch from network or not
+
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModelTest.getBcsYearName(apiNumber = 5)
+            questionBankViewModel.getBcsYearName(apiNumber = 5)
         }
     }
-    
-    
+
     private fun setupRecyclerView() = binding.rvQuestionBank.apply {
         adapter = questionBankAdapter
         layoutManager = LinearLayoutManager(context)
     }
-    
-    override fun onClick(bscYearName: BcsYearName) {
+
+    override fun onClick(bcsYearName: BcsYearName) {
         val data = SharedData(
-            title = bscYearName.bcsYearName,
+            title = bcsYearName.bcsYearName,
             action = "questionBank",
-            totalQuestion = 50, questionType = "",
-            batchOrSubjectName = bscYearName.bcsYearName,
-            time = 0
+            totalQuestion = bcsYearName.totalQuestion.toInt(),
+            batchOrSubjectName = bcsYearName.bcsYearName,
+            isSavedOnDatabase = bcsYearName.isQuestionSaved
         )
         sharedViewModel.setSharedData(data)
         findNavController().navigate(R.id.action_questionBankFragment_to_questionFragment)
     }
-    
+
+    override fun onClickDownload(bcsYearName: BcsYearName) {
+        questionBankViewModel.markDownloadStarted(bcsYearName.id)
+
+        questionBankViewModel.getYearQuestion(
+            bcsYearName.id,
+            bcsYearName.bcsYearName,
+            bcsYearName.totalQuestion.toInt()
+        )
+
+        questionBankViewModel.downloadComplete.observe(viewLifecycleOwner) { id ->
+            if (bcsYearName.id == id) {
+                questionBankViewModel.markDownloadCompleted(id)
+                bcsYearName.isDownloading = false
+                questionBankAdapter.isAnyItemDownloading = false
+                questionBankAdapter.notifyItemChanged(bcsYearName.id)
+            }
+        }
+
+        questionBankViewModel.downloadError.observe(viewLifecycleOwner) { error ->
+            error?.let {
+                when (it) {
+                    true -> {
+                        Toast.makeText(
+                            context,
+                            "Download Failed, check your internet connection",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        questionBankAdapter.isAnyItemDownloading = false
+                        questionBankAdapter.onDownloadFailed(bcsYearName)
+                    }
+
+                    false -> questionBankAdapter.onDownloadComplete(bcsYearName)
+                }
+                questionBankViewModel.resetDownloadError()
+            }
+        }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Restore ongoing downloads
+        questionBankViewModel.currentlyDownloading.observe(viewLifecycleOwner) { downloadingIds ->
+            downloadingIds?.forEach { id ->
+                val bcsYearName = questionBankAdapter.getItemById(id)
+                bcsYearName?.let {
+                    it.isDownloading = true
+                    questionBankAdapter.isAnyItemDownloading = true
+                    questionBankAdapter.notifyItemChanged(it.id)
+                }
+            }
+        }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         networkReceiverManager.unregister()
     }
-    
+
     override fun onConnected() {
         observeBcsYearName()
     }
-    
+
     override fun onDisconnected() {
     }
-    
-    
 }

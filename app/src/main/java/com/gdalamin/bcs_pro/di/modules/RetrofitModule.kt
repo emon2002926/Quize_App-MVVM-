@@ -1,5 +1,6 @@
 package com.gdalamin.bcs_pro.di.modules
 
+import com.gdalamin.bcs_pro.data.local.dao.QuestionDao
 import com.gdalamin.bcs_pro.data.remote.api.ExamApi
 import com.gdalamin.bcs_pro.data.remote.api.QuestionApi
 import com.gdalamin.bcs_pro.data.remote.api.QuestionBankApi
@@ -24,11 +25,19 @@ class RetrofitModule {
     
     @Provides
     @Singleton
-    fun provideQuestionRepository(questionApi: QuestionApi): QuestionRepository {
-        return QuestionRepository(questionApi)
+    fun provideQuestionRepository(
+        questionApi: QuestionApi,
+        questionDao: QuestionDao
+    ): QuestionRepository {
+        return QuestionRepository(questionApi, questionDao)
     }
     
-    
+    //    @Provides
+//    @Singleton
+//    fun provideLocalQuestionRepository(questionDao: QuestionDao): LocalQuestionRepository {
+//        return LocalQuestionRepository(questionDao)
+//    }
+//
     @Provides
     @Singleton
     fun provideQuestionApi(): QuestionApi {
@@ -38,8 +47,8 @@ class RetrofitModule {
     
     @Provides
     @Singleton
-    fun provideExamRepository(examApi: ExamApi): ExamRepository {
-        return ExamRepository(examApi)
+    fun provideExamRepository(examApi: ExamApi, questionDao: QuestionDao): ExamRepository {
+        return ExamRepository(examApi, questionDao)
     }
     
     @Provides

@@ -13,12 +13,12 @@ class LocalExamInfoRepository @Inject constructor(
     }
     
     
-    suspend fun getAllExamsNonLive(): List<LiveExam> {
-        return examInfoDao.getAllExamsNonLive()
+    suspend fun getExamInfoFromDatabase(): List<LiveExam> {
+        return examInfoDao.getExamInfoFromDatabase()
     }
     
     suspend fun isDatabaseEmpty(): Boolean {
-        return examInfoDao.getAllExamsNonLive().isEmpty()
+        return examInfoDao.getExamInfoFromDatabase().isEmpty()
     }
     
     suspend fun deleteAllExamInfo() {

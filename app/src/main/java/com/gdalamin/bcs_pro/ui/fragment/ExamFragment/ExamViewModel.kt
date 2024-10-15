@@ -22,7 +22,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ExamViewModel @Inject constructor(
-    private val examRepository: ExamRepository
+    private val examRepository: ExamRepository,
+//    private val questionRepository: LocalQuestionRepository
 ) : ViewModel() {
     
     private val _questions: MutableLiveData<DataState<MutableList<Question>>> = MutableLiveData()
@@ -74,6 +75,15 @@ class ExamViewModel @Inject constructor(
                     examRepository.getSubjectBasedExamQuestion(subjectName, totalQuestion)
                 _questions.postValue(handleQuestionResponse(questionResponse))
                 isDataLoaded = true
+
+//                questionResponse.apply {
+//                    if (isSuccessful) {
+//                        body()?.let {
+//                            saveQuestions(it)
+//                        }
+//                    }
+//                }
+                
             } catch (t: Throwable) {
                 handleThrowable(t)
             }
@@ -102,6 +112,13 @@ class ExamViewModel @Inject constructor(
             }
         )
     }
-    
-    
+
+//    fun saveQuestions(question: MutableList<Question>) {
+//        viewModelScope.launch(Dispatchers.IO) {
+//            question.let {
+//                examRepository.addQuestions(question)
+//            }
+//        }
+//    }
+//
 }

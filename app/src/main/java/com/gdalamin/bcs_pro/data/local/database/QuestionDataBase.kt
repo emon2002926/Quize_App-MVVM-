@@ -8,5 +8,4 @@ import com.gdalamin.bcs_pro.data.model.Question
 @Database(entities = [Question::class], version = 1)
 abstract class QuestionDataBase : RoomDatabase() {
     abstract fun getQuestionDao(): QuestionDao
-
 }

@@ -14,9 +14,11 @@ data class BcsYearName(
     @PrimaryKey(autoGenerate = true)
     val roomId: Int,
     val bcsYearName: String,
-    val dailyExam: String,
     val id: Int,
-    val subjectCode: String,
-    val subjects: String,
-    val totalQuestion: String
+    val totalQuestion: String,
+    val isQuestionSaved: Boolean,
+    var isDownloading: Boolean = false, // New flag to track animation state
+    var isAnimated: Boolean = false  // Add this property
+
+
 ) : Parcelable

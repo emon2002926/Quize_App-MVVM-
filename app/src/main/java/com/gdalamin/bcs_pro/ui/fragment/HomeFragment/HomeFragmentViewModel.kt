@@ -30,24 +30,33 @@ class HomeFragmentViewModel @Inject constructor(
 
 ) : ViewModel() {
     private val pageNumber = 1
-    
+
     private val _liveExamInfo: MutableLiveData<DataState<MutableList<LiveExam>>> = MutableLiveData()
     val liveExamInfo: LiveData<DataState<MutableList<LiveExam>>> = _liveExamInfo
-    
-    
+
+    private var isDataLoaded = false
+
+
     fun getExamInfo(apiNumber: Int) {
+
+
         viewModelScope.launch {
-            if (examInfoRepository.isDatabaseEmpty()) {
+
+
+            if (!isDataLoaded) {
+                //            if (examInfoRepository.isDatabaseEmpty()) {
                 _liveExamInfo.postValue(DataState.Loading())
                 try {
                     val response = examRepository.getExamInfo(apiNumber, pageNumber, PAGE_SIZE)
                     val result = handleLiveExamResponse(response)
                     _liveExamInfo.postValue(result)
-                    
-                    if (result is DataState.Success) {
-                        saveExamsToDatabase(result.data)
-                    }
-                    
+
+//                if (result is DataState.Success) {
+//                    saveExamsToDatabase(result.data)
+//                }
+                    isDataLoaded = true
+
+
                 } catch (t: Throwable) {
                     when (t) {
                         is IOException -> _liveExamInfo.postValue(
@@ -57,16 +66,21 @@ class HomeFragmentViewModel @Inject constructor(
                         )
                     }
                 }
-            } else {
-                _liveExamInfo.postValue(
-                    DataState.Success(
-                        examInfoRepository.getAllExamsNonLive().toMutableList()
-                    )
-                )
+//            }
+
+//            else {
+//                _liveExamInfo.postValue(
+//                    DataState.Success(
+//                        examInfoRepository.getExamInfoFromDatabase().toMutableList()
+//                    )
+//                )
+//            }
             }
+
+
         }
     }
-    
+
     private fun handleLiveExamResponse(response: Response<MutableList<LiveExam>>): DataState<MutableList<LiveExam>> {
         if (response.isSuccessful) {
             response.body()?.let {
@@ -75,19 +89,19 @@ class HomeFragmentViewModel @Inject constructor(
         }
         return DataState.Error(response.message())
     }
-    
+
     private suspend fun saveExamsToDatabase(exams: MutableList<LiveExam>?) {
         exams?.let {
             examInfoRepository.insertAll(it)
         }
     }
-    
+
     fun deleteAllExamInfo() {
         viewModelScope.launch {
             examInfoRepository.deleteAllExamInfo()
         }
     }
-    
+
     fun updateDatabase() {
         viewModelScope.launch {
             deleteAllExamInfo()
@@ -95,16 +109,16 @@ class HomeFragmentViewModel @Inject constructor(
             getExamInfo(apiNumber = LIVE_EXAM_API)
         }
     }
-    
-    
+
+
     fun clearDatabaseIfNeededTime() {
         val lastClearedTime = sharedPreferences.getLong("last_cleared_time", 0)
         val currentTime = System.currentTimeMillis()
-        
+
         if (currentTime - lastClearedTime >= 120 * 60 * 1000) { // 10 minutes in milliseconds
             updateDatabase()
             sharedPreferences.edit().putLong("last_cleared_time", currentTime).apply()
         }
     }
-    
+
 }

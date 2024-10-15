@@ -28,4 +28,8 @@ interface QuestionBankDao {
     
     @Query("DELETE FROM BcsYearName")
     suspend fun deleteAll()
+    
+    
+    @Query("UPDATE BcsYearName SET isQuestionSaved = :isSaved WHERE id = :id")
+    suspend fun updateIsQuestionSaved(id: Int, isSaved: Boolean)
 }

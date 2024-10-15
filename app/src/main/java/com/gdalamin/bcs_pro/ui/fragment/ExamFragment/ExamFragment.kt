@@ -184,6 +184,8 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
                     hideShimmerLayout(shimmerLayout, rvExamQuestion)
                     response.data?.let {
                         questionAdapter.submitList(it)
+                        
+                        
                     }
                     fabShowResult.visibility = View.VISIBLE
                     tvTimer.visibility = View.VISIBLE

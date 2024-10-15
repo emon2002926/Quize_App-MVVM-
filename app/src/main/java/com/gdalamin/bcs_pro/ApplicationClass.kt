@@ -8,7 +8,6 @@ import dagger.hilt.android.HiltAndroidApp
 class ApplicationClass : Application() {
     override fun onCreate() {
         super.onCreate()
-        //todo have to remove this comment for ad
         MobileAds.initialize(this) {}
     }
 }

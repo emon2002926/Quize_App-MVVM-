@@ -28,8 +28,8 @@ import dagger.hilt.android.AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate),
     LiveExamAdapter.HandleClickListener,
     NetworkReceiverManager.ConnectivityChangeListener {
-    
-    private val homeFragmentViewModel: HomeFragmentViewModel by viewModels()
+
+    private val homeFragmentViewModel: HomeFragmentViewModel by activityViewModels()
     private val subjectViewModel: SubjectViewModel by viewModels()
     private val sharedViewModel: SharedViewModel by activityViewModels()
     private val liveExamAdapter by lazy { LiveExamAdapter(this) }
@@ -37,41 +37,41 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     private val adViewModel: AdViewModel by viewModels()
     private lateinit var networkReceiverManager: NetworkReceiverManager
     private lateinit var homeFragmentObserver: HomeFragmentObserver
-    
+
     private lateinit var adObserver: AdObserver
     private var adView: AdView? = null
-    
+
     override fun loadUi() {
-        
+
         initializeNetworkReceiver()
         initializeObservers()
         setupClickListeners()
         setupRecyclerView(binding.rvLiveExam, liveExamAdapter)
         networkCall()
         handleBackPress()
-        
-        
+
+
         adObserver = AdObserver(this@HomeFragment, binding, adViewModel)
-        
+
         adObserver.showBannerAd()
-        
+
         adViewModel.loadBannerAd(requireContext())
-        
+
     }
-    
-    
+
+
     private fun initializeObservers() {
         homeFragmentObserver = HomeFragmentObserver(
             this, homeFragmentViewModel, adViewModel, binding, liveExamAdapter
         )
         homeFragmentObserver.observeLiveData()
     }
-    
+
     private fun initializeNetworkReceiver() {
         networkReceiverManager = NetworkReceiverManager(requireContext(), this)
         adViewModel.preloadInterstitialAd()
     }
-    
+
     private fun setupClickListeners() {
         HomeFragmentClickListener(
             this@HomeFragment, binding, sharedViewModel, homeFragmentViewModel
@@ -79,8 +79,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         NotificationLayout(this@HomeFragment, notificationViewModel, binding)
         binding.horizontalScrollView.isHorizontalScrollBarEnabled = false
     }
-    
-    
+
+
     private fun networkCall() {
         if (isInternetAvailable(requireContext())) {
             homeFragmentViewModel.clearDatabaseIfNeededTime()
@@ -88,8 +88,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         homeFragmentViewModel.getExamInfo(LIVE_EXAM_API)
         subjectViewModel.getSubjectsName()
     }
-    
-    
+
+
     override fun onClickLiveExam(item: LiveExam) {
         val data = SharedData(
             title = item.examTitle,
@@ -98,23 +98,23 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
             questionType = item.questionSet,
             batchOrSubjectName = "",
             time = item.time * 60
-        
+
         )
-        
+
         sharedViewModel.setSharedData(data)
 //        findNavController().navigate(R.id.action_homeFragment_to_examFragment)
-        
+
         homeFragmentObserver.observeInterstitialAd()
     }
-    
+
     private fun setupRecyclerView(recyclerView: RecyclerView, adapter: RecyclerView.Adapter<*>) {
         recyclerView.apply {
             this.adapter = adapter
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         }
     }
-    
-    
+
+
     private fun handleBackPress() {
         val backPressCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -122,23 +122,23 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, backPressCallback)
-        
+
     }
-    
+
     override fun onConnected() {
         homeFragmentObserver.observeLiveData()
         networkCall()
     }
-    
+
     override fun onDisconnected() {
     }
-    
-    
+
+
     override fun onDestroyView() {
         super.onDestroyView()
         networkReceiverManager.unregister()
         adView?.destroy() // Clean up the adView
-        
+
     }
-    
+
 }

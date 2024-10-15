@@ -1,6 +1,7 @@
 package com.gdalamin.bcs_pro.ui.fragment.QuestionFragment
 
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -11,10 +12,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.gdalamin.bcs_pro.R
 import com.gdalamin.bcs_pro.databinding.FragmentQuestionBinding
 import com.gdalamin.bcs_pro.ui.adapter.specificadapters.QuestionAdapterPaging
+import com.gdalamin.bcs_pro.ui.adapter.specificadapters.QuestionAdapterTest
 import com.gdalamin.bcs_pro.ui.base.BaseFragment
 import com.gdalamin.bcs_pro.ui.common.LoadingStateAdapter
 import com.gdalamin.bcs_pro.ui.common.SharedViewModel
 import com.gdalamin.bcs_pro.ui.network.NetworkReceiverManager
+import com.gdalamin.bcs_pro.utilities.DataState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -25,6 +28,7 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionB
     NetworkReceiverManager.ConnectivityChangeListener {
     
     private val questionAdapterPaging by lazy { QuestionAdapterPaging() }
+    private val questionAdapter by lazy { QuestionAdapterTest() }
     private val sharedViewModel: SharedViewModel by activityViewModels()
     private var mBooleanValue = false
     
@@ -35,7 +39,6 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionB
         binding.backButton.setOnClickListener { findNavController().navigateUp() }
         
         observeSharedData()
-        setupRecyclerView()
         networkReceiverManager = NetworkReceiverManager(requireContext(), this)
     }
     
@@ -45,14 +48,24 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionB
                 when (data.action) {
                     "questionBank" -> {
                         tvTitle.text = data.title
-                        setupFab()
-                        viewModel.getPreviousQuestions(data.batchOrSubjectName)
-                        observePagingQuestions()
+                        
+                        if (data.isSavedOnDatabase) {
+                            viewModel.getQuestionsByBatch(data.batchOrSubjectName)
+                            setupRecyclerViewTest()
+                            observeDownloadingQuestions()
+                        } else {
+                            setupFab()
+                            setupRecyclerView()
+                            viewModel.getPreviousQuestions(data.batchOrSubjectName)
+                            observePagingQuestions()
+                        }
+                        
                     }
                     
                     "subjectBasedQuestions" -> {
                         tvTitle.text = data.title
                         setupFab()
+                        setupRecyclerView()
                         viewModel.getQuestions(10, data.batchOrSubjectName)
                         observePagingQuestions()
                     }
@@ -60,11 +73,39 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionB
                     "importantQuestion" -> {
                         tvTitle.text = data.title
                         setupFab()
+                        setupRecyclerView()
                         viewModel.getQuestions(1)
                         observePagingQuestions()
                     }
                 }
             }
+        }
+    }
+    
+    fun setupRecyclerViewTest() = binding.rvQuestion.apply {
+        adapter = questionAdapter
+        layoutManager = LinearLayoutManager(context)
+    }
+    
+    private fun observeDownloadingQuestions() {
+        viewModel.yearQuestion.observe(viewLifecycleOwner) { dataState ->
+            when (dataState) {
+                is DataState.Error -> Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
+                is DataState.Loading -> Toast.makeText(context, "Loading", Toast.LENGTH_SHORT)
+                    .show()
+                
+                is DataState.Success -> {
+                    
+                    dataState.data?.let { questions ->
+                        questionAdapter.submitList(questions)
+                        binding.shimmerLayout.stopShimmer()
+                        binding.shimmerLayout.visibility = View.GONE
+                        binding.rvQuestion.visibility = View.VISIBLE
+                    }
+                    
+                }
+            }
+            
         }
     }
     

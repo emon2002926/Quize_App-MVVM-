@@ -10,29 +10,30 @@ class QuestionPagingSource(
     private val apiNumber: Int,
     private val batchOrSubjectName: String? = null // Optional parameter for batch if needed
 ) : PagingSource<Int, Question>() {
-
+    
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Question> {
         val pageNumber = params.key ?: 1
         val limit = params.loadSize
-
+        
         return try {
             val response = when (apiNumber) {
                 1 -> questionRepository.getQuestion(apiNumber, pageNumber, limit)
-                10 -> questionRepository.getSubjectBasedQuestions(
+                
+                else -> questionRepository.getSubjectBasedQuestions(
                     apiNumber,
                     pageNumber,
                     limit,
                     batchOrSubjectName ?: ""
                 )
 
-                else -> questionRepository.getPreviousYearQuestion(
-                    apiNumber,
-                    pageNumber,
-                    limit,
-                    batchOrSubjectName ?: ""
-                )
+//                else -> questionRepository.getPreviousYearQuestion(
+//                    apiNumber,
+//                    pageNumber,
+//                    limit,
+//                    batchOrSubjectName ?: ""
+//                )
             }
-
+            
             val questions = response.body() ?: mutableListOf()
             LoadResult.Page(
                 data = questions,
@@ -43,7 +44,7 @@ class QuestionPagingSource(
             LoadResult.Error(e)
         }
     }
-
+    
     override fun getRefreshKey(state: PagingState<Int, Question>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
             state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1)

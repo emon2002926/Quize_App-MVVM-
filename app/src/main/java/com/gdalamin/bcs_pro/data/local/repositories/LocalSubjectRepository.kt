@@ -11,10 +11,6 @@ class LocalSubjectRepository @Inject constructor(
     suspend fun insertAll(subjectsName: List<SubjectName>) {
         subjectDao.insertAllSubjectName(subjectsName)
     }
-
-//    fun getAllExams(): LiveData<List<SubjectName>> {
-//        return subjectDao.getSubjectName()
-//    }
     
     suspend fun getAllSubjectFromDB(): List<SubjectName> {
         return subjectDao.getAllSubjectFromDB()

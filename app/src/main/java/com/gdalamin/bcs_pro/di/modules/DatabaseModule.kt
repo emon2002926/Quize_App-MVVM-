@@ -4,9 +4,11 @@ import android.content.Context
 import androidx.room.Room
 import com.gdalamin.bcs_pro.data.local.dao.ExamInfoDao
 import com.gdalamin.bcs_pro.data.local.dao.QuestionBankDao
+import com.gdalamin.bcs_pro.data.local.dao.QuestionDao
 import com.gdalamin.bcs_pro.data.local.dao.SubjectDao
 import com.gdalamin.bcs_pro.data.local.database.ExamInfoDatabase
 import com.gdalamin.bcs_pro.data.local.database.QuestionBankDatabase
+import com.gdalamin.bcs_pro.data.local.database.QuestionDataBase
 import com.gdalamin.bcs_pro.data.local.database.SubjectNameDatabase
 import dagger.Module
 import dagger.Provides
@@ -62,13 +64,26 @@ class DatabaseModule {
             appContext,
             QuestionBankDatabase::class.java,
             "bcs_year_name_database"
+        ).fallbackToDestructiveMigration().build()
+    }
+    
+    @Provides
+    fun provideQuestionBankDao(database: QuestionBankDatabase): QuestionBankDao {
+        return database.questionBankDao()
+    }
+    
+    @Provides
+    @Singleton
+    fun provideQuestionDataBase(@ApplicationContext appContext: Context): QuestionDataBase {
+        return Room.databaseBuilder(
+            appContext, QuestionDataBase::class.java,
+            "previous_question_database"
         ).build()
     }
     
     @Provides
-    fun provideQuestionDao(database: QuestionBankDatabase): QuestionBankDao {
-        return database.questionBankDao()
+    fun provideQuestionDao(dataBase: QuestionDataBase): QuestionDao {
+        return dataBase.getQuestionDao()
     }
-    
     
 }

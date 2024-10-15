@@ -1,5 +1,6 @@
 package com.gdalamin.bcs_pro.data.remote.repositories
 
+import com.gdalamin.bcs_pro.data.local.dao.QuestionDao
 import com.gdalamin.bcs_pro.data.model.LiveExam
 import com.gdalamin.bcs_pro.data.model.Question
 import com.gdalamin.bcs_pro.data.remote.api.ExamApi
@@ -9,7 +10,9 @@ import retrofit2.Response
 import javax.inject.Inject
 
 
-class ExamRepository @Inject constructor(private val examApi: ExamApi) {
+class ExamRepository @Inject constructor(
+    private val examApi: ExamApi, private val questionDao: QuestionDao
+) {
 
 //    suspend fun getExamQuestion(
 //        totalQuestions: Int
@@ -63,6 +66,15 @@ class ExamRepository @Inject constructor(private val examApi: ExamApi) {
             page
         )
     }
-    
+
+
+//    suspend fun addQuestions(question: List<Question>) {
+//        questionDao.addQuestion(question)
+//
+//    }
+//
+//    suspend fun getQuestion(): List<Question> {
+//        return questionDao.getQuestion()
+//    }
     
 }

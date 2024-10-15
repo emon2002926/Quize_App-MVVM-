@@ -4,10 +4,11 @@ import androidx.annotation.Keep
 
 @Keep
 data class SharedData(
-    val title: String,
-    val action: String,
-    val totalQuestion: Int,
-    val questionType: String,
-    val batchOrSubjectName: String,
-    val time: Int
+    val title: String = "",
+    val action: String = "",
+    val totalQuestion: Int = 0,
+    val questionType: String = "",
+    val batchOrSubjectName: String = "",
+    val time: Int = 0,
+    val isSavedOnDatabase: Boolean = false
 )

@@ -36,8 +36,8 @@
                 android:layout_marginBottom="4dp"
                 android:paddingStart="@dimen/_8sdp"
                 android:text="@string/questionBank"
-                android:textColor="@color/DeepGrey"
-                android:textSize="25sp"
+                android:textColor="@color/LiteBlack"
+                android:textSize="@dimen/_18sdp"
                 android:textStyle="bold" />
 
         </LinearLayout>
