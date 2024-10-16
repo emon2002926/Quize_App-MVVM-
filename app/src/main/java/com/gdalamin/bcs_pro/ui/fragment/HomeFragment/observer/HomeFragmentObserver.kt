@@ -31,6 +31,7 @@ class HomeFragmentObserver(
             when (response) {
                 is DataState.Error -> {
                     showShimmerLayout(shimmerLiveExam, rvLiveExam)
+                    swipeRefreshLayout.isRefreshing = false
                 }
                 
                 is DataState.Loading -> {

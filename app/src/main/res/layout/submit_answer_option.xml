@@ -63,7 +63,7 @@
         android:gravity="center"
         android:padding="10dp"
         android:text="@string/not_now"
-        android:textColor="@color/tangerine"
+        android:textColor="@color/darkTangerine"
         android:textSize="18sp" />
 
 </LinearLayout>

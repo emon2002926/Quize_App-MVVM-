@@ -12,12 +12,12 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:gravity="center"
         android:padding="15dp"
         android:text="@string/overAllExam"
-        android:textColor="@color/darkTangerine"
-        android:textSize="22sp"
+        android:textColor="@color/LiteBlack"
+        android:textSize="@dimen/_20ssp"
         android:textStyle="bold" />
 
 
@@ -170,7 +170,7 @@
         android:gravity="center"
         android:padding="10dp"
         android:text="@string/not_now"
-        android:textColor="@color/tangerine"
+        android:textColor="@color/darkTangerine"
         android:textSize="18sp" />
 
 </LinearLayout>

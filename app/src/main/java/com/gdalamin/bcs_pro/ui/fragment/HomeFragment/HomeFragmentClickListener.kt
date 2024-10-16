@@ -7,7 +7,6 @@ import com.gdalamin.bcs_pro.R
 import com.gdalamin.bcs_pro.data.model.SharedData
 import com.gdalamin.bcs_pro.databinding.FragmentHomeBinding
 import com.gdalamin.bcs_pro.ui.common.SharedViewModel
-import com.gdalamin.bcs_pro.utilities.GeneralUtils.isInternetAvailable
 
 class HomeFragmentClickListener(
     private val fragment: Fragment,
@@ -67,11 +66,9 @@ class HomeFragmentClickListener(
         
         // Swipe refresh logic
         swipeRefreshLayout.setOnRefreshListener {
-            if (isInternetAvailable(fragment.requireContext())) {
-                homeFragmentViewModel.updateDatabase()
-            } else {
-                swipeRefreshLayout.isRefreshing = false
-            }
+            
+            homeFragmentViewModel.refreshExamInfo()
+            
         }
     }
     

@@ -10,7 +10,6 @@ import com.gdalamin.bcs_pro.data.local.repositories.LocalExamInfoRepository
 import com.gdalamin.bcs_pro.data.model.LiveExam
 import com.gdalamin.bcs_pro.data.remote.repositories.ExamRepository
 import com.gdalamin.bcs_pro.utilities.Constants.Companion.CHECK_INTERNET_CONNECTION_MESSAGE
-import com.gdalamin.bcs_pro.utilities.Constants.Companion.LIVE_EXAM_API
 import com.gdalamin.bcs_pro.utilities.Constants.Companion.PAGE_SIZE
 import com.gdalamin.bcs_pro.utilities.DataState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -30,57 +29,43 @@ class HomeFragmentViewModel @Inject constructor(
 
 ) : ViewModel() {
     private val pageNumber = 1
-
+    
     private val _liveExamInfo: MutableLiveData<DataState<MutableList<LiveExam>>> = MutableLiveData()
     val liveExamInfo: LiveData<DataState<MutableList<LiveExam>>> = _liveExamInfo
-
+    
     private var isDataLoaded = false
-
-
-    fun getExamInfo(apiNumber: Int) {
-
-
+    
+    
+    fun getExamInfo() {
         viewModelScope.launch {
-
-
             if (!isDataLoaded) {
-                //            if (examInfoRepository.isDatabaseEmpty()) {
-                _liveExamInfo.postValue(DataState.Loading())
-                try {
-                    val response = examRepository.getExamInfo(apiNumber, pageNumber, PAGE_SIZE)
-                    val result = handleLiveExamResponse(response)
-                    _liveExamInfo.postValue(result)
-
-//                if (result is DataState.Success) {
-//                    saveExamsToDatabase(result.data)
-//                }
-                    isDataLoaded = true
-
-
-                } catch (t: Throwable) {
-                    when (t) {
-                        is IOException -> _liveExamInfo.postValue(
-                            DataState.Error(
-                                CHECK_INTERNET_CONNECTION_MESSAGE
-                            )
-                        )
-                    }
-                }
-//            }
-
-//            else {
-//                _liveExamInfo.postValue(
-//                    DataState.Success(
-//                        examInfoRepository.getExamInfoFromDatabase().toMutableList()
-//                    )
-//                )
-//            }
+                refreshExamInfo()
             }
-
-
         }
     }
-
+    
+    fun refreshExamInfo() {
+        viewModelScope.launch {
+            _liveExamInfo.postValue(DataState.Loading())
+            try {
+                val response = examRepository.getExamInfo(pageNumber, PAGE_SIZE)
+                val result = handleLiveExamResponse(response)
+                _liveExamInfo.postValue(result)
+                
+                isDataLoaded = true
+                
+            } catch (t: Throwable) {
+                when (t) {
+                    is IOException -> _liveExamInfo.postValue(
+                        DataState.Error(
+                            CHECK_INTERNET_CONNECTION_MESSAGE
+                        )
+                    )
+                }
+            }
+        }
+    }
+    
     private fun handleLiveExamResponse(response: Response<MutableList<LiveExam>>): DataState<MutableList<LiveExam>> {
         if (response.isSuccessful) {
             response.body()?.let {
@@ -89,36 +74,37 @@ class HomeFragmentViewModel @Inject constructor(
         }
         return DataState.Error(response.message())
     }
-
+    
+    
     private suspend fun saveExamsToDatabase(exams: MutableList<LiveExam>?) {
         exams?.let {
             examInfoRepository.insertAll(it)
         }
     }
-
+    
     fun deleteAllExamInfo() {
         viewModelScope.launch {
             examInfoRepository.deleteAllExamInfo()
         }
     }
-
+    
     fun updateDatabase() {
         viewModelScope.launch {
             deleteAllExamInfo()
             delay(100) // Optional delay to ensure data is deleted before fetching new data
-            getExamInfo(apiNumber = LIVE_EXAM_API)
+            getExamInfo()
         }
     }
-
-
+    
+    
     fun clearDatabaseIfNeededTime() {
         val lastClearedTime = sharedPreferences.getLong("last_cleared_time", 0)
         val currentTime = System.currentTimeMillis()
-
+        
         if (currentTime - lastClearedTime >= 120 * 60 * 1000) { // 10 minutes in milliseconds
             updateDatabase()
             sharedPreferences.edit().putLong("last_cleared_time", currentTime).apply()
         }
     }
-
+    
 }

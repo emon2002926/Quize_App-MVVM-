@@ -5,6 +5,7 @@ import com.gdalamin.bcs_pro.data.model.LiveExam
 import com.gdalamin.bcs_pro.data.model.Question
 import com.gdalamin.bcs_pro.data.remote.api.ExamApi
 import com.gdalamin.bcs_pro.utilities.Constants.Companion.API_KEY
+import com.gdalamin.bcs_pro.utilities.Constants.Companion.LIVE_EXAM_API
 import com.gdalamin.bcs_pro.utilities.Constants.Companion.SUBJECT_BASED_EXAM
 import retrofit2.Response
 import javax.inject.Inject
@@ -37,11 +38,10 @@ class ExamRepository @Inject constructor(
     }
     
     suspend fun getExamInfo(
-        apiNumber: Int,
         pageNumber: Int,
         limit: Int
     ): Response<MutableList<LiveExam>> {
-        return examApi.getExamInfo(API_KEY, apiNumber, pageNumber, limit)
+        return examApi.getExamInfo(API_KEY, LIVE_EXAM_API, pageNumber, limit)
     }
     
     

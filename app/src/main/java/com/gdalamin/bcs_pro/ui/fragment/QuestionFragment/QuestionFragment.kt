@@ -53,6 +53,7 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionB
                             viewModel.getQuestionsByBatch(data.batchOrSubjectName)
                             setupRecyclerViewTest()
                             observeDownloadingQuestions()
+                            setupFab()
                         } else {
                             setupFab()
                             setupRecyclerView()
@@ -146,6 +147,7 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionB
         btnShowAnswer.setOnClickListener {
             mBooleanValue = !mBooleanValue
             questionAdapterPaging.showAnswer(mBooleanValue)
+            questionAdapter.showAnswer(mBooleanValue)
             if (mBooleanValue) {
                 btnShowAnswer.setImageResource(R.drawable.show_answer)
             } else {

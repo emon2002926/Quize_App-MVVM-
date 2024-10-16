@@ -46,10 +46,14 @@
     <color name="shimmerBackground">#989898</color>
 
     <color name="tangerine">#fc944c</color>
-    <color name="liteGreen">#f6fcf2</color>
+    <!--    <color name="liteGreen">#f6fcf2</color>-->
     <color name="transParent">@android:color/transparent</color>
     <color name="color3">#11C59C</color>
     <color name="liteRed">#fb4c4c</color>
+
+
+    <color name="deepGreen">#4fae5b</color>
+    <color name="liteGreen">#ecf7ee</color>
 
 
 </resources>
