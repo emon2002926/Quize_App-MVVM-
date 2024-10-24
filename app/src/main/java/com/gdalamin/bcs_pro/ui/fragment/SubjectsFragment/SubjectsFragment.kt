@@ -13,8 +13,11 @@ import com.gdalamin.bcs_pro.databinding.FragmentSubjectsBinding
 import com.gdalamin.bcs_pro.databinding.SubjectBasedExamSubmitionBinding
 import com.gdalamin.bcs_pro.ui.adapter.specificadapters.SubjectAdapter
 import com.gdalamin.bcs_pro.ui.base.BaseFragment
+import com.gdalamin.bcs_pro.ui.common.AdViewModel
 import com.gdalamin.bcs_pro.ui.common.SharedViewModel
+import com.gdalamin.bcs_pro.ui.common.observer.InterstitialAdObserver
 import com.gdalamin.bcs_pro.ui.network.NetworkReceiverManager
+import com.gdalamin.bcs_pro.utilities.Constants.Companion.ADMOB_INTERSTITIAL_AD_TEST_ID
 import com.gdalamin.bcs_pro.utilities.Constants.Companion.CHECK_INTERNET_CONNECTION_MESSAGE
 import com.gdalamin.bcs_pro.utilities.DataState
 import com.gdalamin.bcs_pro.utilities.GeneralUtils
@@ -30,8 +33,10 @@ class SubjectsFragment : BaseFragment<FragmentSubjectsBinding>(FragmentSubjectsB
     
     private val subjectViewModel: SubjectViewModel by viewModels()
     private val sharedViewModel: SharedViewModel by activityViewModels()
+    private val adViewModel: AdViewModel by activityViewModels()
     private lateinit var subjectAdapter: SubjectAdapter
     private var sharedString = ""
+    lateinit var interstitialAdObserver: InterstitialAdObserver<SubjectsFragment, FragmentSubjectsBinding>
     
     override fun loadUi() {
         subjectAdapter = SubjectAdapter(this)
@@ -40,6 +45,16 @@ class SubjectsFragment : BaseFragment<FragmentSubjectsBinding>(FragmentSubjectsB
         observer()
         observeSubjectName()
         observeSharedData()
+        
+        interstitialAdObserver = InterstitialAdObserver(
+            fragment = this,
+            adViewModel = adViewModel,
+            binding = binding,
+            adUnitId = ADMOB_INTERSTITIAL_AD_TEST_ID, // Pass your ad unit ID here
+            navigateAction = {
+                findNavController().navigate(R.id.action_subjectsFragment_to_questionFragment) // Navigation action
+            }
+        )
         
     }
     
@@ -131,7 +146,8 @@ class SubjectsFragment : BaseFragment<FragmentSubjectsBinding>(FragmentSubjectsB
             0
         )
         sharedViewModel.setSharedData(data)
-        findNavController().navigate(R.id.action_subjectsFragment_to_questionFragment)
+//        findNavController().navigate(R.id.action_subjectsFragment_to_questionFragment)
+        interstitialAdObserver.observeInterstitialAd()
     }
     
     private fun subjectBasedExamSubmission(subjectName: String, subjectCode: String) {

@@ -39,6 +39,35 @@ class RecordFragment : BaseFragment<FragmentRecordBinding>(FragmentRecordBinding
             
         }
     }
+
+//    @SuppressLint("DefaultLocale")
+//    private fun setUpProgressBar() = binding.apply {
+//
+//        tvTotalExam.text = convertEnglishToBangla(totalExam.toString())
+//        tvTotalQuestion.text = convertEnglishToBangla(totalQuestion.toString())
+//
+//        correctAnswerTv.text = String.format(
+//            "%s (%s%%)",
+//            convertEnglishToBangla(overAllCorrectAnswer.toString()),
+//            convertEnglishToBangla(String.format("%.2f", totalPercentageCorrect))
+//        )
+//        wrongAnswerTv.text =
+//            String.format(
+//                "%s (%s%%)", convertEnglishToBangla(overAllWrongAnswer.toString()),
+//                convertEnglishToBangla(String.format("%.2f", totalPercentageWrong))
+//            )
+//
+//        notAnswered.text = String.format(
+//            "%s (%s%%)",
+//            convertEnglishToBangla(overAllNotAnswered.toString()),
+//            convertEnglishToBangla(String.format("%.2f", totalPercentageNotAnswered))
+//        )
+//
+//
+//        progressBarCorrect.setProgress(Math.round(totalPercentageCorrect))
+//        progressBarWrong.setProgress(Math.round(totalPercentageWrong))
+//        progressBarNotAnswred.setProgress(Math.round(totalPercentageNotAnswered))
+//    }
     
     @SuppressLint("DefaultLocale")
     private fun setUpProgressBar() = binding.apply {

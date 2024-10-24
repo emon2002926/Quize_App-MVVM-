@@ -1,10 +1,13 @@
 package com.gdalamin.bcs_pro.ui.fragment.HomeFragment
 
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.gdalamin.bcs_pro.R
 import com.gdalamin.bcs_pro.data.model.LiveExam
 import com.gdalamin.bcs_pro.data.model.SharedData
 import com.gdalamin.bcs_pro.databinding.FragmentHomeBinding
@@ -12,13 +15,17 @@ import com.gdalamin.bcs_pro.ui.adapter.specificadapters.LiveExamAdapter
 import com.gdalamin.bcs_pro.ui.base.BaseFragment
 import com.gdalamin.bcs_pro.ui.common.AdViewModel
 import com.gdalamin.bcs_pro.ui.common.SharedViewModel
+import com.gdalamin.bcs_pro.ui.common.observer.BannerAdObserver
+import com.gdalamin.bcs_pro.ui.common.observer.InterstitialAdObserver
 import com.gdalamin.bcs_pro.ui.fragment.HomeFragment.notificationLayout.NotificationLayout
 import com.gdalamin.bcs_pro.ui.fragment.HomeFragment.notificationLayout.NotificationViewModel
-import com.gdalamin.bcs_pro.ui.fragment.HomeFragment.observer.AdObserver
 import com.gdalamin.bcs_pro.ui.fragment.HomeFragment.observer.HomeFragmentObserver
 import com.gdalamin.bcs_pro.ui.fragment.SubjectsFragment.SubjectViewModel
 import com.gdalamin.bcs_pro.ui.network.NetworkReceiverManager
+import com.gdalamin.bcs_pro.utilities.Constants.Companion.ADMOB_BANNER_AD_TEST_ID
+import com.gdalamin.bcs_pro.utilities.Constants.Companion.ADMOB_INTERSTITIAL_AD_TEST_ID
 import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.rewarded.RewardItem
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -32,11 +39,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     private val sharedViewModel: SharedViewModel by activityViewModels()
     private val liveExamAdapter by lazy { LiveExamAdapter(this) }
     private val notificationViewModel: NotificationViewModel by viewModels()
-    private val adViewModel: AdViewModel by viewModels()
+    private val adViewModel: AdViewModel by activityViewModels()
     private lateinit var networkReceiverManager: NetworkReceiverManager
     private lateinit var homeFragmentObserver: HomeFragmentObserver
-    
-    private lateinit var adObserver: AdObserver
+    private lateinit var interstitialAdObserver: InterstitialAdObserver<HomeFragment, FragmentHomeBinding>
     private var adView: AdView? = null
     
     override fun loadUi() {
@@ -48,26 +54,72 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         networkCall()
         handleBackPress()
         
-        
-        adObserver = AdObserver(this@HomeFragment, binding, adViewModel)
+        adViewModel.loadBannerAd(ADMOB_BANNER_AD_TEST_ID)
+        val adObserver = BannerAdObserver(
+            fragment = this,
+            binding = binding,
+            adContainer = binding.adContainer,
+            adViewModel = adViewModel
+        )
         
         adObserver.showBannerAd()
         
-        adViewModel.loadBannerAd(requireContext())
+        interstitialAdObserver = InterstitialAdObserver(
+            fragment = this,
+            adViewModel = adViewModel,
+            binding = binding,
+            adUnitId = ADMOB_INTERSTITIAL_AD_TEST_ID,
+            navigateAction = {
+                findNavController().navigate(R.id.action_homeFragment_to_examFragment)
+            }
+        )
+
+//        val rewardedAdObserver = RewardedAdObserver(
+//            fragment = this,
+//            adViewModel = adViewModel,
+//            binding = binding,
+//            adUnitId = "ca-app-pub-3940256099942544/5224354917",
+//            showResulView = { navigateToNextScreen() }, // Define your navigation logic here
+//            onUserEarnedReward = { rewardItem ->
+//                handleUserReward(rewardItem) // Handle what happens when the user earns the reward
+//            }
+//        )
+//        binding.btnQuestionBank.setOnClickListener {
+////            rewardedAdObserver.observeRewardedAd()
+//
+//        }
         
+        // Observe the ad
+        
+        
+    }
+    
+    private fun navigateToNextScreen() {
+        // For example, use NavController or any other method to navigate
+        findNavController().navigate(R.id.action_homeFragment_to_questionBankFragment)
+    }
+    
+    private fun handleUserReward(rewardItem: RewardItem) {
+        // Example: Show a toast or update UI with the reward
+        Toast.makeText(
+            requireContext(),
+            "User earned ${rewardItem.amount} ${rewardItem.type}",
+            Toast.LENGTH_SHORT
+        ).show()
+        
+        // You can add more logic here depending on the reward
     }
     
     
     private fun initializeObservers() {
         homeFragmentObserver = HomeFragmentObserver(
-            this, homeFragmentViewModel, adViewModel, binding, liveExamAdapter
+            this, homeFragmentViewModel, binding, liveExamAdapter
         )
         homeFragmentObserver.observeLiveData()
     }
     
     private fun initializeNetworkReceiver() {
         networkReceiverManager = NetworkReceiverManager(requireContext(), this)
-        adViewModel.preloadInterstitialAd()
     }
     
     private fun setupClickListeners() {
@@ -80,9 +132,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     
     
     private fun networkCall() {
-//        if (isInternetAvailable(requireContext())) {
-//            homeFragmentViewModel.clearDatabaseIfNeededTime()
-//        }
+        
         homeFragmentViewModel.getExamInfo()
         subjectViewModel.getSubjectsName()
     }
@@ -96,13 +146,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
             questionType = item.questionSet,
             batchOrSubjectName = "",
             time = item.time * 60
-        
         )
         
         sharedViewModel.setSharedData(data)
-//        findNavController().navigate(R.id.action_homeFragment_to_examFragment)
-        
-        homeFragmentObserver.observeInterstitialAd()
+        interstitialAdObserver.observeInterstitialAd()
     }
     
     private fun setupRecyclerView(recyclerView: RecyclerView, adapter: RecyclerView.Adapter<*>) {

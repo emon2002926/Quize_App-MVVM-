@@ -14,8 +14,11 @@ import com.gdalamin.bcs_pro.data.model.SharedData
 import com.gdalamin.bcs_pro.databinding.FragmentQuestionBankBinding
 import com.gdalamin.bcs_pro.ui.adapter.specificadapters.QuestionBankAdapter
 import com.gdalamin.bcs_pro.ui.base.BaseFragment
+import com.gdalamin.bcs_pro.ui.common.AdViewModel
 import com.gdalamin.bcs_pro.ui.common.SharedViewModel
+import com.gdalamin.bcs_pro.ui.common.observer.InterstitialAdObserver
 import com.gdalamin.bcs_pro.ui.network.NetworkReceiverManager
+import com.gdalamin.bcs_pro.utilities.Constants.Companion.ADMOB_INTERSTITIAL_AD_TEST_ID
 import com.gdalamin.bcs_pro.utilities.DataState
 import com.gdalamin.bcs_pro.utilities.GeneralUtils.hideShimmerLayout
 import com.gdalamin.bcs_pro.utilities.GeneralUtils.showShimmerLayout
@@ -26,32 +29,43 @@ import kotlinx.coroutines.launch
 class QuestionBankFragment :
     BaseFragment<FragmentQuestionBankBinding>(FragmentQuestionBankBinding::inflate),
     QuestionBankAdapter.HandleClickListener, NetworkReceiverManager.ConnectivityChangeListener {
-
+    
     private val questionBankViewModel: QuestionBankViewModel by viewModels()
     private val sharedViewModel: SharedViewModel by activityViewModels()
-
+    private val adViewModel: AdViewModel by activityViewModels()
     private val questionBankAdapter = QuestionBankAdapter(this)
     private lateinit var networkReceiverManager: NetworkReceiverManager
-
+    lateinit var interstitialAdObserver: InterstitialAdObserver<QuestionBankFragment, FragmentQuestionBankBinding>
+    
     override fun loadUi() {
         binding.backButton.setOnClickListener { findNavController().navigateUp() }
-
+        
         observeBcsYearName()
         setupRecyclerView()
         networkReceiverManager = NetworkReceiverManager(requireContext(), this)
+        
+        interstitialAdObserver = InterstitialAdObserver(
+            fragment = this,
+            adViewModel = adViewModel,
+            binding = binding,
+            adUnitId = ADMOB_INTERSTITIAL_AD_TEST_ID, // Pass your ad unit ID here
+            navigateAction = {
+                findNavController().navigate(R.id.action_questionBankFragment_to_questionFragment) // Navigation action
+            }
+        )
     }
-
+    
     private fun observeBcsYearName() = binding.apply {
         questionBankViewModel.bcsYearName.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is DataState.Error -> {
                     Toast.makeText(requireContext(), response.message, Toast.LENGTH_SHORT).show()
                 }
-
+                
                 is DataState.Loading -> {
                     showShimmerLayout(shimmerLayout, rvQuestionBank)
                 }
-
+                
                 is DataState.Success -> {
                     hideShimmerLayout(shimmerLayout, rvQuestionBank)
                     response.data?.let {
@@ -60,21 +74,21 @@ class QuestionBankFragment :
                 }
             }
         }
-
+        
         questionBankViewModel.getBcsYearNameDatabase().observe(viewLifecycleOwner) { exams ->
             questionBankAdapter.submitList(exams)
         }
-
+        
         viewLifecycleOwner.lifecycleScope.launch {
             questionBankViewModel.getBcsYearName(apiNumber = 5)
         }
     }
-
+    
     private fun setupRecyclerView() = binding.rvQuestionBank.apply {
         adapter = questionBankAdapter
         layoutManager = LinearLayoutManager(context)
     }
-
+    
     override fun onClick(bcsYearName: BcsYearName) {
         val data = SharedData(
             title = bcsYearName.bcsYearName,
@@ -84,18 +98,18 @@ class QuestionBankFragment :
             isSavedOnDatabase = bcsYearName.isQuestionSaved
         )
         sharedViewModel.setSharedData(data)
-        findNavController().navigate(R.id.action_questionBankFragment_to_questionFragment)
+        interstitialAdObserver.observeInterstitialAd()
     }
-
+    
     override fun onClickDownload(bcsYearName: BcsYearName) {
         questionBankViewModel.markDownloadStarted(bcsYearName.id)
-
+        
         questionBankViewModel.getYearQuestion(
             bcsYearName.id,
             bcsYearName.bcsYearName,
             bcsYearName.totalQuestion.toInt()
         )
-
+        
         questionBankViewModel.downloadComplete.observe(viewLifecycleOwner) { id ->
             if (bcsYearName.id == id) {
                 questionBankViewModel.markDownloadCompleted(id)
@@ -104,7 +118,7 @@ class QuestionBankFragment :
                 questionBankAdapter.notifyItemChanged(bcsYearName.id)
             }
         }
-
+        
         questionBankViewModel.downloadError.observe(viewLifecycleOwner) { error ->
             error?.let {
                 when (it) {
@@ -117,17 +131,17 @@ class QuestionBankFragment :
                         questionBankAdapter.isAnyItemDownloading = false
                         questionBankAdapter.onDownloadFailed(bcsYearName)
                     }
-
+                    
                     false -> questionBankAdapter.onDownloadComplete(bcsYearName)
                 }
                 questionBankViewModel.resetDownloadError()
             }
         }
     }
-
+    
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        
         // Restore ongoing downloads
         questionBankViewModel.currentlyDownloading.observe(viewLifecycleOwner) { downloadingIds ->
             downloadingIds?.forEach { id ->
@@ -140,16 +154,16 @@ class QuestionBankFragment :
             }
         }
     }
-
+    
     override fun onDestroyView() {
         super.onDestroyView()
         networkReceiverManager.unregister()
     }
-
+    
     override fun onConnected() {
         observeBcsYearName()
     }
-
+    
     override fun onDisconnected() {
     }
 }

@@ -25,13 +25,18 @@ import com.gdalamin.bcs_pro.ui.adapter.specificadapters.ExamQuestionAdapterPagin
 import com.gdalamin.bcs_pro.ui.adapter.specificadapters.QuestionAdapter
 import com.gdalamin.bcs_pro.ui.adapter.specificadapters.ResultAdapterTest
 import com.gdalamin.bcs_pro.ui.base.BaseFragment
+import com.gdalamin.bcs_pro.ui.common.AdViewModel
 import com.gdalamin.bcs_pro.ui.common.LoadingStateAdapter
 import com.gdalamin.bcs_pro.ui.common.SharedViewModel
+import com.gdalamin.bcs_pro.ui.common.observer.RewardedAdObserver
 import com.gdalamin.bcs_pro.ui.network.NetworkReceiverManager
+import com.gdalamin.bcs_pro.utilities.Constants.Companion.ADMOB_REWARDED_AD_TEST_ID
 import com.gdalamin.bcs_pro.utilities.DataState
 import com.gdalamin.bcs_pro.utilities.GeneralUtils.convertEnglishToBangla
 import com.gdalamin.bcs_pro.utilities.GeneralUtils.hideShimmerLayout
 import com.gdalamin.bcs_pro.utilities.GeneralUtils.showShimmerLayout
+import com.google.android.gms.ads.AdError
+import com.google.android.gms.ads.LoadAdError
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -40,15 +45,19 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::inflate),
     ExamQuestionAdapterPaging.OnItemSelectedListenerPaging, QuestionAdapter.OnItemSelectedListener,
-    NetworkReceiverManager.ConnectivityChangeListener {
+    NetworkReceiverManager.ConnectivityChangeListener, RewardedAdObserver.RewardedAdListener {
     
     private val questionAdapter by lazy { QuestionAdapter(this) }
     private val examQuestionAdapterPaging by lazy { ExamQuestionAdapterPaging(this) }
     
+    
     private val sharedViewModel: SharedViewModel by activityViewModels()
     private val viewModelTest: ExamViewModel by viewModels()
     private val resultViewmodel: ResultViewModel by viewModels()
+    private val adViewModel: AdViewModel by activityViewModels()
+    
     private lateinit var networkReceiverManager: NetworkReceiverManager
+    private lateinit var rewardedAdObserver: RewardedAdObserver<ExamFragment>
     
     private var title = ""
     private var examType = ""
@@ -79,7 +88,13 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
         observeTime()
         handleBackPress()
         
+        rewardedAdObserver =
+            RewardedAdObserver(requireActivity(), ADMOB_REWARDED_AD_TEST_ID, this)
+        rewardedAdObserver.preloadRewardedAd()
+        
+        
     }
+    
     
     private fun localObserver() = with(resultViewmodel) {
         sharedViewModel.sharedData.observe(viewLifecycleOwner) { data ->
@@ -205,8 +220,9 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
         resultViewmodel.setBooleanValue(true)
         val resultAdapter by lazy { ResultAdapterTest() }
         bindingResult.apply {
+            tvAnsweredQuestion.text = convertEnglishToBangla(totalQuestion.toString())
+            
             resultViewmodel.overallResult.observe(viewLifecycleOwner) {
-                tvAnsweredQuestion.text = convertEnglishToBangla(it.totalSelectedAnswer.toString())
                 tvMarks.text = convertEnglishToBangla(it.totalMark.toString())
                 tvCorrectAnswer.text = convertEnglishToBangla(it.totalCorrectAnswer.toString())
                 tvWrongAnswer.text = convertEnglishToBangla(it.totalWrongAnswer.toString())
@@ -250,26 +266,32 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
         
         bindingResult.apply {
             btnSubmit.setOnClickListener {
-                if (answeredQuestions == 0) {
+                
+                if (isResultAvailableToShow(answeredQuestions)) {
+                    resultViewmodel.overallResult.observe(viewLifecycleOwner) {
+                        saveResultForStatic(it)
+                    }
+                    bottomSheetDialog.dismiss()
+                    binding.tvTimer.visibility = View.GONE
+                    rewardedAdObserver.showAd()
+                } else {
                     Toast.makeText(
                         context,
                         "Please answer Question to see result",
                         Toast.LENGTH_SHORT
                     ).show()
-                } else {
-                    resultViewmodel.overallResult.observe(viewLifecycleOwner) {
-                        saveResultForStatic(it)
-                    }
-                    bottomSheetDialog.dismiss()
-                    //old
-                    binding.tvTimer.visibility = View.GONE
-                    showResultView()
                 }
+                
             }
             btnCancel.setOnClickListener { bottomSheetDialog.dismiss() }
         }
         bottomSheetDialog.setContentView(bindingResult.root)
         bottomSheetDialog.show()
+    }
+    
+    private fun isResultAvailableToShow(answeredQuestions: Int): Boolean {
+        
+        return answeredQuestions != 0
     }
     
     private fun setUpFabIcon() = binding.apply {
@@ -319,7 +341,12 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
         }
         isTimerFinished.observe(viewLifecycleOwner) { isFinished ->
             if (isFinished) {
-                showResultView()
+                if (!isResultSubmitted) {
+                    if (isResultAvailableToShow(answeredQuestions)) {
+                        rewardedAdObserver.showAd()
+                    }
+                }
+                
             }
         }
     }
@@ -395,6 +422,27 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
     }
     
     override fun onDisconnected() {
+    }
+    
+    override fun onAdClosed() {
+        if (isResultAvailableToShow(answeredQuestions)) {
+            showResultView()
+            
+        }
+    }
+    
+    override fun onAdFailedToShow(adError: AdError) {
+        if (isResultAvailableToShow(answeredQuestions)) {
+            showResultView()
+            
+        }
+    }
+    
+    override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+        if (isResultAvailableToShow(answeredQuestions)) {
+            showResultView()
+            
+        }
     }
     
 }
