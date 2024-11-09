@@ -17,15 +17,20 @@ class Constants {
         const val YEAR_QUESTION_DOWNLOAD_API = 9
         const val DEFAULT_PAGE_NUMBER = 1
         const val ADMOB_APP_ID = "ca-app-pub-6150752175728569~4498080066"
+        
+        //...........................................................................//
         const val ADMOB_BANNER_AD_ID = "ca-app-pub-6150752175728569/5950826170"
+        const val ADMOB_BANNER_AD_TEST_ID = "ca-app-pub-3940256099942544/9214589741"
+        
+        //...........................................................................//
         const val ADMOB_REWARDED_AD_ID = "ca-app-pub-6150752175728569/2570317502"
         const val ADMOB_REWARDED_AD_TEST_ID = "ca-app-pub-6150752175728569/2570317502"
-        const val ADMOB_BANNER_AD_TEST_ID = "ca-app-pub-3940256099942544/9214589741"
-        const val ADMOB_INTERSTITIAL_AD_ID = "ca-app-pub-6150752175728569/6894811567"
-        const val ADMOB_INTERSTITIAL_AD_ID_Question_Bank = "ca-app-pub-6150752175728569/9368757623"
-        const val ADMOB_INTERSTITIAL_AD_ID_Subject = "ca-app-pub-6150752175728569/2939080645"
-        const val ADMOB_INTERSTITIAL_AD_TEST_ID = "ca-app-pub-3940256099942544/1033173712"
         
+        //...........................................................................//
+        const val ADMOB_INTERSTITIAL_AD_TEST_ID = "ca-app-pub-3940256099942544/1033173712"
+        const val ADMOB_INTERSTITIAL_LIVE_EXAM_AD_ID = "ca-app-pub-6150752175728569/6894811567"
+        const val ADMOB_INTERSTITIAL_QUESTION_BANK_AD_ID = "ca-app-pub-6150752175728569/9368757623"
+        const val ADMOB_INTERSTITIAL_SUBJECT_AD_ID = "ca-app-pub-6150752175728569/2939080645"
         
     }
 }

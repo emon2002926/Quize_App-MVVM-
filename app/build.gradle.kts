@@ -19,8 +19,8 @@ android {
         applicationId = "com.gdalamin.bcs_pro"
         minSdk = 24
         targetSdk = 34
-        versionCode = 77
-        versionName = "2.4.06"
+        versionCode = 80
+        versionName = "2.4.09"
         
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

@@ -40,7 +40,7 @@
             android:resource="@array/preloaded_fonts" />
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="@string/test_admob_app_id" />
+            android:value="@string/admob_app_id" />
 
         <service
             android:name="com.onesignal.NotificationServiceExtension"

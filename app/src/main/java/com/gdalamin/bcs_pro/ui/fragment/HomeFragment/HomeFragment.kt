@@ -1,6 +1,6 @@
 package com.gdalamin.bcs_pro.ui.fragment.HomeFragment
 
-import android.widget.Toast
+import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -22,10 +22,9 @@ import com.gdalamin.bcs_pro.ui.fragment.HomeFragment.notificationLayout.Notifica
 import com.gdalamin.bcs_pro.ui.fragment.HomeFragment.observer.HomeFragmentObserver
 import com.gdalamin.bcs_pro.ui.fragment.SubjectsFragment.SubjectViewModel
 import com.gdalamin.bcs_pro.ui.network.NetworkReceiverManager
-import com.gdalamin.bcs_pro.utilities.Constants.Companion.ADMOB_BANNER_AD_TEST_ID
-import com.gdalamin.bcs_pro.utilities.Constants.Companion.ADMOB_INTERSTITIAL_AD_TEST_ID
+import com.gdalamin.bcs_pro.utilities.Constants.Companion.ADMOB_BANNER_AD_ID
+import com.gdalamin.bcs_pro.utilities.Constants.Companion.ADMOB_INTERSTITIAL_LIVE_EXAM_AD_ID
 import com.google.android.gms.ads.AdView
-import com.google.android.gms.ads.rewarded.RewardItem
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -43,7 +42,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     private lateinit var networkReceiverManager: NetworkReceiverManager
     private lateinit var homeFragmentObserver: HomeFragmentObserver
     private lateinit var interstitialAdObserver: InterstitialAdObserver<HomeFragment, FragmentHomeBinding>
+    private lateinit var interstitialAdObserver1: InterstitialAdObserver<HomeFragment, FragmentHomeBinding>
     private var adView: AdView? = null
+    
     
     override fun loadUi() {
         
@@ -54,7 +55,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         networkCall()
         handleBackPress()
         
-        adViewModel.loadBannerAd(ADMOB_BANNER_AD_TEST_ID)
+        adViewModel.loadBannerAd(ADMOB_BANNER_AD_ID)
         val adObserver = BannerAdObserver(
             fragment = this,
             binding = binding,
@@ -68,46 +69,40 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
             fragment = this,
             adViewModel = adViewModel,
             binding = binding,
-            adUnitId = ADMOB_INTERSTITIAL_AD_TEST_ID,
+            adUnitId = ADMOB_INTERSTITIAL_LIVE_EXAM_AD_ID,
             navigateAction = {
                 findNavController().navigate(R.id.action_homeFragment_to_examFragment)
             }
         )
-
-//        val rewardedAdObserver = RewardedAdObserver(
-//            fragment = this,
-//            adViewModel = adViewModel,
-//            binding = binding,
-//            adUnitId = "ca-app-pub-3940256099942544/5224354917",
-//            showResulView = { navigateToNextScreen() }, // Define your navigation logic here
-//            onUserEarnedReward = { rewardItem ->
-//                handleUserReward(rewardItem) // Handle what happens when the user earns the reward
-//            }
-//        )
-//        binding.btnQuestionBank.setOnClickListener {
-////            rewardedAdObserver.observeRewardedAd()
-//
-//        }
-        
-        // Observe the ad
         
         
+        binding.apply {
+            setSubjectClickListener(tvInternationalAffairs, "আন্তর্জাতিক বিষয়াবলি", "IA")
+            setSubjectClickListener(tvBangladeshAffairs, "বাংলাদেশ বিষয়াবলি", "BA")
+            setSubjectClickListener(tvGeography, "ভূগোল", "GEDM")
+        }
     }
     
-    private fun navigateToNextScreen() {
-        // For example, use NavController or any other method to navigate
-        findNavController().navigate(R.id.action_homeFragment_to_questionBankFragment)
+    
+    private fun setSubjectClickListener(view: View, subjectName: String, subjectCode: String) {
+        view.setOnClickListener {
+            showSubjectBasedQuestion(subjectName, subjectCode)
+        }
     }
     
-    private fun handleUserReward(rewardItem: RewardItem) {
-        // Example: Show a toast or update UI with the reward
-        Toast.makeText(
-            requireContext(),
-            "User earned ${rewardItem.amount} ${rewardItem.type}",
-            Toast.LENGTH_SHORT
-        ).show()
+    private fun showSubjectBasedQuestion(subjectName: String, subjectCode: String) {
+        val data = SharedData(
+            title = subjectName,
+            action = "subjectBasedQuestions",
+            totalQuestion = 200,
+            questionType = "",
+            batchOrSubjectName = subjectCode,
+            time = 0
+        )
         
-        // You can add more logic here depending on the reward
+        sharedViewModel.setSharedData(data)
+//        interstitialAdObserver1.observeInterstitialAd()
+        findNavController().navigate(R.id.action_homeFragment_to_questionFragment)
     }
     
     
@@ -147,6 +142,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
             batchOrSubjectName = "",
             time = item.time * 60
         )
+        
         
         sharedViewModel.setSharedData(data)
         interstitialAdObserver.observeInterstitialAd()

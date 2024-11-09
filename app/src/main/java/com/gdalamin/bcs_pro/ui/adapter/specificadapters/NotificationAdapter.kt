@@ -7,7 +7,7 @@ import com.gdalamin.bcs_pro.databinding.NotificationItemBinding
 import com.gdalamin.bcs_pro.ui.adapter.base.BaseAdapter
 import com.gdalamin.bcs_pro.utilities.GeneralUtils.convertBase64ToBitmap
 
-class NotificationAdapter() :
+class NotificationAdapter(val listner: handleClickListner) :
     BaseAdapter<UserNotification, NotificationItemBinding>(
         areItemsTheSame = { oldItem, newItem -> oldItem.id == newItem.id },
         areContentsTheSame = { oldItem, newItem -> oldItem == newItem },
@@ -24,8 +24,12 @@ class NotificationAdapter() :
             if (item.image.isNotEmpty()) {
                 ivNotificationImage.setImageBitmap(convertBase64ToBitmap(item.image))
             }
+            fullLayout.setOnClickListener { listner.onClick(item) }
         }
     }
     
+    interface handleClickListner {
+        fun onClick(item: UserNotification)
+    }
     
 }

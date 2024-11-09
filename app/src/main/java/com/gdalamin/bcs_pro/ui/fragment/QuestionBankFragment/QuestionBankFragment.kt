@@ -18,7 +18,7 @@ import com.gdalamin.bcs_pro.ui.common.AdViewModel
 import com.gdalamin.bcs_pro.ui.common.SharedViewModel
 import com.gdalamin.bcs_pro.ui.common.observer.InterstitialAdObserver
 import com.gdalamin.bcs_pro.ui.network.NetworkReceiverManager
-import com.gdalamin.bcs_pro.utilities.Constants.Companion.ADMOB_INTERSTITIAL_AD_TEST_ID
+import com.gdalamin.bcs_pro.utilities.Constants.Companion.ADMOB_INTERSTITIAL_QUESTION_BANK_AD_ID
 import com.gdalamin.bcs_pro.utilities.DataState
 import com.gdalamin.bcs_pro.utilities.GeneralUtils.hideShimmerLayout
 import com.gdalamin.bcs_pro.utilities.GeneralUtils.showShimmerLayout
@@ -48,7 +48,7 @@ class QuestionBankFragment :
             fragment = this,
             adViewModel = adViewModel,
             binding = binding,
-            adUnitId = ADMOB_INTERSTITIAL_AD_TEST_ID, // Pass your ad unit ID here
+            adUnitId = ADMOB_INTERSTITIAL_QUESTION_BANK_AD_ID, // Pass your ad unit ID here
             navigateAction = {
                 findNavController().navigate(R.id.action_questionBankFragment_to_questionFragment) // Navigation action
             }

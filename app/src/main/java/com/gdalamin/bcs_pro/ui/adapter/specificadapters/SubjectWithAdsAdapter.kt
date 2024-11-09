@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.gdalamin.bcs_pro.data.model.SubjectName
 import com.gdalamin.bcs_pro.databinding.ItemSubjectBinding
+import com.gdalamin.bcs_pro.utilities.Constants.Companion.ADMOB_BANNER_AD_ID
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
@@ -49,7 +50,7 @@ class SubjectWithAdsAdapter(
             
             VIEW_TYPE_AD -> {
                 val adView = AdView(parent.context).apply {
-                    adUnitId = "YOUR_BANNER_AD_UNIT_ID" // Replace with your actual Ad Unit ID
+                    adUnitId = ADMOB_BANNER_AD_ID // Replace with your actual Ad Unit ID
                     setAdSize(AdSize.BANNER)
                     loadAd(AdRequest.Builder().build())
                 }

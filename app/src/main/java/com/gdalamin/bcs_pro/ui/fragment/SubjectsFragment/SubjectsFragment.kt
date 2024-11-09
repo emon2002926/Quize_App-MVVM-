@@ -17,7 +17,7 @@ import com.gdalamin.bcs_pro.ui.common.AdViewModel
 import com.gdalamin.bcs_pro.ui.common.SharedViewModel
 import com.gdalamin.bcs_pro.ui.common.observer.InterstitialAdObserver
 import com.gdalamin.bcs_pro.ui.network.NetworkReceiverManager
-import com.gdalamin.bcs_pro.utilities.Constants.Companion.ADMOB_INTERSTITIAL_AD_TEST_ID
+import com.gdalamin.bcs_pro.utilities.Constants.Companion.ADMOB_INTERSTITIAL_SUBJECT_AD_ID
 import com.gdalamin.bcs_pro.utilities.Constants.Companion.CHECK_INTERNET_CONNECTION_MESSAGE
 import com.gdalamin.bcs_pro.utilities.DataState
 import com.gdalamin.bcs_pro.utilities.GeneralUtils
@@ -29,12 +29,15 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SubjectsFragment : BaseFragment<FragmentSubjectsBinding>(FragmentSubjectsBinding::inflate),
-    SubjectAdapter.HandleClickListener, NetworkReceiverManager.ConnectivityChangeListener {
+    SubjectAdapter.HandleClickListener,
+    NetworkReceiverManager.ConnectivityChangeListener {
     
     private val subjectViewModel: SubjectViewModel by viewModels()
     private val sharedViewModel: SharedViewModel by activityViewModels()
     private val adViewModel: AdViewModel by activityViewModels()
     private lateinit var subjectAdapter: SubjectAdapter
+//    private lateinit var subjectAdapterAD: SubjectWithAdsAdapter
+    
     private var sharedString = ""
     lateinit var interstitialAdObserver: InterstitialAdObserver<SubjectsFragment, FragmentSubjectsBinding>
     
@@ -50,13 +53,20 @@ class SubjectsFragment : BaseFragment<FragmentSubjectsBinding>(FragmentSubjectsB
             fragment = this,
             adViewModel = adViewModel,
             binding = binding,
-            adUnitId = ADMOB_INTERSTITIAL_AD_TEST_ID, // Pass your ad unit ID here
+            adUnitId = ADMOB_INTERSTITIAL_SUBJECT_AD_ID, // Pass your ad unit ID here
             navigateAction = {
                 findNavController().navigate(R.id.action_subjectsFragment_to_questionFragment) // Navigation action
             }
         )
-        
+//        setupRecyclerViewWithAd()
     }
+
+//    private fun setupRecyclerViewWithAd() {
+//        subjectAdapterAD = SubjectWithAdsAdapter(this)  // Pass the click listener (this fragment)
+//        binding.rvSubjects.layoutManager = LinearLayoutManager(requireContext())
+//        binding.rvSubjects.adapter = subjectAdapterAD
+//    }
+//
     
     private fun observer() {
         viewLifecycleOwner.lifecycleScope.launch {
@@ -87,16 +97,11 @@ class SubjectsFragment : BaseFragment<FragmentSubjectsBinding>(FragmentSubjectsB
                     GeneralUtils.hideShimmerLayout(binding.shimmerLayout, binding.rvSubjects)
                     response.data?.let {
                         subjectAdapter.submitList(it)
+//                        subjectAdapterAD.setSubjectsWithAds(it)
                     }
                 }
             }
         }
-        // Observe data from Room database
-//        subjectViewModel.getSubjectNameDatabase().observe(viewLifecycleOwner) { exams ->
-//            subjectAdapter.submitList(exams)
-//        }
-        // Check for data and decide to fetch from network or not
-        
         
     }
     

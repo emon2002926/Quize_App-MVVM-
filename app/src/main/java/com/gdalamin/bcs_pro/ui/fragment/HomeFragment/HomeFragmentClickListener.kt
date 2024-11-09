@@ -26,9 +26,7 @@ class HomeFragmentClickListener(
         }
         
         // Set listeners for subject-based questions
-        setSubjectClickListener(tvInternationalAffairs, "আন্তর্জাতিক বিষয়াবলি", "IA")
-        setSubjectClickListener(tvBangladeshAffairs, "বাংলাদেশ বিষয়াবলি", "BA")
-        setSubjectClickListener(tvGeography, "ভূগোল", "GEDM")
+        
         
         // Navigate to all subjects
         val subjectNavigateAction = { sharedViewModel.setStringData("subjectBasedPractise") }

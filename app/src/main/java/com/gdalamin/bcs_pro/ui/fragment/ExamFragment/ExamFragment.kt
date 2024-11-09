@@ -30,7 +30,7 @@ import com.gdalamin.bcs_pro.ui.common.LoadingStateAdapter
 import com.gdalamin.bcs_pro.ui.common.SharedViewModel
 import com.gdalamin.bcs_pro.ui.common.observer.RewardedAdObserver
 import com.gdalamin.bcs_pro.ui.network.NetworkReceiverManager
-import com.gdalamin.bcs_pro.utilities.Constants.Companion.ADMOB_REWARDED_AD_TEST_ID
+import com.gdalamin.bcs_pro.utilities.Constants.Companion.ADMOB_REWARDED_AD_ID
 import com.gdalamin.bcs_pro.utilities.DataState
 import com.gdalamin.bcs_pro.utilities.GeneralUtils.convertEnglishToBangla
 import com.gdalamin.bcs_pro.utilities.GeneralUtils.hideShimmerLayout
@@ -89,7 +89,7 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
         handleBackPress()
         
         rewardedAdObserver =
-            RewardedAdObserver(requireActivity(), ADMOB_REWARDED_AD_TEST_ID, this)
+            RewardedAdObserver(requireActivity(), ADMOB_REWARDED_AD_ID, this)
         rewardedAdObserver.preloadRewardedAd()
         
         
