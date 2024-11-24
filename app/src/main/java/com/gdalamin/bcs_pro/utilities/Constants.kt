@@ -24,7 +24,7 @@ class Constants {
         
         //...........................................................................//
         const val ADMOB_REWARDED_AD_ID = "ca-app-pub-6150752175728569/2570317502"
-        const val ADMOB_REWARDED_AD_TEST_ID = "ca-app-pub-6150752175728569/2570317502"
+        const val ADMOB_REWARDED_AD_TEST_ID = "ca-app-pub-3940256099942544/5224354917"
         
         //...........................................................................//
         const val ADMOB_INTERSTITIAL_AD_TEST_ID = "ca-app-pub-3940256099942544/1033173712"

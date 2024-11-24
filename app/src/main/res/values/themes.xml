@@ -2,19 +2,9 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.BCSPROKotlin" parent="Theme.AppCompat.Light.NoActionBar">
 
-
-        <!--        <item name="colorPrimary">@color/darkTangerine</item>-->
-        <!--        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
-        <!--        <item name="colorAccent">@color/colorAccent</item>-->
-
         <item name="colorPrimary">@color/deepGreen</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-
-        <!--        <item name="android:windowLightStatusBar">true</item>-->
-        <!--        <item name="android:statusBarColor">@color/white</item>-->
-        <!--        <item name="android:navigationBarColor">@color/white</item>-->
-        <!--        <item name="android:windowLightNavigationBar">true</item>-->
 
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:statusBarColor">@color/white</item>

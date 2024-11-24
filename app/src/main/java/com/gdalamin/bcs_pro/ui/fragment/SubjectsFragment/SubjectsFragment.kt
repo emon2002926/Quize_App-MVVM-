@@ -53,7 +53,7 @@ class SubjectsFragment : BaseFragment<FragmentSubjectsBinding>(FragmentSubjectsB
             fragment = this,
             adViewModel = adViewModel,
             binding = binding,
-            adUnitId = ADMOB_INTERSTITIAL_SUBJECT_AD_ID, // Pass your ad unit ID here
+            adUnitId = ADMOB_INTERSTITIAL_SUBJECT_AD_ID,
             navigateAction = {
                 findNavController().navigate(R.id.action_subjectsFragment_to_questionFragment) // Navigation action
             }
