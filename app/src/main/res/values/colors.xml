@@ -52,8 +52,29 @@
     <color name="liteRed">#fb4c4c</color>
 
 
-    <color name="deepGreen">#4fae5b</color>
-    <color name="liteGreen">#ecf7ee</color>
+    <!--    <color name="deepGreen">#4fae5b</color>-->
+    <!--    <color name="liteGreen">#ecf7ee</color>-->
+
+    <!--    purple-->
+    <!--    <color name="deepGreen">#492c87</color>-->
+    <!--    <color name="liteGreen">#18ECF7EE</color>-->
+
+    <!--    orange-->
+    <!--    <color name="deepGreen">#FF9800</color>-->
+    <!--    <color name="liteGreen">#18ECF7EE</color>-->
+
+    <!--    teal-->
+    <!--    <color name="deepGreen">#008080</color>-->
+    <!--    <color name="liteGreen">#18ECF7EE</color>-->
+    <!--    dark teal-->
+    <color name="deepGreen">#005F73</color>
+    <color name="liteGreen">#18ECF7EE</color>
+    <!--    navy blue-->
+    <!--    <color name="deepGreen">#1E3A8A</color>-->
+    <!--    <color name="liteGreen">#18ECF7EE</color>-->
+    <!--    dark purple-->
+    <!--    <color name="deepGreen">#4A148C</color>-->
+    <!--    <color name="liteGreen">#18ECF7EE</color>-->
 
 
 </resources>
