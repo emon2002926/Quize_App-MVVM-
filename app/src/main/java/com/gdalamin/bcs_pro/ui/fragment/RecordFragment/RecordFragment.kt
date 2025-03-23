@@ -1,9 +1,7 @@
 package com.gdalamin.bcs_pro.ui.fragment.RecordFragment
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
-import android.util.Log
 import androidx.core.content.ContextCompat
 import com.gdalamin.bcs_pro.R
 import com.gdalamin.bcs_pro.databinding.FragmentRecordBinding
@@ -38,10 +36,9 @@ class RecordFragment : BaseFragment<FragmentRecordBinding>(FragmentRecordBinding
         totalPercentageNotAnswered = (overAllNotAnswered.toFloat() / totalQuestion) * 100
 
         if (totalQuestion > 1) {
-            setUpProgressBar()
-        }
+//            setUpProgressBar()
 
-        Log.d("totalExam", "$totalQuestion")
+        }
 
         progress()
     }
@@ -49,7 +46,7 @@ class RecordFragment : BaseFragment<FragmentRecordBinding>(FragmentRecordBinding
 
     private fun progress() = binding.apply {
 
-        correctProgressBar.setProgress(31)
+        correctProgressBar.setProgress(Math.round(totalPercentageCorrect))
         correctProgressBar.setProgressColor(
             ContextCompat.getColor(requireContext(), R.color.deepGreen)
         )
@@ -62,37 +59,19 @@ class RecordFragment : BaseFragment<FragmentRecordBinding>(FragmentRecordBinding
             ContextCompat.getColor(requireContext(), R.color.liteTangerine)
         )
 
-//        correctTotalTv.text = convertEnglishToBangla(totalQuestion.toString())
-//        wrongTotalTv.text = convertEnglishToBangla(totalQuestion.toString())
-//        notAnsweredTotalTv.text = convertEnglishToBangla(totalQuestion.toString())
 
-
-        val correctPercentageText = "ম ${
-            String.format(
-                "%s (%s%%)",
-                convertEnglishToBangla(overAllCorrectAnswer.toString()),
-                convertEnglishToBangla(String.format("%.2f", totalPercentageCorrect))
-            )
-        }"
-        val wrongAnswerText = String.format(
-            "%s (%s%%)", convertEnglishToBangla(overAllWrongAnswer.toString()),
-            convertEnglishToBangla(String.format("%.2f", totalPercentageWrong))
-        )
-        val notAnsweredText = String.format(
-            "%s (%s%%)",
-            convertEnglishToBangla(overAllNotAnswered.toString()),
-            convertEnglishToBangla(String.format("%.2f", totalPercentageNotAnswered))
-        )
-//        correctPercentageTv.text = correctPercentageText
-//        wrongPercentageTv.text = wrongAnswerText
-//        notAnsweredPercentageTv.text = notAnsweredText
+        correctPercentageTv.text = formatedText(totalPercentageCorrect)
+        wrongPercentageTv.text = formatedText(totalPercentageWrong)
+        notAnsweredPercentageTv.text = formatedText(totalPercentageNotAnswered)
 
     }
 
+    private fun formatedText(percentage: Float): String =
+        "শতকরা  ${convertEnglishToBangla(Math.round(percentage).toString())}%"
+
+    /*
     @SuppressLint("DefaultLocale")
     private fun setUpProgressBar() = binding.apply {
-
-
         tvTotalExam.text = convertEnglishToBangla(totalExam.toString())
         tvTotalQuestion.text = convertEnglishToBangla(totalQuestion.toString())
 
@@ -121,8 +100,44 @@ class RecordFragment : BaseFragment<FragmentRecordBinding>(FragmentRecordBinding
         progressBarNotAnswred.setProgress(Math.round(totalPercentageNotAnswered))
     }
 
+     */
+
     private fun getInt(key: String, defaultValue: Int): Int {
         return sharedPreferences.getInt(key, defaultValue)
     }
+
+
+    /**
+
+    old code from progress method
+    progress() fun {
+
+    //        correctTotalTv.text = convertEnglishToBangla(totalQuestion.toString())
+    //        wrongTotalTv.text = convertEnglishToBangla(totalQuestion.toString())
+    //        notAnsweredTotalTv.text = convertEnglishToBangla(totalQuestion.toString())
+
+    //        val correctPercentageText = "ম ${
+    //            String.format(
+    //                "%s (%s%%)",
+    //                convertEnglishToBangla(overAllCorrectAnswer.toString()),
+    //                convertEnglishToBangla(String.format("%.2f", totalPercentageCorrect))
+    //            )
+    //        }"
+    //        val wrongAnswerText = String.format(
+    //            "%s (%s%%)", convertEnglishToBangla(overAllWrongAnswer.toString()),
+    //            convertEnglishToBangla(String.format("%.2f", totalPercentageWrong))
+    //        )
+    //        val notAnsweredText = String.format(
+    //            "%s (%s%%)",
+    //            convertEnglishToBangla(overAllNotAnswered.toString()),
+    //            convertEnglishToBangla(String.format("%.2f", totalPercentageNotAnswered))
+    //        )
+    //        correctPercentageTv.text = correctPercentageText
+    //        wrongPercentageTv.text = wrongAnswerText
+    //        notAnsweredPercentageTv.text = notAnsweredText
+
+    }
+
+     */
 
 }
